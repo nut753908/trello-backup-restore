@@ -1,0 +1,19 @@
+{
+  "name": "trello-backup-restore",
+  "version": "0.0.1",
+  "description": "A Trello Power-Up which backups and restores kind of card",
+  "license": "MIT",
+  "main": "server.js",
+  "repository": "https://github.com/nut753908/trello-backup-restore",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "compression": "^1.8.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}
