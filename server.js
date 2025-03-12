@@ -1,7 +1,3 @@
-// note:
-//   this reference exists in https://glitch.com/~trello-power-up and https://glitch.com/~trello-power-up-skeleton.
-//   its license is described as MIT in package.json in the url above, but its full text may not exist.
-
 // where your node app starts
 // server.js
 
