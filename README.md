@@ -1,6 +1,6 @@
 # trello-backup-restore
 
-A Trello Power-Up which backs up and restores kind of card, list and lists.
+A Trello Power-Up which backs up and restores card, list and lists.
 
 ---
 
