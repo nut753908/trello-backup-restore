@@ -1,4 +1,4 @@
-# trello-backup-restore
+# Trello Backup & Restore
 
 A Trello Power-Up which backs up and restores card, list and lists.
 
@@ -8,7 +8,6 @@ These sources are referenced in this project.
 
 - [glitch/trello-power-up](https://glitch.com/~trello-power-up)
 - [glitch/trello-power-up-skeleton](https://glitch.com/~trello-power-up-skeleton)
-
 
 The license is described as MIT in package.json in the urls above, but its full text may not exist.
 
