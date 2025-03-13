@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" />
+  </head>
+  <body>
+    <button type="button" class="mod-primary">Click to authorize</button>
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script type="module">
+      import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/env.js";
+      import { makeRequests } from "/js/restore.js";
+      var t = window.TrelloPowerUp.iframe({
+        appKey: APP_KEY,
+        appName: APP_NAME,
+        appAuthor: APP_AUTHOR,
+      });
+      t.render(function () {
+        document.querySelector("button").addEventListener(
+          "click",
+          function () {
+            t.getRestApi()
+              .authorize({ scope: "read,write" })
+              .then(async function () {
+                await makeRequests(t, false);
+                t.closePopup();
+              });
+          },
+          false
+        );
+      });
+    </script>
+  </body>
+</html>
