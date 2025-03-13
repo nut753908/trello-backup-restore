@@ -1,59 +1,62 @@
 import { APP_KEY } from "/js/env.js";
 
-var authorize = async function (t) {
-  const authorized = await t.getRestApi().isAuthorized();
-  if (!authorized) {
-    await t.getRestApi().authorize({ scope: "read,write" });
-  }
-  const token = await t.getRestApi().getToken();
-  if (!token) {
-    throw new Error("No token");
-  }
-  return token;
-};
-
-var getList = async function (id, key, token) {
-  return fetch(
-    `https://api.trello.com/1/lists/${id}?key=${key}&token=${token}`,
-    {
-      method: "GET",
+var getBoard = function (id, key, token) {
+  fetch(`https://api.trello.com/1/boards/${id}?key=${key}&token=${token}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json'
     }
-  )
-    .then((response) => {
+  })
+    .then(response => {
       console.log(
-        `Get list response: ${response.status} ${response.statusText}`
+        `Get board response: ${response.status} ${response.statusText}`
       );
       return response.text();
     })
-    .then((text) => console.log(text))
-    .catch((err) => console.error(err));
+    .then(text => console.log(text))
+    .catch(err => console.error(err));
 };
 
-var updateList = async function (id, key, token) {
-  return fetch(
-    `https://api.trello.com/1/lists/${id}?key=${key}&token=${token}`,
-    {
-      method: "PUT",
-    }
-  )
-    .then((response) => {
+var updateBoard = function (id, key, token) {
+  fetch(`https://api.trello.com/1/boards/${id}?key=${key}&token=${token}`, {
+    method: 'PUT'
+  })
+    .then(response => {
       console.log(
-        `Update list response: ${response.status} ${response.statusText}`
+        `Update board response: ${response.status} ${response.statusText}`
       );
       return response.text();
     })
-    .then((text) => console.log(text))
-    .catch((err) => console.error(err));
+    .then(text => console.log(text))
+    .catch(err => console.error(err));
 };
 
-export var restoreBoardButtonCallback = function (t) {
-  authorize(t)
+export var makeRequests = async function (t, withAuth) {
+  await t.getRestApi()
+    .getToken()
     .then(async function (token) {
-      const id = t.getContext().list;
-      await getList(id, APP_KEY, token);
-      await updateList(id, APP_KEY, token);
-    })
-    .catch(function (err) {
-      console.log(err);
+      if (/^[0-9a-fA-Z]{76}$/.test(token)) {
+        const idBoard = t.getContext().board;
+        await getBoard(idBoard, APP_KEY, token);
+        await updateBoard(idBoard, APP_KEY, token);
+        {
+          const blob = new Blob(["a"], { type: "text/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "a.txt";
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      } else if (withAuth) {
+        await t.popup({
+          title: "Authorize",
+          url: "/authorize.html",
+        });
+      }
     });
+};
+
+export var restoreBoardButtonCallback = async function (t) {
+  await makeRequests(t, true);
 };
