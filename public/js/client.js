@@ -2,7 +2,6 @@
 
 import { backUpCardButtonCallback } from "/js/back-up.js";
 
-// we can access Bluebird Promises as follows
 var Promise = TrelloPowerUp.Promise;
 
 var FILE_DOWNLOAD_ICON =
