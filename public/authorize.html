@@ -9,8 +9,7 @@
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
     <script type="module">
       import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/env.js";
-      import { makeRequests } from "/js/restore.js";
-      var t = window.TrelloPowerUp.iframe({
+      var t = TrelloPowerUp.iframe({
         appKey: APP_KEY,
         appName: APP_NAME,
         appAuthor: APP_AUTHOR,
@@ -21,8 +20,7 @@
           function () {
             t.getRestApi()
               .authorize({ scope: "read,write" })
-              .then(async function () {
-                await makeRequests(t, false);
+              .then(function () {
                 t.closePopup();
               });
           },
