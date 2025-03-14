@@ -2,37 +2,38 @@ import { APP_KEY } from "/js/env.js";
 
 var getBoard = function (id, key, token) {
   fetch(`https://api.trello.com/1/boards/${id}?key=${key}&token=${token}`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Accept': 'application/json'
-    }
+      Accept: "application/json",
+    },
   })
-    .then(response => {
+    .then((response) => {
       console.log(
         `Get board response: ${response.status} ${response.statusText}`
       );
       return response.text();
     })
-    .then(text => console.log(text))
-    .catch(err => console.error(err));
+    .then((text) => console.log(text))
+    .catch((err) => console.error(err));
 };
 
 var updateBoard = function (id, key, token) {
   fetch(`https://api.trello.com/1/boards/${id}?key=${key}&token=${token}`, {
-    method: 'PUT'
+    method: "PUT",
   })
-    .then(response => {
+    .then((response) => {
       console.log(
         `Update board response: ${response.status} ${response.statusText}`
       );
       return response.text();
     })
-    .then(text => console.log(text))
-    .catch(err => console.error(err));
+    .then((text) => console.log(text))
+    .catch((err) => console.error(err));
 };
 
-export var makeRequests = async function (t, withAuth) {
-  await t.getRestApi()
+export var restoreBoardButtonCallback = async function (t) {
+  await t
+    .getRestApi()
     .getToken()
     .then(async function (token) {
       if (/^[0-9a-fA-Z]{76}$/.test(token)) {
@@ -48,15 +49,11 @@ export var makeRequests = async function (t, withAuth) {
           a.click();
           URL.revokeObjectURL(url);
         }
-      } else if (withAuth) {
+      } else {
         await t.popup({
           title: "Authorize",
           url: "/authorize.html",
         });
       }
     });
-};
-
-export var restoreBoardButtonCallback = async function (t) {
-  await makeRequests(t, true);
 };
