@@ -1,34 +1,44 @@
 import { APP_KEY } from "/js/env.js";
 
-var getBoard = function (id, key, token) {
-  fetch(`https://api.trello.com/1/boards/${id}?key=${key}&token=${token}`, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-    },
-  })
-    .then((response) => {
-      console.log(
-        `Get board response: ${response.status} ${response.statusText}`
-      );
-      return response.text();
-    })
-    .then((text) => console.log(text))
-    .catch((err) => console.error(err));
+var upload = function () {
+  return new Promise(function (resolve) {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json"; // NOTE: change to ".zip" later
+    input.addEventListener(
+      "change",
+      function () {
+        resolve(this.files[0]);
+      },
+      false
+    );
+    input.click();
+  });
 };
 
-var updateBoard = function (id, key, token) {
-  fetch(`https://api.trello.com/1/boards/${id}?key=${key}&token=${token}`, {
-    method: "PUT",
-  })
-    .then((response) => {
-      console.log(
-        `Update board response: ${response.status} ${response.statusText}`
-      );
-      return response.text();
-    })
-    .then((text) => console.log(text))
-    .catch((err) => console.error(err));
+var read = function (file) {
+  return new Promise(function (resolve) {
+    const reader = new FileReader();
+    reader.addEventListener(
+      "load",
+      function () {
+        resolve(reader.result);
+      },
+      false
+    );
+    reader.readAsText(file);
+  });
+};
+
+var restore = function (text) {
+  console.log(text);
+};
+
+export var uploadFileAndRestore = async function (t) {
+  const file = await upload();
+  t.closePopup();
+  const text = await read(file);
+  await restore(text);
 };
 
 export var restoreBoardButtonCallback = async function (t) {
@@ -37,22 +47,16 @@ export var restoreBoardButtonCallback = async function (t) {
     .getToken()
     .then(async function (token) {
       if (/^[0-9a-fA-Z]{76}$/.test(token)) {
-        const idBoard = t.getContext().board;
-        await getBoard(idBoard, APP_KEY, token);
-        await updateBoard(idBoard, APP_KEY, token);
-        {
-          const blob = new Blob(["a"], { type: "text/json" });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "a.txt";
-          a.click();
-          URL.revokeObjectURL(url);
-        }
+        await t.popup({
+          title: "Restore",
+          url: "/restore.html",
+          height: 40,
+        });
       } else {
         await t.popup({
           title: "Authorize",
           url: "/authorize.html",
+          height: 40,
         });
       }
     });

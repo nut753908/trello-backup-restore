@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" />
+  </head>
+  <body>
+    <button type="button" class="mod-primary">Upload file and Restore</button>
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script type="module">
+      import { uploadFileAndRestore } from "/js/restore.js";
+      var t = TrelloPowerUp.iframe();
+      t.render(function () {
+        document.querySelector("button").addEventListener(
+          "click",
+          function () {
+            uploadFileAndRestore(t);
+          },
+          false
+        );
+      });
+    </script>
+  </body>
+</html>
