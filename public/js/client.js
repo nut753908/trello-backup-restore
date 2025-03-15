@@ -11,7 +11,7 @@ var FILE_UPLOAD_ICON =
 
 TrelloPowerUp.initialize(
   {
-    "card-buttons": function (t, options) {
+    "card-buttons": function (t) {
       return [
         {
           icon: FILE_DOWNLOAD_ICON,
@@ -20,7 +20,7 @@ TrelloPowerUp.initialize(
         },
       ];
     },
-    "board-buttons": function (t, options) {
+    "board-buttons": function (t) {
       return [
         {
           icon: FILE_UPLOAD_ICON,
