@@ -7,17 +7,12 @@
   <body>
     <button type="button" class="mod-primary">Upload file and Restore</button>
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
-    <script type="module">
-      import { uploadFileAndRestore } from "/js/restore.js";
+    <script>
       var t = TrelloPowerUp.iframe();
       t.render(function () {
-        document.querySelector("button").addEventListener(
-          "click",
-          function () {
-            uploadFileAndRestore(t);
-          },
-          false
-        );
+        document
+          .querySelector("button")
+          .addEventListener("click", () => t.notifyParent("done"), false);
       });
     </script>
   </body>

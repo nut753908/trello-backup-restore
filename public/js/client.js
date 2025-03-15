@@ -1,7 +1,7 @@
 /* global TrelloPowerUp */
 
 import { backUpCardButtonCallback } from "/js/back-up.js";
-import { restoreBoardButtonCallback } from "/js/restore.js";
+import { restoreBoardButtonCallback } from "/js/authorize.js";
 import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/env.js";
 
 var FILE_DOWNLOAD_ICON =

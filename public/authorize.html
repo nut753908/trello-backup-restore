@@ -20,7 +20,7 @@
           async function () {
             await t.getRestApi().clearToken();
             await t.getRestApi().authorize({ scope: "read,write" });
-            t.closePopup();
+            t.notifyParent("done");
           },
           false
         );
