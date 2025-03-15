@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" />
+  </head>
+  <body>
+    <button type="button" class="mod-primary">Select file and Restore</button>
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script>
+      var t = TrelloPowerUp.iframe();
+      t.render(function () {
+        document
+          .querySelector("button")
+          .addEventListener("click", () => t.notifyParent("done"), false);
+      });
+    </script>
+  </body>
+</html>

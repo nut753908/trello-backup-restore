@@ -1,62 +1,56 @@
+import { createList, createCard } from "/js/api.js";
 import { APP_KEY } from "/js/env.js";
 
-var getBoard = function (id, key, token) {
-  fetch(`https://api.trello.com/1/boards/${id}?key=${key}&token=${token}`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json'
-    }
-  })
-    .then(response => {
-      console.log(
-        `Get board response: ${response.status} ${response.statusText}`
-      );
-      return response.text();
-    })
-    .then(text => console.log(text))
-    .catch(err => console.error(err));
+var upload = function () {
+  return new Promise(function (resolve) {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json"; // NOTE: change to ".zip" later
+    input.addEventListener("change", () => resolve(input.files[0]), false);
+    input.addEventListener("cancel", () => resolve(null), false);
+    input.click();
+  });
 };
 
-var updateBoard = function (id, key, token) {
-  fetch(`https://api.trello.com/1/boards/${id}?key=${key}&token=${token}`, {
-    method: 'PUT'
-  })
-    .then(response => {
-      console.log(
-        `Update board response: ${response.status} ${response.statusText}`
-      );
-      return response.text();
-    })
-    .then(text => console.log(text))
-    .catch(err => console.error(err));
+var read = function (file) {
+  return new Promise(function (resolve) {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => resolve(reader.result), false);
+    reader.readAsText(file);
+  });
 };
 
-export var makeRequests = async function (t, withAuth) {
-  await t.getRestApi()
-    .getToken()
-    .then(async function (token) {
-      if (/^[0-9a-fA-Z]{76}$/.test(token)) {
-        const idBoard = t.getContext().board;
-        await getBoard(idBoard, APP_KEY, token);
-        await updateBoard(idBoard, APP_KEY, token);
-        {
-          const blob = new Blob(["a"], { type: "text/json" });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "a.txt";
-          a.click();
-          URL.revokeObjectURL(url);
-        }
-      } else if (withAuth) {
-        await t.popup({
-          title: "Authorize",
-          url: "/authorize.html",
-        });
-      }
-    });
+var getBody = function (card) {
+  return {
+    name: card?.name,
+    due: card?.due,
+    start: card?.start,
+    dueComplete: card?.dueComplete,
+    idMembers: card?.idMembers,
+    idLabels: card?.idLabels,
+    address: card?.address,
+    locationName: card?.locationName,
+    coordinates: card?.coordinates,
+  };
 };
 
-export var restoreBoardButtonCallback = async function (t) {
-  await makeRequests(t, true);
+var restore = async function (t, text) {
+  const token = await t.getRestApi().getToken();
+  const idBoard = t.getContext().board;
+  const _listAndCard = JSON.parse(text);
+  const name = _listAndCard?.list?.name;
+  const _res = await createList(idBoard, name, APP_KEY, token);
+  const _resJson = await _res.json();
+  const idList = _resJson?.id;
+  const body = getBody(_listAndCard?.card);
+  await createCard(idList, body, APP_KEY, token);
+};
+
+export var restorePopupCallback = async function (t) {
+  const file = await upload();
+  t.closePopup();
+  if (/.*\.json$/.test(file?.name)) {
+    const text = await read(file);
+    await restore(t, text);
+  }
 };

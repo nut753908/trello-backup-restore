@@ -9,8 +9,7 @@
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
     <script type="module">
       import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/env.js";
-      import { makeRequests } from "/js/restore.js";
-      var t = window.TrelloPowerUp.iframe({
+      var t = TrelloPowerUp.iframe({
         appKey: APP_KEY,
         appName: APP_NAME,
         appAuthor: APP_AUTHOR,
@@ -18,13 +17,10 @@
       t.render(function () {
         document.querySelector("button").addEventListener(
           "click",
-          function () {
-            t.getRestApi()
-              .authorize({ scope: "read,write" })
-              .then(async function () {
-                await makeRequests(t, false);
-                t.closePopup();
-              });
+          async function () {
+            await t.getRestApi().clearToken();
+            await t.getRestApi().authorize({ scope: "read,write" });
+            t.notifyParent("done");
           },
           false
         );
