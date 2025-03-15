@@ -49,7 +49,7 @@ var restore = async function (t, text) {
 export var restorePopupCallback = async function (t) {
   const file = await upload();
   t.closePopup();
-  if (/.*\.json$/.test(file?.name)) {
+  if (/\.json$/.test(file?.name)) {
     const text = await read(file);
     await restore(t, text);
   }
