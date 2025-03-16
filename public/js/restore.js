@@ -1,3 +1,5 @@
+/* global JSZip */
+
 import { createList, createCard } from "/js/api.js";
 import { APP_KEY } from "/js/env.js";
 
@@ -5,18 +7,10 @@ var upload = function () {
   return new Promise(function (resolve) {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = ".json"; // NOTE: change to ".zip" later
+    input.accept = ".zip";
     input.addEventListener("change", () => resolve(input.files[0]), false);
     input.addEventListener("cancel", () => resolve(null), false);
     input.click();
-  });
-};
-
-var read = function (file) {
-  return new Promise(function (resolve) {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => resolve(reader.result), false);
-    reader.readAsText(file);
   });
 };
 
@@ -47,10 +41,15 @@ var restore = async function (t, text) {
 };
 
 export var restorePopupCallback = async function (t) {
-  const file = await upload();
+  const inputFile = await upload();
   t.closePopup();
-  if (/\.json$/.test(file?.name)) {
-    const text = await read(file);
-    await restore(t, text);
+  if (/\.zip$/.test(inputFile?.name)) {
+    var newZip = new JSZip();
+    const zip = await newZip.loadAsync(inputFile);
+    const file = zip.file("list-and-card.json");
+    if (file) {
+      const text = await file.async("string");
+      await restore(t, text);
+    }
   }
 };

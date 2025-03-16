@@ -1,5 +1,6 @@
-var downloadJSON = function (data, name) {
-  const blob = new Blob([data], { type: "text/json" });
+/* global JSZip */
+
+var download = function (blob, name) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -32,5 +33,8 @@ export var backUpCardButtonCallback = async function (t) {
         return card;
       }),
   };
-  downloadJSON(JSON.stringify(listAndCard, null, 2), "list-and-card.json");
+  var zip = new JSZip();
+  zip.file("list-and-card.json", JSON.stringify(listAndCard, null, 2));
+  const blob = await zip.generateAsync({ type: "blob" });
+  download(blob, "card.zip");
 };
