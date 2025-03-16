@@ -1,6 +1,9 @@
 /* global TrelloPowerUp */
 
-import { backUpCardButtonCallback } from "/js/back-up.js";
+import {
+  backUpCardButtonCallback,
+  backUpListActionCallback,
+} from "/js/back-up.js";
 import { restoreBoardButtonCallback } from "/js/authorize.js";
 import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/env.js";
 
@@ -17,6 +20,14 @@ TrelloPowerUp.initialize(
           icon: FILE_DOWNLOAD_ICON,
           text: "Back up",
           callback: backUpCardButtonCallback,
+        },
+      ];
+    },
+    "list-actions": function (t) {
+      return [
+        {
+          text: "Back up list",
+          callback: backUpListActionCallback,
         },
       ];
     },
