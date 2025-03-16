@@ -1,6 +1,7 @@
 import { restorePopupCallback } from "/js/restore.js";
 
-var main = async function (t, withAuth) {
+const main = async (t, withAuth) => {
+  await t.closePopup();
   const token = await t.getRestApi().getToken();
   if (/^[0-9a-fA-Z]{76}$/.test(token)) {
     await t.popup({
@@ -19,11 +20,10 @@ var main = async function (t, withAuth) {
   }
 };
 
-var authorizePopupCallback = async function (t) {
-  await t.closePopup();
+const authorizePopupCallback = async (t) => {
   await main(t, false);
 };
 
-export var restoreBoardButtonCallback = async function (t) {
+export const restoreBoardButtonCallback = async (t) => {
   await main(t, true);
 };

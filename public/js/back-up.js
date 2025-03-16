@@ -1,6 +1,6 @@
 /* global JSZip */
 
-var download = function (blob, name) {
+const download = (blob, name) => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -9,22 +9,15 @@ var download = function (blob, name) {
   URL.revokeObjectURL(url);
 };
 
-var getLists = async function (t, type) {
-  switch (type) {
-    case "card":
-      return [
-        {
-          ...(await t.list("id", "name")),
-          cards: [await t.card("all")],
-        },
-      ];
-    case "list":
-      return [await t.list("all")];
-    case "lists":
-      return await t.lists("all");
-    default:
-      return [];
-  }
+const getLists = {
+  card: async (t) => [
+    {
+      ...(await t.list("id", "name")),
+      cards: [await t.card("all")],
+    },
+  ],
+  list: async (t) => [await t.list("all")],
+  lists: async (t) => t.lists("all"),
 };
 
 const cardKeys = [
@@ -40,9 +33,9 @@ const cardKeys = [
   "labels",
 ];
 
-var backUp = async function (t, type) {
-  var zip = new JSZip();
-  const lists = await getLists(t, type);
+const backUp = async (t, type) => {
+  const zip = new JSZip();
+  const lists = await getLists[type](t);
   lists.forEach((list, i) => {
     list.cards.forEach((card, j) => {
       card = cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {});
@@ -59,14 +52,14 @@ var backUp = async function (t, type) {
   download(blob, `${type}.zip`);
 };
 
-export var backUpCardButtonCallback = async function (t) {
+export const backUpCardButtonCallback = async (t) => {
   await backUp(t, "card");
 };
 
-export var backUpListActionCallback = async function (t) {
+export const backUpListActionCallback = async (t) => {
   await backUp(t, "list");
 };
 
-export var backUpListsBoardButtonCallback = async function (t) {
+export const backUpListsBoardButtonCallback = async (t) => {
   await backUp(t, "lists");
 };
