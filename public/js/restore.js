@@ -28,35 +28,45 @@ var getBody = function (card) {
   };
 };
 
-var restore = async function (t, list, cards) {
+var restoreList = async function (token, idBoard, file) {
+  const text = await file.async("string");
+  const list = JSON.parse(text);
+  const name = list?.name;
+  const res = await createList(idBoard, name, APP_KEY, token);
+  const resJson = await res.json();
+  return resJson?.id;
+};
+
+var restoreCard = async function (token, idList, file) {
+  const text = await file.async("string");
+  const card = JSON.parse(text);
+  const body = getBody(card);
+  const res = await createCard(idList, body, APP_KEY, token);
+  const resJson = await res.json();
+  return resJson?.id;
+};
+
+var restore = async function (t, file) {
+  if (!/\.zip$/.test(file?.name)) {
+    return;
+  }
   const token = await t.getRestApi().getToken();
   const idBoard = t.getContext().board;
-  const name = list?.name;
-  const _res = await createList(idBoard, name, APP_KEY, token);
-  const _resJson = await _res.json();
-  const idList = _resJson?.id;
-  for (const card of cards) {
-    const body = getBody(card);
-    await createCard(idList, body, APP_KEY, token);
+  var newZip = new JSZip();
+  const zip = await newZip.loadAsync(file);
+  const listFiles = zip.file(/^list\d+\.json$/);
+  for (const listFile of listFiles) {
+    const idList = await restoreList(token, idBoard, listFile);
+    const i = listFile.name.match(/^list(\d+)\.json$/)[1];
+    const cardFiles = zip.file(new RegExp(`^list${i}_card\\d+\\.json$`));
+    for (const cardFile of cardFiles) {
+      await restoreCard(token, idList, cardFile);
+    }
   }
 };
 
 export var restorePopupCallback = async function (t) {
-  const inputFile = await upload();
+  const file = await upload();
   t.closePopup();
-  if (/\.zip$/.test(inputFile?.name)) {
-    var newZip = new JSZip();
-    const zip = await newZip.loadAsync(inputFile);
-    const listFile = zip.file("list1.json");
-    const cardFiles = zip.file(/^list1_card\d+\.json$/);
-    if (listFile) {
-      const listText = await listFile.async("string");
-      const cardTexts = await Promise.all(
-        cardFiles.map(async (f) => await f.async("string"))
-      );
-      const list = JSON.parse(listText);
-      const cards = cardTexts.map((t) => JSON.parse(t));
-      await restore(t, list, cards);
-    }
-  }
+  await restore(t, file);
 };
