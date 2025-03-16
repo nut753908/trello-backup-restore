@@ -8,14 +8,14 @@ import {
 import { restoreBoardButtonCallback } from "/js/authorize.js";
 import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/env.js";
 
-var FILE_DOWNLOAD_ICON =
+const FILE_DOWNLOAD_ICON =
   "https://cdn.glitch.global/0b64f33b-22b9-4fbd-8d4e-fdb824ae590b/file_download_16dp_1F1F1F.svg?v=1741327113830";
-var FILE_UPLOAD_ICON =
+const FILE_UPLOAD_ICON =
   "https://cdn.glitch.global/0b64f33b-22b9-4fbd-8d4e-fdb824ae590b/file_upload_16dp_1F1F1F.svg?v=1741327106140";
 
 TrelloPowerUp.initialize(
   {
-    "card-buttons": function (t) {
+    "card-buttons": (t) => {
       return [
         {
           icon: FILE_DOWNLOAD_ICON,
@@ -24,7 +24,7 @@ TrelloPowerUp.initialize(
         },
       ];
     },
-    "list-actions": function (t) {
+    "list-actions": (t) => {
       return [
         {
           text: "Back up list",
@@ -32,7 +32,7 @@ TrelloPowerUp.initialize(
         },
       ];
     },
-    "board-buttons": function (t) {
+    "board-buttons": (t) => {
       return [
         {
           icon: FILE_DOWNLOAD_ICON,

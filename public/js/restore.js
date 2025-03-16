@@ -2,7 +2,7 @@
 
 import { createList, createCard } from "/js/api.js";
 
-var upload = function () {
+const upload = () => {
   return new Promise(function (resolve) {
     const input = document.createElement("input");
     input.type = "file";
@@ -13,21 +13,19 @@ var upload = function () {
   });
 };
 
-var getBody = function (card) {
-  return {
-    name: card?.name,
-    due: card?.due,
-    start: card?.start,
-    dueComplete: card?.dueComplete,
-    idMembers: card?.idMembers,
-    idLabels: card?.idLabels,
-    address: card?.address,
-    locationName: card?.locationName,
-    coordinates: card?.coordinates,
-  };
-};
+const getBody = (card) => ({
+  name: card?.name,
+  due: card?.due,
+  start: card?.start,
+  dueComplete: card?.dueComplete,
+  idMembers: card?.idMembers,
+  idLabels: card?.idLabels,
+  address: card?.address,
+  locationName: card?.locationName,
+  coordinates: card?.coordinates,
+});
 
-var restoreList = async function (token, idBoard, file) {
+const restoreList = async (token, idBoard, file) => {
   const text = await file.async("string");
   const list = JSON.parse(text);
   const name = list?.name;
@@ -36,7 +34,7 @@ var restoreList = async function (token, idBoard, file) {
   return resJson?.id;
 };
 
-var restoreCard = async function (token, idList, file) {
+const restoreCard = async (token, idList, file) => {
   const text = await file.async("string");
   const card = JSON.parse(text);
   const body = getBody(card);
@@ -45,13 +43,13 @@ var restoreCard = async function (token, idList, file) {
   return resJson?.id;
 };
 
-var restore = async function (t, file) {
+const restore = async (t, file) => {
   if (!/\.zip$/.test(file?.name)) {
     return;
   }
   const token = await t.getRestApi().getToken();
   const idBoard = t.getContext().board;
-  var newZip = new JSZip();
+  const newZip = new JSZip();
   const zip = await newZip.loadAsync(file);
   const listFiles = zip.file(/^list\d+\.json$/);
   for (const listFile of listFiles) {
@@ -64,7 +62,7 @@ var restore = async function (t, file) {
   }
 };
 
-export var restorePopupCallback = async function (t) {
+export const restorePopupCallback = async (t) => {
   const file = await upload();
   t.closePopup();
   await restore(t, file);
