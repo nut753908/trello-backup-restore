@@ -43,7 +43,7 @@ var backUp = async function (t, type) {
   });
   var zip = new JSZip();
   zip.file("list1.json", JSON.stringify(list, null, 2));
-  cards.map(function (card, i) {
+  cards.forEach(function (card, i) {
     zip.file(`list1_card${i + 1}.json`, JSON.stringify(card, null, 2));
   });
   const blob = await zip.generateAsync({ type: "blob" });
