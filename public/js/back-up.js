@@ -32,8 +32,8 @@ export var backUpCardButtonCallback = async function (t) {
       return card;
     });
   var zip = new JSZip();
-  zip.file("list.json", JSON.stringify(list, null, 2));
-  zip.file("card.json", JSON.stringify(card, null, 2));
+  zip.file("list1.json", JSON.stringify(list, null, 2));
+  zip.file("list1_card1.json", JSON.stringify(card, null, 2));
   const blob = await zip.generateAsync({ type: "blob" });
   download(blob, "card.zip");
 };

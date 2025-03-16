@@ -45,8 +45,8 @@ export var restorePopupCallback = async function (t) {
   if (/\.zip$/.test(inputFile?.name)) {
     var newZip = new JSZip();
     const zip = await newZip.loadAsync(inputFile);
-    const listFile = zip.file("list.json");
-    const cardFile = zip.file("card.json");
+    const listFile = zip.file("list1.json");
+    const cardFile = zip.file("list1_card1.json");
     if (listFile && cardFile) {
       const listText = await listFile.async("string");
       const cardText = await cardFile.async("string");
