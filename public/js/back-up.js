@@ -9,6 +9,22 @@ var download = function (blob, name) {
   URL.revokeObjectURL(url);
 };
 
+var getLists = async function (t, type) {
+  switch (type) {
+    case "card":
+      return [
+        {
+          ...(await t.list("id", "name")),
+          cards: [await t.card("all")],
+        },
+      ];
+    case "list":
+      return [await t.list("all")];
+    default:
+      return [];
+  }
+};
+
 const cardKeys = [
   "id",
   "name",
@@ -22,29 +38,23 @@ const cardKeys = [
   "labels",
 ];
 
-var getCards = async function (t, type) {
-  if (type === "card") {
-    return [await t.card(...cardKeys)];
-  }
-  return await t
-    .list("cards")
-    .get("cards")
-    .map((card) => cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {}));
-};
-
 var backUp = async function (t, type) {
-  const list = await t.list("id", "name");
-  let cards = (await getCards(t, type)).map(function (card) {
-    card.idMembers = card.members.map((v) => v.id);
-    card.idLabels = card.labels.map((v) => v.id);
-    delete card.members;
-    delete card.labels;
-    return card;
-  });
   var zip = new JSZip();
-  zip.file("list1.json", JSON.stringify(list, null, 2));
-  cards.forEach(function (card, i) {
-    zip.file(`list1_card${i + 1}.json`, JSON.stringify(card, null, 2));
+  const lists = await getLists(t, type);
+  lists.forEach(function (list, i) {
+    list.cards.forEach(function (card, j) {
+      card = cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {});
+      card.idMembers = card.members.map((v) => v.id);
+      card.idLabels = card.labels.map((v) => v.id);
+      delete card.members;
+      delete card.labels;
+      zip.file(
+        `list${i + 1}_card${j + 1}.json`,
+        JSON.stringify(card, null, 2)
+      );
+    });
+    delete list.cards;
+    zip.file(`list${i + 1}.json`, JSON.stringify(list, null, 2));
   });
   const blob = await zip.generateAsync({ type: "blob" });
   download(blob, `${type}.zip`);
