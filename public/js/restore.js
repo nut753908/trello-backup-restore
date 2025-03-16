@@ -28,15 +28,17 @@ var getBody = function (card) {
   };
 };
 
-var restore = async function (t, list, card) {
+var restore = async function (t, list, cards) {
   const token = await t.getRestApi().getToken();
   const idBoard = t.getContext().board;
   const name = list?.name;
   const _res = await createList(idBoard, name, APP_KEY, token);
   const _resJson = await _res.json();
   const idList = _resJson?.id;
-  const body = getBody(card);
-  await createCard(idList, body, APP_KEY, token);
+  for (const card of cards) {
+    const body = getBody(card);
+    await createCard(idList, body, APP_KEY, token);
+  }
 };
 
 export var restorePopupCallback = async function (t) {
@@ -46,13 +48,15 @@ export var restorePopupCallback = async function (t) {
     var newZip = new JSZip();
     const zip = await newZip.loadAsync(inputFile);
     const listFile = zip.file("list1.json");
-    const cardFile = zip.file("list1_card1.json");
-    if (listFile && cardFile) {
+    const cardFiles = zip.file(/^list1_card\d+\.json$/);
+    if (listFile) {
       const listText = await listFile.async("string");
-      const cardText = await cardFile.async("string");
+      const cardTexts = await Promise.all(
+        cardFiles.map(async (f) => await f.async("string"))
+      );
       const list = JSON.parse(listText);
-      const card = JSON.parse(cardText);
-      await restore(t, list, card);
+      const cards = cardTexts.map((t) => JSON.parse(t));
+      await restore(t, list, cards);
     }
   }
 };
