@@ -41,17 +41,14 @@ const cardKeys = [
 var backUp = async function (t, type) {
   var zip = new JSZip();
   const lists = await getLists(t, type);
-  lists.forEach(function (list, i) {
-    list.cards.forEach(function (card, j) {
+  lists.forEach((list, i) => {
+    list.cards.forEach((card, j) => {
       card = cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {});
       card.idMembers = card.members.map((v) => v.id);
       card.idLabels = card.labels.map((v) => v.id);
       delete card.members;
       delete card.labels;
-      zip.file(
-        `list${i + 1}_card${j + 1}.json`,
-        JSON.stringify(card, null, 2)
-      );
+      zip.file(`list${i + 1}_card${j + 1}.json`, JSON.stringify(card, null, 2));
     });
     delete list.cards;
     zip.file(`list${i + 1}.json`, JSON.stringify(list, null, 2));
