@@ -1,7 +1,6 @@
 /* global JSZip */
 
 import { createList, createCard } from "/js/api.js";
-import { APP_KEY } from "/js/env.js";
 
 var upload = function () {
   return new Promise(function (resolve) {
@@ -32,7 +31,7 @@ var restoreList = async function (token, idBoard, file) {
   const text = await file.async("string");
   const list = JSON.parse(text);
   const name = list?.name;
-  const res = await createList(idBoard, name, APP_KEY, token);
+  const res = await createList(token, idBoard, name);
   const resJson = await res.json();
   return resJson?.id;
 };
@@ -41,7 +40,7 @@ var restoreCard = async function (token, idList, file) {
   const text = await file.async("string");
   const card = JSON.parse(text);
   const body = getBody(card);
-  const res = await createCard(idList, body, APP_KEY, token);
+  const res = await createCard(token, idList, body);
   const resJson = await res.json();
   return resJson?.id;
 };
