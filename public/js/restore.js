@@ -28,15 +28,14 @@ var getBody = function (card) {
   };
 };
 
-var restore = async function (t, text) {
+var restore = async function (t, list, card) {
   const token = await t.getRestApi().getToken();
   const idBoard = t.getContext().board;
-  const _listAndCard = JSON.parse(text);
-  const name = _listAndCard?.list?.name;
+  const name = list?.name;
   const _res = await createList(idBoard, name, APP_KEY, token);
   const _resJson = await _res.json();
   const idList = _resJson?.id;
-  const body = getBody(_listAndCard?.card);
+  const body = getBody(card);
   await createCard(idList, body, APP_KEY, token);
 };
 
@@ -46,10 +45,14 @@ export var restorePopupCallback = async function (t) {
   if (/\.zip$/.test(inputFile?.name)) {
     var newZip = new JSZip();
     const zip = await newZip.loadAsync(inputFile);
-    const file = zip.file("list-and-card.json");
-    if (file) {
-      const text = await file.async("string");
-      await restore(t, text);
+    const listFile = zip.file("list.json");
+    const cardFile = zip.file("card.json");
+    if (listFile && cardFile) {
+      const listText = await listFile.async("string");
+      const cardText = await cardFile.async("string");
+      const list = JSON.parse(listText);
+      const card = JSON.parse(cardText);
+      await restore(t, list, card);
     }
   }
 };
