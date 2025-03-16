@@ -20,6 +20,8 @@ var getLists = async function (t, type) {
       ];
     case "list":
       return [await t.list("all")];
+    case "lists":
+      return await t.lists("all");
     default:
       return [];
   }
@@ -63,4 +65,8 @@ export var backUpCardButtonCallback = async function (t) {
 
 export var backUpListActionCallback = async function (t) {
   await backUp(t, "list");
+};
+
+export var backUpListsBoardButtonCallback = async function (t) {
+  await backUp(t, "lists");
 };

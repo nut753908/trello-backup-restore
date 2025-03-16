@@ -3,6 +3,7 @@
 import {
   backUpCardButtonCallback,
   backUpListActionCallback,
+  backUpListsBoardButtonCallback,
 } from "/js/back-up.js";
 import { restoreBoardButtonCallback } from "/js/authorize.js";
 import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/env.js";
@@ -33,6 +34,11 @@ TrelloPowerUp.initialize(
     },
     "board-buttons": function (t) {
       return [
+        {
+          icon: FILE_DOWNLOAD_ICON,
+          text: "Back up lists",
+          callback: backUpListsBoardButtonCallback,
+        },
         {
           icon: FILE_UPLOAD_ICON,
           text: "Restore",
