@@ -1,7 +1,6 @@
 /* global JSZip */
 
 import { createList, createCard } from "/js/api.js";
-import { APP_KEY } from "/js/env.js";
 
 var upload = function () {
   return new Promise(function (resolve) {
@@ -28,31 +27,45 @@ var getBody = function (card) {
   };
 };
 
-var restore = async function (t, list, card) {
+var restoreList = async function (token, idBoard, file) {
+  const text = await file.async("string");
+  const list = JSON.parse(text);
+  const name = list?.name;
+  const res = await createList(token, idBoard, name);
+  const resJson = await res.json();
+  return resJson?.id;
+};
+
+var restoreCard = async function (token, idList, file) {
+  const text = await file.async("string");
+  const card = JSON.parse(text);
+  const body = getBody(card);
+  const res = await createCard(token, idList, body);
+  const resJson = await res.json();
+  return resJson?.id;
+};
+
+var restore = async function (t, file) {
+  if (!/\.zip$/.test(file?.name)) {
+    return;
+  }
   const token = await t.getRestApi().getToken();
   const idBoard = t.getContext().board;
-  const name = list?.name;
-  const _res = await createList(idBoard, name, APP_KEY, token);
-  const _resJson = await _res.json();
-  const idList = _resJson?.id;
-  const body = getBody(card);
-  await createCard(idList, body, APP_KEY, token);
+  var newZip = new JSZip();
+  const zip = await newZip.loadAsync(file);
+  const listFiles = zip.file(/^list\d+\.json$/);
+  for (const listFile of listFiles) {
+    const idList = await restoreList(token, idBoard, listFile);
+    const i = listFile.name.match(/^list(\d+)\.json$/)[1];
+    const cardFiles = zip.file(new RegExp(`^list${i}_card\\d+\\.json$`));
+    for (const cardFile of cardFiles) {
+      await restoreCard(token, idList, cardFile);
+    }
+  }
 };
 
 export var restorePopupCallback = async function (t) {
-  const inputFile = await upload();
+  const file = await upload();
   t.closePopup();
-  if (/\.zip$/.test(inputFile?.name)) {
-    var newZip = new JSZip();
-    const zip = await newZip.loadAsync(inputFile);
-    const listFile = zip.file("list1.json");
-    const cardFile = zip.file("list1_card1.json");
-    if (listFile && cardFile) {
-      const listText = await listFile.async("string");
-      const cardText = await cardFile.async("string");
-      const list = JSON.parse(listText);
-      const card = JSON.parse(cardText);
-      await restore(t, list, card);
-    }
-  }
+  await restore(t, file);
 };
