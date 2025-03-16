@@ -22,9 +22,19 @@ const cardKeys = [
   "labels",
 ];
 
-export var backUpCardButtonCallback = async function (t) {
+var getCards = async function (t, type) {
+  if (type === "card") {
+    return [await t.card(...cardKeys)];
+  }
+  return await t
+    .list("cards")
+    .get("cards")
+    .map((card) => cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {}));
+};
+
+var backUp = async function (t, type) {
   const list = await t.list("id", "name");
-  const card = await t.card(...cardKeys).then(function (card) {
+  let cards = (await getCards(t, type)).map(function (card) {
     card.idMembers = card.members.map((v) => v.id);
     card.idLabels = card.labels.map((v) => v.id);
     delete card.members;
@@ -33,34 +43,17 @@ export var backUpCardButtonCallback = async function (t) {
   });
   var zip = new JSZip();
   zip.file("list1.json", JSON.stringify(list, null, 2));
-  zip.file("list1_card1.json", JSON.stringify(card, null, 2));
-  const blob = await zip.generateAsync({ type: "blob" });
-  download(blob, "card.zip");
-};
-
-export var backUpListActionCallback = async function (t) {
-  const list = await t.list("id", "name");
-  const cards = await t
-    .list("cards")
-    .get("cards")
-    .then(function (cards) {
-      return cards
-        .map(function (card) {
-          return cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {});
-        })
-        .map(function (card) {
-          card.idMembers = card.members.map((v) => v.id);
-          card.idLabels = card.labels.map((v) => v.id);
-          delete card.members;
-          delete card.labels;
-          return card;
-        });
-    });
-  var zip = new JSZip();
-  zip.file("list1.json", JSON.stringify(list, null, 2));
   cards.map(function (card, i) {
     zip.file(`list1_card${i + 1}.json`, JSON.stringify(card, null, 2));
   });
   const blob = await zip.generateAsync({ type: "blob" });
-  download(blob, "list.zip");
+  download(blob, `${type}.zip`);
+};
+
+export var backUpCardButtonCallback = async function (t) {
+  await backUp(t, "card");
+};
+
+export var backUpListActionCallback = async function (t) {
+  await backUp(t, "list");
 };
