@@ -34,6 +34,7 @@ const cardKeys = [
 ];
 
 const backUp = async (t, type) => {
+  t.alert({ message: `Backing up ${type}` });
   const zip = new JSZip();
   const lists = await getLists[type](t);
   lists.forEach((list, i) => {
