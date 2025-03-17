@@ -1,7 +1,6 @@
 import { restorePopupCallback } from "/js/restore.js";
 
 const main = async (t, withAuth) => {
-  await t.closePopup();
   const token = await t.getRestApi().getToken();
   if (/^[0-9a-fA-Z]{76}$/.test(token)) {
     await t.popup({
@@ -21,6 +20,7 @@ const main = async (t, withAuth) => {
 };
 
 const authorizePopupCallback = async (t) => {
+  await t.closePopup();
   await main(t, false);
 };
 
