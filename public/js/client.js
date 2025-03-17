@@ -54,4 +54,3 @@ TrelloPowerUp.initialize(
     appAuthor: APP_AUTHOR,
   }
 );
-
