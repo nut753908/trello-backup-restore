@@ -9,11 +9,9 @@
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
     <script>
       const t = TrelloPowerUp.iframe();
-      t.render(() => {
-        document
-          .querySelector("button")
-          .addEventListener("click", () => t.notifyParent("done"), false);
-      });
+      document
+        .querySelector("button")
+        .addEventListener("click", () => t.notifyParent("done"), false);
     </script>
   </body>
 </html>

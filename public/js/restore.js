@@ -1,5 +1,6 @@
 /* global JSZip */
 
+import { protect } from "/js/protect.js";
 import { createList, createCard } from "/js/api.js";
 
 const upload = () => {
@@ -43,7 +44,7 @@ const restoreCard = async (token, idList, file) => {
   return resJson?.id;
 };
 
-const restore = async (t, file) => {
+const restore = (file) => async (t) => {
   if (!/\.zip$/.test(file?.name)) {
     return;
   }
@@ -67,5 +68,5 @@ const restore = async (t, file) => {
 export const restorePopupCallback = async (t) => {
   const file = await upload();
   t.closePopup();
-  await restore(t, file);
+  await protect(restore(file))(t);
 };
