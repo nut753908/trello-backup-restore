@@ -47,7 +47,7 @@ const restore = async (t, file) => {
   if (!/\.zip$/.test(file?.name)) {
     return;
   }
-  t.alert({ message: "Restoring" });
+  t.alert({ message: "Restoring, please wait..." });
   const token = await t.getRestApi().getToken();
   const idBoard = t.getContext().board;
   const newZip = new JSZip();
