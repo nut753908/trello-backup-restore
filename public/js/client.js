@@ -1,5 +1,6 @@
 /* global TrelloPowerUp */
 
+import { protect } from "/js/protect.js";
 import {
   backUpCardButtonCallback,
   backUpListActionCallback,
@@ -20,7 +21,7 @@ TrelloPowerUp.initialize(
         {
           icon: FILE_DOWNLOAD_ICON,
           text: "Back up",
-          callback: backUpCardButtonCallback,
+          callback: protect(backUpCardButtonCallback),
         },
       ];
     },
@@ -28,7 +29,7 @@ TrelloPowerUp.initialize(
       return [
         {
           text: "Back up list",
-          callback: backUpListActionCallback,
+          callback: protect(backUpListActionCallback),
         },
       ];
     },
@@ -37,12 +38,12 @@ TrelloPowerUp.initialize(
         {
           icon: FILE_DOWNLOAD_ICON,
           text: "Back up lists",
-          callback: backUpListsBoardButtonCallback,
+          callback: protect(backUpListsBoardButtonCallback),
         },
         {
           icon: FILE_UPLOAD_ICON,
           text: "Restore",
-          callback: restoreBoardButtonCallback,
+          callback: protect(restoreBoardButtonCallback),
         },
       ];
     },
@@ -53,3 +54,4 @@ TrelloPowerUp.initialize(
     appAuthor: APP_AUTHOR,
   }
 );
+
