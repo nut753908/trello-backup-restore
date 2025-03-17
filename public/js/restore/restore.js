@@ -1,9 +1,9 @@
 /* global JSZip */
 
-import { protect } from "/js/protect.js";
 import { createList, createCard } from "/js/restore/api.js";
+import { protect } from "/js/protect.js";
 
-const upload = () =>
+const selectFile = () =>
   new Promise((resolve) => {
     const input = document.createElement("input");
     input.type = "file";
@@ -44,19 +44,19 @@ const restoreList = async (file, token, idBoard) => {
   return json?.id;
 };
 
-const cardLoop = async (i, zip, token, idList) => {
+const loopCard = async (i, zip, token, idList) => {
   const re = new RegExp(`^list${i}_card(\\d+)\\.json$`);
   for (const file of zip.file(re)) {
     await restoreCard(file, token, idList);
   }
 };
 
-const listLoop = async (zip, token, idBoard) => {
+const loopList = async (zip, token, idBoard) => {
   const re = /^list(\d+)\.json$/;
   for (const file of zip.file(re)) {
     const idList = await restoreList(file, token, idBoard);
     const i = file.name.match(re)[1];
-    await cardLoop(i, zip, token, idList);
+    await loopCard(i, zip, token, idList);
   }
 };
 
@@ -66,12 +66,12 @@ const restore = (file) => async (t) => {
   const zip = await newZip.loadAsync(file);
   const token = await t.getRestApi().getToken();
   const idBoard = t.getContext().board;
-  await listLoop(zip, token, idBoard);
+  await loopList(zip, token, idBoard);
   t.alert({ message: "Restoration complete 🎉" });
 };
 
 export const restorePopupCallback = async (t) => {
-  const file = await upload();
+  const file = await selectFile();
   t.closePopup();
   if (/\.zip$/.test(file?.name)) {
     await protect(restore(file))(t);
