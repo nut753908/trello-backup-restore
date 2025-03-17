@@ -53,15 +53,15 @@ const restore = (file) => async (t) => {
   const idBoard = t.getContext().board;
   const newZip = new JSZip();
   const zip = await newZip.loadAsync(file);
-  const listRegex = /^list(\d+)\.json$/;
-  const listFiles = zip.file(listRegex);
-  for (const listFile of listFiles) {
-    const idList = await restoreList(token, idBoard, listFile);
-    const i = listFile.name.match(listRegex)[1];
-    const cardRegex = new RegExp(`^list${i}_card(\\d+)\\.json$`);
-    const cardFiles = zip.file(cardRegex);
-    for (const cardFile of cardFiles) {
-      await restoreCard(token, idList, cardFile);
+  const listRe = /^list(\d+)\.json$/;
+  const lists = zip.file(listRe);
+  for (const list of lists) {
+    const idList = await restoreList(token, idBoard, list);
+    const i = list.name.match(listRe)[1];
+    const cardRe = new RegExp(`^list${i}_card(\\d+)\\.json$`);
+    const cards = zip.file(cardRe);
+    for (const card of cards) {
+      await restoreCard(token, idList, card);
     }
   }
   t.alert({ message: "Restoration complete 🎉" });
