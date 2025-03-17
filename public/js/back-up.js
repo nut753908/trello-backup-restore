@@ -24,22 +24,30 @@ const cardKeys = [
   "labels",
 ];
 
-const cardLoop = (list, zip, i) => {
+const backUpCard = (card, zip, i, j) => {
+  card = cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {});
+  card.idMembers = card.members.map((v) => v.id);
+  card.idLabels = card.labels.map((v) => v.id);
+  delete card.members;
+  delete card.labels;
+  zip.file(`list${i + 1}_card${j + 1}.json`, JSON.stringify(card, null, 2));
+};
+
+const backUpList = (list, zip, i) => {
+  delete list.cards;
+  zip.file(`list${i + 1}.json`, JSON.stringify(list, null, 2));
+};
+
+const loopCard = (list, zip, i) => {
   list.cards.forEach((card, j) => {
-    card = cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {});
-    card.idMembers = card.members.map((v) => v.id);
-    card.idLabels = card.labels.map((v) => v.id);
-    delete card.members;
-    delete card.labels;
-    zip.file(`list${i + 1}_card${j + 1}.json`, JSON.stringify(card, null, 2));
+    backUpCard(card, zip, i, j);
   });
 };
 
-const listLoop = (lists, zip) => {
+const loopList = (lists, zip) => {
   lists.forEach((list, i) => {
-    cardLoop(list, zip, i);
-    delete list.cards;
-    zip.file(`list${i + 1}.json`, JSON.stringify(list, null, 2));
+    loopCard(list, zip, i);
+    backUpList(list, zip, i);
   });
 };
 
@@ -56,7 +64,7 @@ const backUp = async (t, type) => {
   t.alert({ message: `Backing up ${type}` });
   const lists = await getLists[type](t);
   const zip = new JSZip();
-  listLoop(lists, zip);
+  loopList(lists, zip);
   const blob = await zip.generateAsync({ type: "blob" });
   download(blob, `${type}.zip`);
 };
