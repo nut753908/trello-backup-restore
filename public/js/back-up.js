@@ -53,14 +53,14 @@ const backUp = async (t, type) => {
   download(blob, `${type}.zip`);
 };
 
-export const backUpCardButtonCallback = async (t) => {
-  await backUp(t, "card");
+export const backUpCardButtonCallback = (t) => {
+  backUp(t, "card");
 };
 
-export const backUpListActionCallback = async (t) => {
-  await backUp(t, "list");
+export const backUpListActionCallback = (t) => {
+  backUp(t, "list");
 };
 
-export const backUpListsBoardButtonCallback = async (t) => {
-  await backUp(t, "lists");
+export const backUpListsBoardButtonCallback = (t) => {
+  backUp(t, "lists");
 };
