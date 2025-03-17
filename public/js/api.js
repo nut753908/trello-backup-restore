@@ -2,7 +2,7 @@ import { APP_KEY } from "/js/env.js";
 
 export const createList = (token, idBoard, name) => {
   return fetch(
-    `https://api.trello.com/1/boards/${idBoard}/lists?name=${name}&key=${APP_KEY}&token=${token}&pos=bottom`,
+    `https://api.trello.com/1/boards/${idBoard}/lists?name=${name}&pos=bottom&key=${APP_KEY}&token=${token}`,
     {
       method: "POST",
       headers: {
@@ -14,7 +14,7 @@ export const createList = (token, idBoard, name) => {
 
 export const createCard = (token, idList, body) => {
   return fetch(
-    `https://api.trello.com/1/cards?idList=${idList}&key=${APP_KEY}&token=${token}&pos=bottom`,
+    `https://api.trello.com/1/cards?idList=${idList}&pos=bottom&key=${APP_KEY}&token=${token}`,
     {
       method: "POST",
       headers: {
