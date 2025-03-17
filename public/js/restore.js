@@ -67,8 +67,7 @@ const restore = (file) => async (t) => {
 export const restorePopupCallback = async (t) => {
   const file = await upload();
   t.closePopup();
-  if (!/\.zip$/.test(file?.name)) {
-    return;
+  if (/\.zip$/.test(file?.name)) {
+    await protect(restore(file))(t);
   }
-  await protect(restore(file))(t);
 };
