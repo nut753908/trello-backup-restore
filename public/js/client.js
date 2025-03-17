@@ -6,7 +6,7 @@ import {
   backUpListActionCallback,
   backUpListsBoardButtonCallback,
 } from "/js/back-up.js";
-import { restoreBoardButtonCallback } from "/js/authorize.js";
+import { restoreBoardButtonCallback } from "/js/restore/authorize.js";
 import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/env.js";
 
 const FILE_DOWNLOAD_ICON =

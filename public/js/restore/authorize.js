@@ -1,4 +1,4 @@
-import { restorePopupCallback } from "/js/restore.js";
+import { restorePopupCallback } from "/js/restore/restore.js";
 
 const main = async (t, withAuth) => {
   const token = await t.getRestApi().getToken();
@@ -6,14 +6,14 @@ const main = async (t, withAuth) => {
     await t.popup({
       callback: restorePopupCallback,
       title: "Restore",
-      url: "/restore.html",
+      url: "/restore/restore.html",
       height: 40,
     });
   } else if (withAuth) {
     await t.popup({
       callback: authorizePopupCallback,
       title: "Authorize",
-      url: "/authorize.html",
+      url: "/restore/authorize.html",
       height: 40,
     });
   }

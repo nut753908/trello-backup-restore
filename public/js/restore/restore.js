@@ -1,7 +1,7 @@
 /* global JSZip */
 
 import { protect } from "/js/protect.js";
-import { createList, createCard } from "/js/api.js";
+import { createList, createCard } from "/js/restore/api.js";
 
 const upload = () =>
   new Promise((resolve) => {
