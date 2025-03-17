@@ -61,7 +61,7 @@ const restore = async (t, file) => {
       await restoreCard(token, idList, cardFile);
     }
   }
-  t.alert({ message: "Restoration complete" });
+  t.alert({ message: "Restoration complete 🎉" });
 };
 
 export const restorePopupCallback = async (t) => {
