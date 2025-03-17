@@ -14,17 +14,18 @@ const upload = () => {
   });
 };
 
-const getBody = (card) => ({
-  name: card?.name,
-  due: card?.due,
-  start: card?.start,
-  dueComplete: card?.dueComplete,
-  idMembers: card?.idMembers,
-  idLabels: card?.idLabels,
-  address: card?.address,
-  locationName: card?.locationName,
-  coordinates: card?.coordinates,
-});
+const cardKeys = [
+  "id",
+  "name",
+  "due",
+  "start",
+  "dueComplete",
+  "idMembers",
+  "idLabels",
+  "address",
+  "locationName",
+  "coordinates",
+];
 
 const restoreList = async (token, idBoard, file) => {
   const text = await file.async("string");
@@ -38,7 +39,7 @@ const restoreList = async (token, idBoard, file) => {
 const restoreCard = async (token, idList, file) => {
   const text = await file.async("string");
   const card = JSON.parse(text);
-  const body = getBody(card);
+  const body = cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {});
   const res = await createCard(token, idList, body);
   const resJson = await res.json();
   return resJson?.id;
@@ -53,13 +54,15 @@ const restore = (file) => async (t) => {
   const idBoard = t.getContext().board;
   const newZip = new JSZip();
   const zip = await newZip.loadAsync(file);
-  const listFiles = zip.file(/^list\d+\.json$/);
-  for (const listFile of listFiles) {
-    const idList = await restoreList(token, idBoard, listFile);
-    const i = listFile.name.match(/^list(\d+)\.json$/)[1];
-    const cardFiles = zip.file(new RegExp(`^list${i}_card\\d+\\.json$`));
-    for (const cardFile of cardFiles) {
-      await restoreCard(token, idList, cardFile);
+  const listRe = /^list(\d+)\.json$/;
+  const lists = zip.file(listRe);
+  for (const list of lists) {
+    const idList = await restoreList(token, idBoard, list);
+    const i = list.name.match(listRe)[1];
+    const cardRe = new RegExp(`^list${i}_card(\\d+)\\.json$`);
+    const cards = zip.file(cardRe);
+    for (const card of cards) {
+      await restoreCard(token, idList, card);
     }
   }
   t.alert({ message: "Restoration complete 🎉" });
