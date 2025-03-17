@@ -14,17 +14,18 @@ const upload = () => {
   });
 };
 
-const getBody = (card) => ({
-  name: card?.name,
-  due: card?.due,
-  start: card?.start,
-  dueComplete: card?.dueComplete,
-  idMembers: card?.idMembers,
-  idLabels: card?.idLabels,
-  address: card?.address,
-  locationName: card?.locationName,
-  coordinates: card?.coordinates,
-});
+const cardKeys = [
+  "id",
+  "name",
+  "due",
+  "start",
+  "dueComplete",
+  "idMembers",
+  "idLabels",
+  "address",
+  "locationName",
+  "coordinates",
+];
 
 const restoreList = async (token, idBoard, file) => {
   const text = await file.async("string");
@@ -38,7 +39,7 @@ const restoreList = async (token, idBoard, file) => {
 const restoreCard = async (token, idList, file) => {
   const text = await file.async("string");
   const card = JSON.parse(text);
-  const body = getBody(card);
+  const body = cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {});
   const res = await createCard(token, idList, body);
   const resJson = await res.json();
   return resJson?.id;
