@@ -15,7 +15,7 @@ The license is described as MIT in package.json in the urls above, but its full 
 
 These icons used in this project are downloaded from [Material Symbols and Icons](https://fonts.google.com/icons).
 
-- [settings_backup_restore_40dp_1F1F1F.svg](https://cdn.glitch.global/0b64f33b-22b9-4fbd-8d4e-fdb824ae590b/settings_backup_restore_40dp_1F1F1F.svg?v=1741329489763)
+- [settings_backup_restore_144dp_1F1F1F.svg](https://cdn.glitch.global/0b64f33b-22b9-4fbd-8d4e-fdb824ae590b/settings_backup_restore_144dp_1F1F1F.svg?v=1742194350293)
 - [file_download_16dp_1F1F1F.svg](https://cdn.glitch.global/0b64f33b-22b9-4fbd-8d4e-fdb824ae590b/file_download_16dp_1F1F1F.svg?v=1741327113830)
 - [file_upload_16dp_1F1F1F.svg](https://cdn.glitch.global/0b64f33b-22b9-4fbd-8d4e-fdb824ae590b/file_upload_16dp_1F1F1F.svg?v=1741327106140)
 
