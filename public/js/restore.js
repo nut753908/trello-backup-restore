@@ -46,9 +46,6 @@ const restoreCard = async (token, idList, file) => {
 };
 
 const restore = (file) => async (t) => {
-  if (!/\.zip$/.test(file?.name)) {
-    return;
-  }
   t.alert({ message: "Restoring, please wait..." });
   const token = await t.getRestApi().getToken();
   const idBoard = t.getContext().board;
@@ -71,5 +68,8 @@ const restore = (file) => async (t) => {
 export const restorePopupCallback = async (t) => {
   const file = await upload();
   t.closePopup();
+  if (!/\.zip$/.test(file?.name)) {
+    return;
+  }
   await protect(restore(file))(t);
 };
