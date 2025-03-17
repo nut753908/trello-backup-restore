@@ -1,9 +1,7 @@
 const args = ["member", "private", "busyForBackupRestore"];
 
 export const protect = (func) => async (t) => {
-  window.onbeforeunload = () => {
-    t.set(...args, false);
-  };
+  window.onbeforeunload = () => t.set(...args, false);
   if (await t.get(...args, false)) {
     return;
   }
