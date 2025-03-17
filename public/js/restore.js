@@ -3,8 +3,8 @@
 import { protect } from "/js/protect.js";
 import { createList, createCard } from "/js/api.js";
 
-const upload = () => {
-  return new Promise((resolve) => {
+const upload = () =>
+  new Promise((resolve) => {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = ".zip";
@@ -12,7 +12,6 @@ const upload = () => {
     input.addEventListener("cancel", () => resolve(null), false);
     input.click();
   });
-};
 
 const cardKeys = [
   "id",
