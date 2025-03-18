@@ -6,6 +6,7 @@ const popupAfterAuth = async (t) => {
 };
 
 export const popup = async (t, withAuth = true) => {
+  throw new Error("error");
   const token = await t.getRestApi().getToken();
   if (/^[0-9a-fA-Z]{76}$/.test(token)) {
     await t.popup({
