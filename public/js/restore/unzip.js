@@ -57,5 +57,6 @@ export const unzip = (file) => async (t) => {
   const token = await t.getRestApi().getToken();
   const idBoard = t.getContext().board;
   await loopList(zip, token, idBoard);
+  await t.hideAlert();
   t.alert({ message: "Restoration complete 🎉" });
 };
