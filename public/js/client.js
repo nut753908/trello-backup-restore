@@ -2,7 +2,7 @@
 
 import { protect } from "/js/protect.js";
 import { backUp } from "/js/back-up/back-up.js";
-import { popup1 } from "/js/restore/popup.js";
+import { popup } from "/js/restore/popup.js";
 import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/env.js";
 
 const BACKUP_ICON =
@@ -34,7 +34,7 @@ TrelloPowerUp.initialize(
       {
         icon: RESTORE_ICON,
         text: "Restore",
-        callback: protect(popup1),
+        callback: protect(popup),
       },
     ],
   },

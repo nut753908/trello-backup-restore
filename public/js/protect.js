@@ -7,8 +7,7 @@ export const protect = (func) => async (t) => {
   busy = true;
   await Promise.all([
     new Promise((resolve) => setTimeout(resolve, 500)),
-    func(t),
-  ]).finally(() => {
-    busy = false;
-  });
+    func(t).catch((e) => { console.error(e); }),
+  ]);
+  busy = false;
 };
