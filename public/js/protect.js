@@ -1,17 +1,14 @@
-const args = ["member", "private", "busyForBackupRestore"];
+let busy = false;
 
 export const protect = (func) => async (t) => {
-  window.onbeforeunload = () => {
-    t.set(...args, false);
-  };
-  if (await t.get(...args, false)) {
+  if (busy) {
     return;
   }
-  await t.set(...args, true);
+  busy = true;
   await Promise.all([
     new Promise((resolve) => setTimeout(resolve, 500)),
     func(t),
   ]).finally(() => {
-    t.set(...args, false);
+    busy = false;
   });
 };
