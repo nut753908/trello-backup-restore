@@ -1,5 +1,6 @@
 /* global JSZip */
 
+import { withBackoff } from "/js/restore/backoff.js";
 import { createList, createCard } from "/js/restore/api.js";
 
 const cardKeys = [
@@ -19,7 +20,7 @@ const fileToCard = async (file, token, idList) => {
   const text = await file.async("string");
   const card = JSON.parse(text);
   const body = cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {});
-  const res = await createCard(token, idList, body);
+  const res = await withBackoff(() => createCard(token, idList, body));
   const json = await res.json();
   return json?.id;
 };
@@ -28,7 +29,7 @@ const fileToList = async (file, token, idBoard) => {
   const text = await file.async("string");
   const list = JSON.parse(text);
   const name = list?.name;
-  const res = await createList(token, idBoard, name);
+  const res = await withBackoff(() => createList(token, idBoard, name));
   const json = await res.json();
   return json?.id;
 };
