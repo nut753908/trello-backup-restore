@@ -7,7 +7,7 @@ const fullJitter = async () => {
 
 export const backoff = async (func) => {
   const res = await func();
-  if (res.status === 200) {
+  if (res.status === 429) {
     await fullJitter();
     attempt += 1;
     return backoff(func);
