@@ -16,23 +16,23 @@ const cardKeys = [
   "coordinates",
 ];
 
-const fileToCard = async (file, token, idList) => {
-  const text = await file.async("string");
-  const card = JSON.parse(text);
-  const body = cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {});
-  const res = await withBackoff(() => createCard(token, idList, body));
-  const json = await res.json();
-  return json?.id;
-};
+const fileToCard = (file, token, idList) =>
+  file
+    .async("string")
+    .then((text) => JSON.parse(text))
+    .then((card) => cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {}))
+    .then((body) => withBackoff(() => createCard(token, idList, body)))
+    .then((res) => res.json())
+    .then((json) => json?.id);
 
-const fileToList = async (file, token, idBoard) => {
-  const text = await file.async("string");
-  const list = JSON.parse(text);
-  const name = list?.name;
-  const res = await withBackoff(() => createList(token, idBoard, name));
-  const json = await res.json();
-  return json?.id;
-};
+const fileToList = (file, token, idBoard) =>
+  file
+    .async("string")
+    .then((text) => JSON.parse(text))
+    .then((list) => list?.name)
+    .then((name) => withBackoff(() => createList(token, idBoard, name)))
+    .then((res) => res.json())
+    .then((json) => json?.id);
 
 const loopCard = async (i, zip, token, idList) => {
   const re = new RegExp(`^list${i}_card(\\d+)\\.json$`);
