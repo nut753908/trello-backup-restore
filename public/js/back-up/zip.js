@@ -7,6 +7,17 @@ import {
   descToFile,
 } from "/js/back-up/file.js";
 
+const getLists = {
+  card: async (t) => [
+    {
+      ...(await t.list("id", "name")),
+      cards: [await t.card("all")],
+    },
+  ],
+  list: async (t) => [await t.list("all")],
+  lists: (t) => t.lists("all"),
+};
+
 const loopCard = (cards, zip, i) => {
   cards.forEach((card, j) => {
     j++;
@@ -23,7 +34,9 @@ const loopList = (lists, zip) => {
   });
 };
 
-export const createZipBlob = (board, lists) => {
+export const createZipBlob = async (t, type) => {
+  const board = await t.board("id", "name");
+  const lists = await getLists[type](t);
   const zip = new JSZip();
   boardToFile(board, zip);
   loopList(lists, zip);
