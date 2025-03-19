@@ -41,9 +41,12 @@ const fileToList = (file, token, idBoard) =>
     .then((res) => res.json())
     .then((json) => json?.id);
 
+const compareName = (a, b) => a.name > b.name ? 1 : -1;
+
 const loopCard = async (i, zip, token, idList) => {
   const re = new RegExp(`^list${i}_card(\\d+)\\.json$`);
-  for (const file of zip.file(re)) {
+  const files = zip.file(re).sort(compareName);
+  for (const file of files) {
     const j = file.name.match(re)[1];
     const descFile = zip.file(`list${i}_card${j}_desc.md`);
     await fileToCard(file, descFile, token, idList);
@@ -52,7 +55,8 @@ const loopCard = async (i, zip, token, idList) => {
 
 const loopList = async (zip, token, idBoard) => {
   const re = /^list(\d+)\.json$/;
-  for (const file of zip.file(re)) {
+  const files = zip.file(re).sort(compareName);
+  for (const file of files) {
     const i = file.name.match(re)[1];
     const idList = await fileToList(file, token, idBoard);
     await loopCard(i, zip, token, idList);
