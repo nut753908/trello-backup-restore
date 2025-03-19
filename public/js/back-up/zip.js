@@ -40,8 +40,8 @@ const loopList = (lists, zip) => {
   });
 };
 
-export const createZipBlob = async (lists) => {
+export const createZipBlob = (lists) => {
   const zip = new JSZip();
   loopList(lists, zip);
-  return await zip.generateAsync({ type: "blob" });
+  return zip.generateAsync({ type: "blob" });
 };
