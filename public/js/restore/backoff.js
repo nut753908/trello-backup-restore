@@ -1,7 +1,7 @@
-let retryCount = 0;
+let attempt = 0;
 
 const backoff = async () => {
-  const backoff = Math.min(Math.pow(2, retryCount) * 1000, 32000);
+  const backoff = Math.min(Math.pow(2, attempt) * 1000, 32000);
   const jitter = Math.random() * 1000;
   const sum = backoff + jitter;
   await new Promise((resolve) => setTimeout(resolve, sum));
@@ -11,7 +11,7 @@ export const withBackoff = async (func) => {
   const res = await func();
   if (res.status === 429) {
     await backoff();
-    retryCount += 1;
+    attempt += 1;
     return withBackoff(func);
   }
   if (
@@ -19,9 +19,9 @@ export const withBackoff = async (func) => {
     res.headers.get("x-rate-limit-api-token-remaining") <= 50
   ) {
     await backoff();
-    retryCount += 1;
+    attempt += 1;
     return res;
   }
-  retryCount = 0;
+  attempt = 0;
   return res;
 };
