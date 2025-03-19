@@ -12,7 +12,7 @@ export const withBackoff = async (func) => {
   if (res.status === 429) {
     await backoff();
     retryCount += 1;
-    return await withBackoff(func);
+    return withBackoff(func);
   }
   if (
     res.headers.get("x-rate-limit-api-key-remaining") <= 100 ||
