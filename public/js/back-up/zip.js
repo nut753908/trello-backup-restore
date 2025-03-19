@@ -44,9 +44,9 @@ const loopList = (lists, zip) => {
   });
 };
 
-export const createZipBlob = (board, lists) => {
+export const createZipBlob = (lists, board) => {
   const zip = new JSZip();
-  boardToFile(board, zip);
   loopList(lists, zip);
+  boardToFile(board, zip);
   return zip.generateAsync({ type: "blob" });
 };
