@@ -6,6 +6,7 @@ import { createList, createCard } from "/js/restore/api.js";
 const cardKeys = [
   "id",
   "name",
+  "desc",
   "due",
   "start",
   "dueComplete",
@@ -16,10 +17,16 @@ const cardKeys = [
   "coordinates",
 ];
 
-const fileToCard = (file, token, idList) =>
+const fileToCard = (file, descFile, token, idList) =>
   file
     .async("string")
     .then((text) => JSON.parse(text))
+    .then(async (card) => {
+      if (descFile) {
+        card.desc = await descFile.async("string");
+      }
+      return card;
+    })
     .then((card) => cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {}))
     .then((body) => backoff(() => createCard(token, idList, body)))
     .then((res) => res.json())
@@ -37,15 +44,17 @@ const fileToList = (file, token, idBoard) =>
 const loopCard = async (i, zip, token, idList) => {
   const re = new RegExp(`^list${i}_card(\\d+)\\.json$`);
   for (const file of zip.file(re)) {
-    await fileToCard(file, token, idList);
+    const j = file.name.match(re)[1];
+    const descFile = zip.file(`list${i}_card${j}_desc.md`);
+    await fileToCard(file, descFile, token, idList);
   }
 };
 
 const loopList = async (zip, token, idBoard) => {
   const re = /^list(\d+)\.json$/;
   for (const file of zip.file(re)) {
-    const idList = await fileToList(file, token, idBoard);
     const i = file.name.match(re)[1];
+    const idList = await fileToList(file, token, idBoard);
     await loopCard(i, zip, token, idList);
   }
 };
