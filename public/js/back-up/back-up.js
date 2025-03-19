@@ -20,9 +20,21 @@ const download = (blob, name) => {
   URL.revokeObjectURL(url);
 };
 
+const createFilename = (t, type) =>
+  ({
+    card: (t) => t.card("name"),
+    list: (t) => t.list("name"),
+    lists: (t) => t.board("name"),
+  }
+    [type](t)
+    .get("name")
+    .then((n) => n.replace(/[<>:"\/\\|?*]/g, ""))
+    .then((n) => `${type}_${n}.zip`));
+
 export const backUp = (type) => async (t) => {
   t.alert({ message: `Backing up ${type}` });
   const lists = await getLists[type](t);
   const blob = await createZipBlob(lists);
-  download(blob, `${type}.zip`);
+  const name = await createFilename(t, type);
+  download(blob, name);
 };
