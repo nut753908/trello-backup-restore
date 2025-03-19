@@ -1,5 +1,3 @@
-/* global JSZip */
-
 import { protect } from "/js/protect.js";
 import { unzip } from "/js/restore/unzip.js";
 
