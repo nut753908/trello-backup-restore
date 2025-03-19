@@ -1,27 +1,25 @@
-let retryCount = 0;
+let attempt = 0;
 
-const backoff = async () => {
-  const backoff = Math.min(Math.pow(2, retryCount) * 1000, 32000);
-  const jitter = Math.random() * 1000;
-  const jitteredBackoff = backoff + jitter;
-  await new Promise((resolve) => setTimeout(resolve, jitteredBackoff));
-};
+const fullJitter = () =>
+  new Promise((resolve) =>
+    setTimeout(resolve, Math.min(32000, 1000 * 2 ** attempt) * Math.random())
+  );
 
-export const withBackoff = async (func) => {
+export const backoff = async (func) => {
   const res = await func();
   if (res.status === 429) {
-    await backoff();
-    retryCount += 1;
-    return withBackoff(func);
+    await fullJitter();
+    attempt += 1;
+    return backoff(func);
   }
   if (
     res.headers.get("x-rate-limit-api-key-remaining") <= 100 ||
     res.headers.get("x-rate-limit-api-token-remaining") <= 50
   ) {
-    await backoff();
-    retryCount += 1;
+    await fullJitter();
+    attempt += 1;
     return res;
   }
-  retryCount = 0;
+  attempt = 0;
   return res;
 };

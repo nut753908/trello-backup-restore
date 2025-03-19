@@ -1,6 +1,6 @@
 /* global JSZip */
 
-import { withBackoff } from "/js/restore/backoff.js";
+import { backoff } from "/js/restore/backoff.js";
 import { createList, createCard } from "/js/restore/api.js";
 
 const cardKeys = [
@@ -21,7 +21,7 @@ const fileToCard = (file, token, idList) =>
     .async("string")
     .then((text) => JSON.parse(text))
     .then((card) => cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {}))
-    .then((body) => withBackoff(() => createCard(token, idList, body)))
+    .then((body) => backoff(() => createCard(token, idList, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
 
@@ -30,7 +30,7 @@ const fileToList = (file, token, idBoard) =>
     .async("string")
     .then((text) => JSON.parse(text))
     .then((list) => list?.name)
-    .then((name) => withBackoff(() => createList(token, idBoard, name)))
+    .then((name) => backoff(() => createList(token, idBoard, name)))
     .then((res) => res.json())
     .then((json) => json?.id);
 
