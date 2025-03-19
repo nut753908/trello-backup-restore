@@ -27,6 +27,10 @@ const listToFile = (list, zip, i) => {
   zip.file(`list${i + 1}.json`, JSON.stringify(list, null, 2));
 };
 
+const boardToFile = (board, zip) => {
+  zip.file("_board.json", JSON.stringify(board, null, 2));
+};
+
 const loopCard = (list, zip, i) => {
   list.cards.forEach((card, j) => {
     cardToFile(card, zip, i, j);
@@ -40,8 +44,9 @@ const loopList = (lists, zip) => {
   });
 };
 
-export const createZipBlob = (lists) => {
+export const createZipBlob = (board, lists) => {
   const zip = new JSZip();
+  boardToFile(board, zip);
   loopList(lists, zip);
   return zip.generateAsync({ type: "blob" });
 };
