@@ -1,5 +1,11 @@
 /* global JSZip */
 
+const descToFile = (desc, zip, i, j) => {
+  if (desc) {
+    zip.file(`list${i + 1}_card${j + 1}_desc.md`, desc);
+  }
+};
+
 const cardKeys = [
   "id",
   "name",
@@ -33,6 +39,7 @@ const boardToFile = (board, zip) => {
 
 const loopCard = (list, zip, i) => {
   list.cards.forEach((card, j) => {
+    descToFile(card.desc, zip, i, j);
     cardToFile(card, zip, i, j);
   });
 };
