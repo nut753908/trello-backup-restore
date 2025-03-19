@@ -1,9 +1,9 @@
 let attempt = 0;
 
-const fullJitter = async () => {
-  const sleep = Math.min(32000, 1000 * 2 ** attempt) * Math.random();
-  await new Promise((resolve) => setTimeout(resolve, sleep));
-};
+const fullJitter = () =>
+  new Promise((resolve) =>
+    setTimeout(resolve, Math.min(32000, 1000 * 2 ** attempt) * Math.random())
+  );
 
 export const backoff = async (func) => {
   const res = await func();
