@@ -8,7 +8,7 @@ const getLists = {
     },
   ],
   list: async (t) => [await t.list("all")],
-  lists: async (t) => t.lists("all"),
+  lists: (t) => t.lists("all"),
 };
 
 const download = (blob, name) => {
