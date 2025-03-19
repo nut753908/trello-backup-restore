@@ -1,16 +1,5 @@
 import { createZipBlob } from "/js/back-up/zip.js";
 
-const getLists = {
-  card: async (t) => [
-    {
-      ...(await t.list("id", "name")),
-      cards: [await t.card("all")],
-    },
-  ],
-  list: async (t) => [await t.list("all")],
-  lists: (t) => t.lists("all"),
-};
-
 const createFilename = (t, type) =>
   ({
     card: (t) => t.card("name"),
@@ -33,9 +22,7 @@ const download = (blob, name) => {
 
 export const backUp = (type) => async (t) => {
   t.alert({ message: `Backing up ${type}` });
-  const lists = await getLists[type](t);
-  const board = await t.board("id", "name");
-  const blob = await createZipBlob(lists, board);
+  const blob = await createZipBlob(t, type);
   const name = await createFilename(t, type);
   download(blob, name);
 };
