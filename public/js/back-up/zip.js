@@ -7,8 +7,8 @@ import {
   descToFile,
 } from "/js/back-up/file.js";
 
-const loopCard = (list, zip, i) => {
-  list.cards.forEach((card, j) => {
+const loopCard = (cards, zip, i) => {
+  cards.forEach((card, j) => {
     j++;
     cardToFile(card, zip, i, j);
     descToFile(card.desc, zip, i, j);
@@ -19,7 +19,7 @@ const loopList = (lists, zip) => {
   lists.forEach((list, i) => {
     i++;
     listToFile(list, zip, i);
-    loopCard(list, zip, i);
+    loopCard(list.cards, zip, i);
   });
 };
 
