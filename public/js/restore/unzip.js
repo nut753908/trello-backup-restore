@@ -20,7 +20,7 @@ const cardKeys = [
 const fileToCard = (file, descFile, token, idList) =>
   file
     .async("string")
-    .then((text) => JSON.parse(text))
+    .then(JSON.parse)
     .then(async (card) => {
       if (descFile) {
         card.desc = await descFile.async("string");
@@ -35,7 +35,7 @@ const fileToCard = (file, descFile, token, idList) =>
 const fileToList = (file, token, idBoard) =>
   file
     .async("string")
-    .then((text) => JSON.parse(text))
+    .then(JSON.parse)
     .then((list) => list?.name)
     .then((name) => backoff(() => createList(token, idBoard, name)))
     .then((res) => res.json())
