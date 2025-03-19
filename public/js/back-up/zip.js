@@ -2,7 +2,7 @@
 
 const descToFile = (desc, zip, i, j) => {
   if (desc) {
-    zip.file(`list${i + 1}_card${j + 1}_desc.md`, desc);
+    zip.file(`list${i}_card${j}_desc.md`, desc);
   }
 };
 
@@ -25,12 +25,12 @@ const cardToFile = (card, zip, i, j) => {
   card.idLabels = card.labels.map((v) => v.id);
   delete card.members;
   delete card.labels;
-  zip.file(`list${i + 1}_card${j + 1}.json`, JSON.stringify(card, null, 2));
+  zip.file(`list${i}_card${j}.json`, JSON.stringify(card, null, 2));
 };
 
 const listToFile = (list, zip, i) => {
   delete list.cards;
-  zip.file(`list${i + 1}.json`, JSON.stringify(list, null, 2));
+  zip.file(`list${i}.json`, JSON.stringify(list, null, 2));
 };
 
 const boardToFile = (board, zip) => {
@@ -39,6 +39,7 @@ const boardToFile = (board, zip) => {
 
 const loopCard = (list, zip, i) => {
   list.cards.forEach((card, j) => {
+    j++;
     descToFile(card.desc, zip, i, j);
     cardToFile(card, zip, i, j);
   });
@@ -46,6 +47,7 @@ const loopCard = (list, zip, i) => {
 
 const loopList = (lists, zip) => {
   lists.forEach((list, i) => {
+    i++;
     loopCard(list, zip, i);
     listToFile(list, zip, i);
   });

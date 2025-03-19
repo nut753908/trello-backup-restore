@@ -9,7 +9,7 @@ export const backoff = async (func) => {
   const res = await func();
   if (res.status === 429) {
     await fullJitter();
-    attempt += 1;
+    attempt++;
     return backoff(func);
   }
   if (
@@ -17,7 +17,7 @@ export const backoff = async (func) => {
     res.headers.get("x-rate-limit-api-token-remaining") <= 50
   ) {
     await fullJitter();
-    attempt += 1;
+    attempt++;
     return res;
   }
   attempt = 0;
