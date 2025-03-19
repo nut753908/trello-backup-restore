@@ -11,15 +11,6 @@ const getLists = {
   lists: (t) => t.lists("all"),
 };
 
-const download = (blob, name) => {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = name;
-  a.click();
-  URL.revokeObjectURL(url);
-};
-
 const createFilename = (t, type) =>
   ({
     card: (t) => t.card("name"),
@@ -30,6 +21,15 @@ const createFilename = (t, type) =>
     .get("name")
     .then((n) => n.replace(/[<>:"\/\\|?*]/g, ""))
     .then((n) => `${type}_${n}.zip`));
+
+const download = (blob, name) => {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(url);
+};
 
 export const backUp = (type) => async (t) => {
   t.alert({ message: `Backing up ${type}` });
