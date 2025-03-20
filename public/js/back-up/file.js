@@ -35,3 +35,9 @@ export const descToFile = (desc, zip, i, j) => {
     zip.file(`list${i}_card${j}_desc.md`, desc);
   }
 };
+
+// a: attachment
+export const attachmentToFile = (a, zip, i, j, n) => {
+  a = ["id", "name", "url"].reduce((o, k) => ({ ...o, [k]: a[k] }), {});
+  zip.file(`list${i}_card${j}_attachment${n}.json`, JSON.stringify(a, null, 2));
+};

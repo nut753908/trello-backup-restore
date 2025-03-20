@@ -1,5 +1,5 @@
 import { backoff } from "/js/restore/backoff.js";
-import { createList, createCard } from "/js/restore/api.js";
+import { createList, createCard, createAttachment } from "/js/restore/api.js";
 
 export const fileToList = (file, token, idBoard) =>
   file
@@ -36,5 +36,15 @@ export const fileToCard = (file, descFile, token, idList) =>
     })
     .then((card) => cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {}))
     .then((body) => backoff(() => createCard(token, idList, body)))
+    .then((res) => res.json())
+    .then((json) => json?.id);
+
+export const fileToAttachment = (file, token, idCard) =>
+  file
+    .async("string")
+    .then(JSON.parse)
+    // a: attachment
+    .then((a) => ["name", "url"].reduce((o, k) => ({ ...o, [k]: a?.[k] }), {}))
+    .then((body) => backoff(() => createAttachment(token, idCard, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
