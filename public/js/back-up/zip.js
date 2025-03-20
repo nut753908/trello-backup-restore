@@ -5,6 +5,7 @@ import {
   listToFile,
   cardToFile,
   descToFile,
+  attachmentToFile,
 } from "/js/back-up/file.js";
 
 const getLists = {
@@ -18,11 +19,19 @@ const getLists = {
   lists: (t) => t.lists("all"),
 };
 
+const loopAttachment = (attachments, zip, i, j) => {
+  attachments.forEach((attachment, n) => {
+    n++;
+    attachmentToFile(attachment, zip, i, j, n);
+  });
+};
+
 const loopCard = (cards, zip, i) => {
   cards.forEach((card, j) => {
     j++;
     cardToFile(card, zip, i, j);
     descToFile(card.desc, zip, i, j);
+    loopAttachment(card.attachments, zip, i, j);
   });
 };
 
