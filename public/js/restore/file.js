@@ -11,7 +11,6 @@ export const fileToList = (file, token, idBoard) =>
     .then((json) => json?.id);
 
 const cardKeys = [
-  "id",
   "name",
   "desc",
   "due",
