@@ -1,8 +1,16 @@
 /* global JSZip */
 
-import { fileToList, fileToCard } from "/js/restore/file.js";
+import { fileToList, fileToCard, fileToAttachment } from "/js/restore/file.js";
 
 const compareName = (a, b) => (a.name > b.name ? 1 : -1);
+
+const loopAttachment = async (i, j, zip, token, idCard) => {
+  const re = new RegExp(`^list${i}_card${j}_attachment(\\d+)\\.json$`);
+  const files = zip.file(re).sort(compareName);
+  for (const file of files) {
+    await fileToAttachment(file, token, idCard);
+  }
+};
 
 const loopCard = async (i, zip, token, idList) => {
   const re = new RegExp(`^list${i}_card(\\d+)\\.json$`);
@@ -10,7 +18,8 @@ const loopCard = async (i, zip, token, idList) => {
   for (const file of files) {
     const j = file.name.match(re)[1];
     const descFile = zip.file(`list${i}_card${j}_desc.md`);
-    await fileToCard(file, descFile, token, idList);
+    const idCard = await fileToCard(file, descFile, token, idList);
+    await loopAttachment(i, j, zip, token, idCard);
   }
 };
 
