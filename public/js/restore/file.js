@@ -23,27 +23,38 @@ const cardKeys = [
   "coordinates",
 ];
 
-export const fileToCard = (file, descFile, token, idList) =>
-  file
+export const fileToCard = (cardFile, descFile, token, idList) =>
+  cardFile
     .async("string")
     .then(JSON.parse)
+    .then((card) => cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {}))
     .then(async (card) => {
       if (descFile) {
         card.desc = await descFile.async("string");
       }
       return card;
     })
-    .then((card) => cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {}))
     .then((body) => backoff(() => createCard(token, idList, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
 
-export const fileToAttachment = (file, token, idCard) =>
-  file
+// a: attachment
+export const fileToAttachment = (aFile, fileFile, token, idCard) =>
+  aFile
     .async("string")
     .then(JSON.parse)
-    // a: attachment
     .then((a) => ["name", "url"].reduce((o, k) => ({ ...o, [k]: a?.[k] }), {}))
+    .then(async (a) => {
+      a.setCover = false;
+      if (fileFile) {
+        a.name = fileFile.name.match(
+          /^list\d+_card\d+_attachment\d+_file_(.+)/
+        )[1];
+        a.file = await fileFile.async("blob");
+        delete a.url;
+      }
+      return a;
+    })
     .then((body) => backoff(() => createAttachment(token, idCard, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
