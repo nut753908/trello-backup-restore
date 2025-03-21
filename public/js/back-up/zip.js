@@ -24,7 +24,7 @@ const loopAttachment = async (attachments, zip, i, j, token) => {
   for (const [_n, attachment] of attachments.entries()) {
     const n = _n + 1;
     attachmentToFile(attachment, zip, i, j, n);
-    await fileToFile(attachment.url, zip, i, j, n, token);
+    await fileToFile(attachment, zip, i, j, n, token);
   }
 };
 

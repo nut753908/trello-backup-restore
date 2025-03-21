@@ -47,10 +47,12 @@ export const fileToAttachment = (aFile, fileFile, token, idCard) =>
     .then(async (a) => {
       a.setCover = false;
       if (fileFile) {
-        a.name = fileFile.name.match(
-          /^list\d+_card\d+_attachment\d+_file_(.+)/
-        )[1];
-        a.file = await fileFile.async("blob");
+        a.file = new File(
+          [await fileFile.async("blob")],
+          a.url
+            ? decodeURI(a.url.split("/").pop())
+            : decodeURI(a.name.split("/").pop())
+        );
         delete a.url;
       }
       return a;

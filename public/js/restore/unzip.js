@@ -10,10 +10,7 @@ const loopAttachment = async (i, j, zip, token, idCard) => {
   // a: attachment
   for (const aFile of files) {
     const n = aFile.name.match(re)[1];
-    const fileFile = zip
-      .file(new RegExp(`^list${i}_card${j}_attachment${n}_file_.+`))
-      .sort(compareName)
-      .shift();
+    const fileFile = zip.file(`list${i}_card${j}_attachment${n}_file`);
     await fileToAttachment(aFile, fileFile, token, idCard);
   }
 };
