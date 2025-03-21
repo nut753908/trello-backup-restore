@@ -55,6 +55,6 @@ export const fileToFile = async (a, zip, i, j, n, token) => {
     const proxyUrl = a.url.replace(trelloHostRe, proxyHost);
     const res = await fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
     const blob = await res.blob();
-    zip.file(`list${i}_card${j}_attachment${n}_file_${a.name}`, blob);
+    zip.file(`list${i}_card${j}_attachment${n}_file`, blob);
   }
 };
