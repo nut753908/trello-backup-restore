@@ -8,7 +8,11 @@ const loopAttachment = async (i, j, zip, token, idCard) => {
   const re = new RegExp(`^list${i}_card${j}_attachment(\\d+)\\.json$`);
   const files = zip.file(re).sort(compareName);
   for (const file of files) {
-    await fileToAttachment(file, token, idCard);
+    const n = file.name.match(re)[1];
+    const fileFiles = zip
+      .file(new RegExp(`^list${i}_card${j}_attachment${n}_file_.+`))
+      .sort(compareName);
+    await fileToAttachment(file, fileFiles, token, idCard);
   }
 };
 

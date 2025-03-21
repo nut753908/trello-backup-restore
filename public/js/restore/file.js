@@ -38,12 +38,22 @@ export const fileToCard = (file, descFile, token, idList) =>
     .then((res) => res.json())
     .then((json) => json?.id);
 
-export const fileToAttachment = (file, token, idCard) =>
+export const fileToAttachment = (file, fileFiles, token, idCard) =>
   file
     .async("string")
     .then(JSON.parse)
     // a: attachment
     .then((a) => ["name", "url"].reduce((o, k) => ({ ...o, [k]: a?.[k] }), {}))
+    .then(async (a) => {
+      a.setCover = false;
+      if (fileFiles.length >= 1) {
+        a.name = fileFiles[0].name;
+        a.name = a.name.match(/^list\d+_card\d+_attachment\d+_file_(.+)/)[1];
+        a.file = await fileFiles[0].async("blob");
+        delete a.url;
+      }
+      return a;
+    })
     .then((body) => backoff(() => createAttachment(token, idCard, body)))
     .then((res) => res.json())
     .then((json) => json?.id);

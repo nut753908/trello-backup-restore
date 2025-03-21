@@ -31,16 +31,16 @@ export const createCard = (token, idList, body) =>
     }),
   });
 
-export const createAttachment = (token, idCard, body) =>
-  fetch(`https://api.trello.com/1/cards/${idCard}/attachments`, {
+export const createAttachment = (token, idCard, body) => {
+  const formData = new FormData();
+  Object.entries(body).forEach(([k, v]) => formData.append(k, v));
+  formData.append("key", APP_KEY);
+  formData.append("token", token);
+  return fetch(`https://api.trello.com/1/cards/${idCard}/attachments`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       Accept: "application/json",
     },
-    body: JSON.stringify({
-      ...body,
-      key: APP_KEY,
-      token,
-    }),
+    body: formData,
   });
+};
