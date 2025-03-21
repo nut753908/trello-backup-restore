@@ -44,18 +44,13 @@ export const attachmentToFile = (a, zip, i, j, n) => {
   zip.file(`list${i}_card${j}_attachment${n}.json`, JSON.stringify(a, null, 2));
 };
 
-const downloadFile = (url, token) => {
-  const proxyUrl = url.replace(/^https:\/\/trello\.com/, "https://trello-backup-restore.glitch.me");
-  return fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
-}
-
 export const fileToFile = async (url, zip, i, j, n, token) => {
-  const res = await downloadFile(url, token);
+  const proxyUrl = url.replace(
+    /^https:\/\/trello\.com/,
+    "https://trello-backup-restore.glitch.me"
+  );
+  const res = await fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
   const blob = await res.blob();
-  const url2 = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url2;
-  a.download = "hoge.png";
-  a.click();
-  URL.revokeObjectURL(url2);
+  const name = url.split("/download/").pop();
+  zip.file(`list${i}_card${j}_attachment${n}_file_${name}`, blob);
 };
