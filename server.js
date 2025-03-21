@@ -17,19 +17,17 @@ app.use(cors({ origin: "https://trello.com" }));
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
-app.get(
-  "/1/cards/:cardId/attachments/:attachmentId/download/:filename",
-  (req, res) => {
-    fetch(
-      `https://api.trello.com/1/cards/${req.params.cardId}/attachments/${req.params.attachmentId}/download/${req.params.filename}`,
-      {
-        headers: {
-          Authorization: `OAuth oauth_consumer_key="${req.query.key}", oauth_token="${req.query.token}"`,
-        },
-      }
-    ).then((r) => r.body.pipe(res));
-  }
-);
+const downloadPathRe =
+  /^\/1\/cards\/[0-9a-f]{24}\/attachments\/[0-9a-f]{24}\/download\/.+/;
+const apiUrl = "https://api.trello.com";
+
+app.get(downloadPathRe, (req, res) => {
+  fetch(`${apiUrl}${req.path}`, {
+    headers: {
+      Authorization: `OAuth oauth_consumer_key="${req.query.key}", oauth_token="${req.query.token}"`,
+    },
+  }).then((r) => r.body.pipe(res));
+});
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function () {
