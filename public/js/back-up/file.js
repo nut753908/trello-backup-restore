@@ -41,6 +41,7 @@ export const descToFile = (desc, zip, i, j) => {
 // a: attachment
 export const attachmentToFile = (a, zip, i, j, n) => {
   a = ["id", "name", "url"].reduce((o, k) => ({ ...o, [k]: a[k] }), {});
+  a.url = decodeURI(a.url);
   zip.file(`list${i}_card${j}_attachment${n}.json`, JSON.stringify(a, null, 2));
 };
 
@@ -54,7 +55,7 @@ export const fileToFile = async (url, zip, i, j, n, token) => {
     const proxyUrl = url.replace(trelloUrlRe, apiProxyUrl);
     const res = await fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
     const blob = await res.blob();
-    const name = url.split("/download/").pop();
+    const name = decodeURI(url).split("/download/").pop();
     zip.file(`list${i}_card${j}_attachment${n}_file_${name}`, blob);
   }
 };
