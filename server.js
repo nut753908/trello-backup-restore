@@ -27,9 +27,7 @@ app.get(
           Authorization: `OAuth oauth_consumer_key="${req.query.key}", oauth_token="${req.query.token}"`,
         },
       }
-    )
-      .then((r) => r.arrayBuffer())
-      .then((buf) => res.send(Buffer.from(buf)));
+    ).then((r) => r.body.pipe(res));
   }
 );
 
