@@ -23,8 +23,8 @@ const cardKeys = [
   "coordinates",
 ];
 
-export const fileToCard = (file, descFile, token, idList) =>
-  file
+export const fileToCard = (cardFile, descFile, token, idList) =>
+  cardFile
     .async("string")
     .then(JSON.parse)
     .then((card) => cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {}))
@@ -38,11 +38,11 @@ export const fileToCard = (file, descFile, token, idList) =>
     .then((res) => res.json())
     .then((json) => json?.id);
 
-export const fileToAttachment = (file, fileFiles, token, idCard) =>
-  file
+// a: attachment
+export const fileToAttachment = (aFile, fileFiles, token, idCard) =>
+  aFile
     .async("string")
     .then(JSON.parse)
-    // a: attachment
     .then((a) => ["name", "url"].reduce((o, k) => ({ ...o, [k]: a?.[k] }), {}))
     .then(async (a) => {
       a.setCover = false;
