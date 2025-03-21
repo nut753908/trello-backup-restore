@@ -19,10 +19,10 @@ app.use(express.static("public"));
 
 const downloadPathRe =
   /^\/1\/cards\/[0-9a-f]{24}\/attachments\/[0-9a-f]{24}\/download\/.+/;
-const apiUrl = "https://api.trello.com";
+const apiHost = "https://api.trello.com";
 
 app.get(downloadPathRe, (req, res) => {
-  fetch(`${apiUrl}${req.path}`, {
+  fetch(`${apiHost}${req.path}`, {
     headers: {
       Authorization: `OAuth oauth_consumer_key="${req.query.key}", oauth_token="${req.query.token}"`,
     },
