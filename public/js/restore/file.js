@@ -47,8 +47,9 @@ export const fileToAttachment = (file, fileFiles, token, idCard) =>
     .then(async (a) => {
       a.setCover = false;
       if (fileFiles.length >= 1) {
-        a.name = fileFiles[0].name;
-        a.name = a.name.match(/^list\d+_card\d+_attachment\d+_file_(.+)/)[1];
+        a.name = fileFiles[0].name.match(
+          /^list\d+_card\d+_attachment\d+_file_(.+)/
+        )[1];
         a.file = await fileFiles[0].async("blob");
         delete a.url;
       }
