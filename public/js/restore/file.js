@@ -47,7 +47,10 @@ export const fileToAttachment = (aFile, fileFile, token, idCard) =>
     .then(async (a) => {
       a.setCover = false;
       if (fileFile) {
-        a.file = await fileFile.async("blob");
+        a.file = new File(
+          [await fileFile.async("blob")],
+          decodeURI(a.url.split("/").pop())
+        );
         delete a.url;
       }
       return a;
