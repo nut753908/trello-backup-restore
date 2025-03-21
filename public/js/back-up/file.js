@@ -49,12 +49,12 @@ const downloadUrlRe =
 const trelloHostRe = /^https:\/\/trello\.com/;
 const proxyHost = "https://trello-backup-restore.glitch.me";
 
-export const fileToFile = async (url, zip, i, j, n, token) => {
-  if (downloadUrlRe.test(url)) {
-    const proxyUrl = url.replace(trelloHostRe, proxyHost);
+// a: attachment
+export const fileToFile = async (a, zip, i, j, n, token) => {
+  if (downloadUrlRe.test(a.url)) {
+    const proxyUrl = a.url.replace(trelloHostRe, proxyHost);
     const res = await fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
     const blob = await res.blob();
-    const name = decodeURI(url).split("/download/").pop();
-    zip.file(`list${i}_card${j}_attachment${n}_file_${name}`, blob);
+    zip.file(`list${i}_card${j}_attachment${n}_file_${a.name}`, blob);
   }
 };
