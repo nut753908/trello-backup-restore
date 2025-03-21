@@ -1,8 +1,9 @@
 /* global TrelloPowerUp */
 
 import { protect } from "/js/protect.js";
+import { check } from "/js/check.js";
 import { backUp } from "/js/back-up/back-up.js";
-import { popup } from "/js/restore/popup.js";
+import { popupRestore } from "/js/popup.js";
 import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/env.js";
 
 const BACKUP_ICON =
@@ -16,25 +17,25 @@ TrelloPowerUp.initialize(
       {
         icon: BACKUP_ICON,
         text: "Back up",
-        callback: protect(backUp("card")),
+        callback: protect(check(backUp("card"))),
       },
     ],
     "list-actions": (t) => [
       {
         text: "Back up list",
-        callback: protect(backUp("list")),
+        callback: protect(check(backUp("list"))),
       },
     ],
     "board-buttons": (t) => [
       {
         icon: BACKUP_ICON,
         text: "Back up lists",
-        callback: protect(backUp("lists")),
+        callback: protect(check(backUp("lists"))),
       },
       {
         icon: RESTORE_ICON,
         text: "Restore",
-        callback: protect(popup),
+        callback: protect(check(popupRestore)),
       },
     ],
   },
