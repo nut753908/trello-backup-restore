@@ -27,13 +27,13 @@ export const fileToCard = (file, descFile, token, idList) =>
   file
     .async("string")
     .then(JSON.parse)
+    .then((card) => cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {}))
     .then(async (card) => {
       if (descFile) {
         card.desc = await descFile.async("string");
       }
       return card;
     })
-    .then((card) => cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {}))
     .then((body) => backoff(() => createCard(token, idList, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
