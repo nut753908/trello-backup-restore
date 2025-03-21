@@ -1,3 +1,5 @@
+import { APP_KEY } from "/js/env.js";
+
 export const boardToFile = (board, zip) => {
   zip.file("_board.json", JSON.stringify(board, null, 2));
 };
@@ -39,5 +41,21 @@ export const descToFile = (desc, zip, i, j) => {
 // a: attachment
 export const attachmentToFile = (a, zip, i, j, n) => {
   a = ["id", "name", "url"].reduce((o, k) => ({ ...o, [k]: a[k] }), {});
+  a.url = decodeURI(a.url);
   zip.file(`list${i}_card${j}_attachment${n}.json`, JSON.stringify(a, null, 2));
+};
+
+const downloadUrlRe =
+  /^https:\/\/trello\.com\/1\/cards\/[0-9a-f]{24}\/attachments\/[0-9a-f]{24}\/download\/.+/;
+const trelloHostRe = /^https:\/\/trello\.com/;
+const proxyHost = "https://trello-backup-restore.glitch.me";
+
+export const fileToFile = async (url, zip, i, j, n, token) => {
+  if (downloadUrlRe.test(url)) {
+    const proxyUrl = url.replace(trelloHostRe, proxyHost);
+    const res = await fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
+    const blob = await res.blob();
+    const name = decodeURI(url).split("/download/").pop();
+    zip.file(`list${i}_card${j}_attachment${n}_file_${name}`, blob);
+  }
 };
