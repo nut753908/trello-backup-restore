@@ -44,13 +44,17 @@ export const attachmentToFile = (a, zip, i, j, n) => {
   zip.file(`list${i}_card${j}_attachment${n}.json`, JSON.stringify(a, null, 2));
 };
 
+const downloadUrlRe =
+  /^https:\/\/trello\.com\/1\/cards\/[0-9a-f]{24}\/attachments\/[0-9a-f]{24}\/download\/.+/;
+const trelloUrlRe = /^https:\/\/trello\.com/;
+const apiProxyUrl = "https://trello-backup-restore.glitch.me";
+
 export const fileToFile = async (url, zip, i, j, n, token) => {
-  const proxyUrl = url.replace(
-    /^https:\/\/trello\.com/,
-    "https://trello-backup-restore.glitch.me"
-  );
-  const res = await fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
-  const blob = await res.blob();
-  const name = url.split("/download/").pop();
-  zip.file(`list${i}_card${j}_attachment${n}_file_${name}`, blob);
+  if (downloadUrlRe.test(url)) {
+    const proxyUrl = url.replace(trelloUrlRe, apiProxyUrl);
+    const res = await fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
+    const blob = await res.blob();
+    const name = url.split("/download/").pop();
+    zip.file(`list${i}_card${j}_attachment${n}_file_${name}`, blob);
+  }
 };
