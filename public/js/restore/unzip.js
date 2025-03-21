@@ -7,12 +7,14 @@ const compareName = (a, b) => (a.name > b.name ? 1 : -1);
 const loopAttachment = async (i, j, zip, token, idCard) => {
   const re = new RegExp(`^list${i}_card${j}_attachment(\\d+)\\.json$`);
   const files = zip.file(re).sort(compareName);
+  // a: attachment
   for (const aFile of files) {
     const n = aFile.name.match(re)[1];
-    const fileFiles = zip
+    const fileFile = zip
       .file(new RegExp(`^list${i}_card${j}_attachment${n}_file_.+`))
-      .sort(compareName);
-    await fileToAttachment(aFile, fileFiles, token, idCard);
+      .sort(compareName)
+      .shift();
+    await fileToAttachment(aFile, fileFile, token, idCard);
   }
 };
 

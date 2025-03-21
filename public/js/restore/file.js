@@ -39,18 +39,18 @@ export const fileToCard = (cardFile, descFile, token, idList) =>
     .then((json) => json?.id);
 
 // a: attachment
-export const fileToAttachment = (aFile, fileFiles, token, idCard) =>
+export const fileToAttachment = (aFile, fileFile, token, idCard) =>
   aFile
     .async("string")
     .then(JSON.parse)
     .then((a) => ["name", "url"].reduce((o, k) => ({ ...o, [k]: a?.[k] }), {}))
     .then(async (a) => {
       a.setCover = false;
-      if (fileFiles.length >= 1) {
-        a.name = fileFiles[0].name.match(
+      if (fileFile) {
+        a.name = fileFile.name.match(
           /^list\d+_card\d+_attachment\d+_file_(.+)/
         )[1];
-        a.file = await fileFiles[0].async("blob");
+        a.file = await fileFile.async("blob");
         delete a.url;
       }
       return a;
