@@ -87,7 +87,7 @@ export const fileToCover = (file, token, idCard, idsOldA, idsNewA) => {
       coverKeys.reduce((o, k) => ({ ...o, [k]: cover?.[k] }), {})
     )
     .then((cover) => {
-      if (cover.idAttachment !== null) {
+      if (cover.idAttachment) {
         const i = idsOldA.indexOf(cover.idAttachment);
         cover.idAttachment = i !== -1 ? idsNewA[i] : null;
       }
