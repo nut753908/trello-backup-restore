@@ -44,3 +44,17 @@ export const createAttachment = (token, idCard, body) => {
     body: formData,
   });
 };
+
+export const createCover = (token, idCard, body) =>
+  fetch(`https://api.trello.com/1/cards/${idCard}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      ...body,
+      key: APP_KEY,
+      token,
+    }),
+  });
