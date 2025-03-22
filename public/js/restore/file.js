@@ -76,7 +76,7 @@ export const fileToAttachment = (aFile, fileFile, token, idCard) =>
 const coverKeys = ["color", "idAttachment", "url", "size", "brightness"];
 
 // a: attachment
-export const coverToCard = (file, token, idCard, idsOldA, idsNewA) => {
+export const fileToCover = (file, token, idCard, idsOldA, idsNewA) => {
   if (!file) {
     return;
   }

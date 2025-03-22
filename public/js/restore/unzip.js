@@ -5,7 +5,7 @@ import {
   fileToCard,
   getAttachmentId,
   fileToAttachment,
-  coverToCard,
+  fileToCover,
 } from "/js/restore/file.js";
 
 const compareName = (a, b) => (a.name > b.name ? 1 : -1);
@@ -35,7 +35,7 @@ const loopCard = async (i, zip, token, idList) => {
     // a: attachment
     const [idsOldA, idsNewA] = await loopAttachment(i, j, zip, token, idCard);
     const coverFile = zip.file(`list${i}_card${j}_cover.json`);
-    await coverToCard(coverFile, token, idCard, idsOldA, idsNewA);
+    await fileToCover(coverFile, token, idCard, idsOldA, idsNewA);
   }
 };
 
