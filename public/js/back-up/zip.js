@@ -1,5 +1,6 @@
 /* global JSZip */
 
+import { APP_KEY } from "/js/env.js";
 import {
   boardToFile,
   listToFile,
@@ -18,6 +19,18 @@ const getLists = {
   ],
   list: async (t) => [await t.list("all")],
   lists: (t) => t.lists("all"),
+};
+
+const addProperties = async (idBoard, token, lists) => {
+  const res = await fetch(
+    `https://api.trello.com/1/boards/${idBoard}/cards?fields=idList,cover&key=${APP_KEY}&token=${token}`
+  );
+  const json = await res.json();
+  lists.forEach((l) => {
+    l.cards.forEach((c) => {
+      c.cover = json.find((i) => l.id === i.idList && c.id === i.id).cover;
+    });
+  });
 };
 
 const loopAttachment = async (attachments, zip, i, j, token) => {
@@ -46,9 +59,10 @@ const loopList = async (lists, zip, token) => {
 };
 
 export const createZipBlob = async (t, type) => {
+  const token = await t.getRestApi().getToken();
   const board = await t.board("id", "name");
   const lists = await getLists[type](t);
-  const token = await t.getRestApi().getToken();
+  await addProperties(board.id, token, lists);
   const zip = new JSZip();
   boardToFile(board, zip);
   await loopList(lists, zip, token);
