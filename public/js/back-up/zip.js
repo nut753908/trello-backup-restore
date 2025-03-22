@@ -8,6 +8,7 @@ import {
   descToFile,
   attachmentToFile,
   fileToFile,
+  coverToFile,
 } from "/js/back-up/file.js";
 
 const getLists = {
@@ -47,6 +48,7 @@ const loopCard = async (cards, zip, i, token) => {
     cardToFile(card, zip, i, j);
     descToFile(card.desc, zip, i, j);
     await loopAttachment(card.attachments, zip, i, j, token);
+    coverToFile(card.cover, zip, i, j);
   }
 };
 
