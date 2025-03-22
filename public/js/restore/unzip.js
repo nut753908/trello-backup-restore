@@ -32,6 +32,7 @@ const loopCard = async (i, zip, token, idList) => {
     const j = cardFile.name.match(re)[1];
     const descFile = zip.file(`list${i}_card${j}_desc.md`);
     const idCard = await fileToCard(cardFile, descFile, token, idList);
+    // a: attachment
     const [idsOldA, idsNewA] = await loopAttachment(i, j, zip, token, idCard);
     const coverFile = zip.file(`list${i}_card${j}_cover.json`);
     await coverToCard(coverFile, token, idCard, idsOldA, idsNewA);
