@@ -3,7 +3,7 @@ import {
   createList,
   createCard,
   createAttachment,
-  createCover,
+  updateCard,
 } from "/js/restore/api.js";
 
 export const fileToList = (file, token, idBoard) =>
@@ -93,5 +93,5 @@ export const coverToCard = (file, token, idCard, idsOldA, idsNewA) => {
       }
       return { cover };
     })
-    .then((body) => backoff(() => createCover(token, idCard, body)));
+    .then((body) => backoff(() => updateCard(token, idCard, body)));
 };

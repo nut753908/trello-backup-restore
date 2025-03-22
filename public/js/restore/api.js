@@ -45,7 +45,7 @@ export const createAttachment = (token, idCard, body) => {
   });
 };
 
-export const createCover = (token, idCard, body) =>
+export const updateCard = (token, idCard, body) =>
   fetch(`https://api.trello.com/1/cards/${idCard}`, {
     method: "PUT",
     headers: {
