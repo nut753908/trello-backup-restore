@@ -16,19 +16,17 @@ const cardKeys = [
   "due",
   "start",
   "dueComplete",
+  "idMembers",
+  "idLabels",
   "address",
   "locationName",
   "coordinates",
-  "members",
-  "labels",
 ];
 
 export const cardToFile = (card, zip, i, j) => {
-  card = cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {});
   card.idMembers = card.members.map((v) => v.id);
   card.idLabels = card.labels.map((v) => v.id);
-  delete card.members;
-  delete card.labels;
+  card = cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {});
   zip.file(`list${i}_card${j}.json`, JSON.stringify(card, null, 2));
 };
 
