@@ -1,5 +1,10 @@
 import { backoff } from "/js/restore/backoff.js";
-import { createList, createCard, createAttachment } from "/js/restore/api.js";
+import {
+  createList,
+  createCard,
+  createAttachment,
+  updateCard,
+} from "/js/restore/api.js";
 
 export const fileToList = (file, token, idBoard) =>
   file
@@ -39,6 +44,13 @@ export const fileToCard = (cardFile, descFile, token, idList) =>
     .then((json) => json?.id);
 
 // a: attachment
+export const getAttachmentId = (file) =>
+  file
+    .async("string")
+    .then(JSON.parse)
+    .then((a) => a.id);
+
+// a: attachment
 export const fileToAttachment = (aFile, fileFile, token, idCard) =>
   aFile
     .async("string")
@@ -60,3 +72,26 @@ export const fileToAttachment = (aFile, fileFile, token, idCard) =>
     .then((body) => backoff(() => createAttachment(token, idCard, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
+
+const coverKeys = ["color", "idAttachment", "url", "size", "brightness"];
+
+// a: attachment
+export const fileToCover = (file, token, idCard, idsOldA, idsNewA) => {
+  if (!file) {
+    return;
+  }
+  file
+    .async("string")
+    .then(JSON.parse)
+    .then((cover) =>
+      coverKeys.reduce((o, k) => ({ ...o, [k]: cover?.[k] }), {})
+    )
+    .then((cover) => {
+      if (cover.idAttachment !== null) {
+        const i = idsOldA.indexOf(cover.idAttachment);
+        cover.idAttachment = i !== -1 ? idsNewA[i] : null;
+      }
+      return { cover };
+    })
+    .then((body) => backoff(() => updateCard(token, idCard, body)));
+};

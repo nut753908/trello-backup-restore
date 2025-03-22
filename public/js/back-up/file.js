@@ -16,19 +16,17 @@ const cardKeys = [
   "due",
   "start",
   "dueComplete",
+  "idMembers",
+  "idLabels",
   "address",
   "locationName",
   "coordinates",
-  "members",
-  "labels",
 ];
 
 export const cardToFile = (card, zip, i, j) => {
-  card = cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {});
   card.idMembers = card.members.map((v) => v.id);
   card.idLabels = card.labels.map((v) => v.id);
-  delete card.members;
-  delete card.labels;
+  card = cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {});
   zip.file(`list${i}_card${j}.json`, JSON.stringify(card, null, 2));
 };
 
@@ -56,5 +54,15 @@ export const fileToFile = async (a, zip, i, j, n, token) => {
     const res = await fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
     const blob = await res.blob();
     zip.file(`list${i}_card${j}_attachment${n}_file`, blob);
+  }
+};
+
+const coverKeys = ["color", "idAttachment", "url", "size", "brightness"];
+
+export const coverToFile = (cover, zip, i, j) => {
+  if (cover.color || cover.idAttachment || cover.idUploadedBackground) {
+    cover.url = cover.idUploadedBackground ? cover.sharedSourceUrl : null;
+    cover = coverKeys.reduce((o, k) => ({ ...o, [k]: cover[k] }), {});
+    zip.file(`list${i}_card${j}_cover.json`, JSON.stringify(cover, null, 2));
   }
 };
