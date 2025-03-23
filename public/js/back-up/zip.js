@@ -24,12 +24,13 @@ const getLists = {
 
 const addProperties = async (idBoard, token, lists) => {
   const res = await fetch(
-    `https://api.trello.com/1/boards/${idBoard}/cards?fields=idList,cover&key=${APP_KEY}&token=${token}`
+    `https://api.trello.com/1/boards/${idBoard}/cards?fields=cover&key=${APP_KEY}&token=${token}`
   );
   const json = await res.json();
+  const map = json.reduce((o, c) => ({ ...o, [c.id]: c }), {});
   lists.forEach((l) => {
     l.cards.forEach((c) => {
-      c.cover = json.find((i) => l.id === i.idList && c.id === i.id).cover;
+      c.cover = map[c.id].cover;
     });
   });
 };
