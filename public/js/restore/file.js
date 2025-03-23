@@ -68,7 +68,13 @@ export const fileToAttachment = (aFile, fileFile, token, idCard) =>
     .then((res) => res.json())
     .then((json) => json?.id);
 
-const coverKeys = ["color", "posAttachment", "url", "size", "brightness"];
+const coverKeys = [
+  "color",
+  "posAttachment",
+  "unsplashUrl",
+  "size",
+  "brightness",
+];
 
 // a: attachment
 export const fileToCover = (file, token, idCard, idsA) => {
@@ -84,7 +90,9 @@ export const fileToCover = (file, token, idCard, idsA) => {
     .then((cover) => {
       cover.idAttachment =
         cover.posAttachment >= 1 ? idsA[cover.posAttachment - 1] : null;
+      cover.url = cover.unsplashUrl;
       delete cover.posAttachment;
+      delete cover.unsplashUrl;
       return { cover };
     })
     .then((body) => backoff(() => updateCard(token, idCard, body)));

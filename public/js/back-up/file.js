@@ -57,13 +57,21 @@ export const fileToFile = async (a, zip, i, j, n, token) => {
   }
 };
 
-const coverKeys = ["color", "posAttachment", "url", "size", "brightness"];
+const coverKeys = [
+  "color",
+  "posAttachment",
+  "unsplashUrl",
+  "size",
+  "brightness",
+];
 
 export const coverToFile = (cover, attachments, zip, i, j) => {
   if (cover.color || cover.idAttachment || cover.idUploadedBackground) {
     const pos = attachments.findIndex((a) => a.id === cover.idAttachment);
     cover.posAttachment = pos !== -1 ? pos + 1 : null;
-    cover.url = cover.idUploadedBackground ? cover.sharedSourceUrl : null;
+    cover.unsplashUrl = cover.idUploadedBackground
+      ? cover.sharedSourceUrl
+      : null;
     cover = coverKeys.reduce((o, k) => ({ ...o, [k]: cover[k] }), {});
     zip.file(`list${i}_card${j}_cover.json`, JSON.stringify(cover, null, 2));
   }
