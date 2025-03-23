@@ -3,6 +3,7 @@
 // cl: checklist
 // ci: checkitem
 // cfi: custom field item
+// s: sticker
 
 import { backoff } from "/js/common/backoff.js";
 import {
@@ -13,6 +14,7 @@ import {
   createCl,
   createCi,
   updateCfis,
+  addS,
 } from "/js/restore/api.js";
 import {
   listKeys,
@@ -22,6 +24,7 @@ import {
   clKeys,
   ciKeys,
   cfiKeys,
+  sKeys,
 } from "/js/restore/keys.js";
 
 export const fileToList = (file, token, idBoard) =>
@@ -123,3 +126,12 @@ export const filesToCfis = async (files, token, idCard) => {
       .then((body) => backoff(() => updateCfis(token, idCard, body)));
   }
 };
+
+export const fileToS = (file, token, idCard) =>
+  file
+    .async("string")
+    .then(JSON.parse)
+    .then((s) => sKeys.reduce((o, k) => ({ ...o, [k]: s?.[k] }), {}))
+    .then((body) => backoff(() => addS(token, idCard, body)))
+    .then((res) => res.json())
+    .then((json) => json?.id);

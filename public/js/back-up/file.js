@@ -3,6 +3,7 @@
 // cl: checklist
 // ci: checkitem
 // cfi: custom field item
+// s: sticker
 
 import {
   listKeys,
@@ -12,6 +13,7 @@ import {
   clKeys,
   ciKeys,
   cfiKeys,
+  sKeys,
 } from "/js/back-up/keys.js";
 import { APP_KEY, PROXY_HOST } from "/js/common/env.js";
 
@@ -87,4 +89,9 @@ export const cfiToFile = (cfi, zip, i, j, n) => {
     `list${i}_card${j}_customFieldItem${n}.json`,
     JSON.stringify(cfi, null, 2)
   );
+};
+
+export const sToFile = (s, zip, i, j, n) => {
+  s = sKeys.reduce((o, k) => ({ ...o, [k]: s[k] }), {});
+  zip.file(`list${i}_card${j}_sticker${n}.json`, JSON.stringify(s, null, 2));
 };

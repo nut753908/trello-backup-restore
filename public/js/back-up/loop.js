@@ -3,6 +3,7 @@
 // cl: checklist
 // ci: checkitem
 // cfi: custom field item
+// s: sticker
 
 import {
   listToFile,
@@ -14,6 +15,7 @@ import {
   clToFile,
   ciToFile,
   cfiToFile,
+  sToFile,
 } from "/js/back-up/file.js";
 
 const loopA = async (a_s, zip, i, j, token) => {
@@ -46,6 +48,13 @@ const loopCfi = (cfis, zip, i, j) => {
   }
 };
 
+const loopS = (ss, zip, i, j) => {
+  for (const [_n, s] of ss.entries()) {
+    const n = _n + 1;
+    sToFile(s, zip, i, j, n);
+  }
+};
+
 const loopCard = async (cards, zip, i, token) => {
   for (const [_j, card] of cards.entries()) {
     const j = _j + 1;
@@ -55,6 +64,7 @@ const loopCard = async (cards, zip, i, token) => {
     coverToFile(card.cover, card.attachments, zip, i, j);
     loopCl(card.checklists, zip, i, j);
     loopCfi(card.customFieldItems, zip, i, j);
+    loopS(card.stickers, zip, i, j);
   }
 };
 
