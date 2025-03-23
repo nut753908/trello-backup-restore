@@ -95,3 +95,15 @@ export const checkitemToFile = (ci, zip, i, j, n, m) => {
     JSON.stringify(ci, null, 2)
   );
 };
+
+// cfi: customFieldItem
+const cfiKeys = ["id", "idCustomField", "value", "idValue"];
+
+// cfi: customFieldItem
+export const customFieldItemToFile = (cfi, zip, i, j, n) => {
+  cfi = cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi[k] }), {});
+  zip.file(
+    `list${i}_card${j}_customFieldItem${n}.json`,
+    JSON.stringify(cfi, null, 2)
+  );
+};

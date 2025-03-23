@@ -11,6 +11,7 @@ import {
   coverToFile,
   checklistToFile,
   checkitemToFile,
+  customFieldItemToFile,
 } from "/js/back-up/file.js";
 
 const getLists = {
@@ -62,6 +63,13 @@ const loopChecklist = (checklists, zip, i, j) => {
   }
 };
 
+const loopCustomFieldItem = (customFieldItems, zip, i, j) => {
+  for (const [_n, customFieldItem] of customFieldItems.entries()) {
+    const n = _n + 1;
+    customFieldItemToFile(customFieldItem, zip, i, j, n);
+  }
+};
+
 const loopCard = async (cards, zip, i, token) => {
   for (const [_j, card] of cards.entries()) {
     const j = _j + 1;
@@ -70,6 +78,7 @@ const loopCard = async (cards, zip, i, token) => {
     await loopAttachment(card.attachments, zip, i, j, token);
     coverToFile(card.cover, card.attachments, zip, i, j);
     loopChecklist(card.checklists, zip, i, j);
+    loopCustomFieldItem(card.customFieldItems, zip, i, j);
   }
 };
 
