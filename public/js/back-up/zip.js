@@ -10,6 +10,7 @@ import {
   fileToFile,
   coverToFile,
   checklistToFile,
+  checkitemToFile,
 } from "/js/back-up/file.js";
 
 const getLists = {
@@ -25,13 +26,15 @@ const getLists = {
 
 const addProperties = async (idBoard, token, lists) => {
   const res = await fetch(
-    `https://api.trello.com/1/boards/${idBoard}/cards?fields=cover&key=${APP_KEY}&token=${token}`
+    `https://api.trello.com/1/boards/${idBoard}/cards` +
+      `?fields=cover&checklists=all&key=${APP_KEY}&token=${token}`
   );
   const json = await res.json();
   const map = json.reduce((o, c) => ({ ...o, [c.id]: c }), {});
   lists.forEach((l) => {
     l.cards.forEach((c) => {
       c.cover = map[c.id].cover;
+      c.checklists = map[c.id].checklists;
     });
   });
 };
@@ -44,10 +47,20 @@ const loopAttachment = async (attachments, zip, i, j, token) => {
   }
 };
 
-const loopChecklist = async (checklists, zip, i, j, token) => {
+const loopCheckitem = (checkitems, zip, i, j, n) => {
+  if (checkitems) {
+    for (const [_m, checkitem] of checkitems.entries()) {
+      const m = _m + 1;
+      checkitemToFile(checkitem, zip, i, j, n, m);
+    }
+  }
+};
+
+const loopChecklist = (checklists, zip, i, j) => {
   for (const [_n, checklist] of checklists.entries()) {
     const n = _n + 1;
     checklistToFile(checklist, zip, i, j, n);
+    loopCheckitem(checklist.checkItems, zip, i, j, n);
   }
 };
 

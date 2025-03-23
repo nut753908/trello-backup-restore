@@ -16,7 +16,7 @@ export const createList = (token, idBoard, name) =>
   });
 
 export const createCard = (token, idList, body) =>
-  fetch(`https://api.trello.com/1/cards`, {
+  fetch("https://api.trello.com/1/cards", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -60,7 +60,7 @@ export const updateCard = (token, idCard, body) =>
   });
 
 export const createChecklist = (token, idCard, body) =>
-  fetch(`https://api.trello.com/1/checklists`, {
+  fetch("https://api.trello.com/1/checklists", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -69,6 +69,21 @@ export const createChecklist = (token, idCard, body) =>
     body: JSON.stringify({
       ...body,
       idCard,
+      pos: "bottom",
+      key: APP_KEY,
+      token,
+    }),
+  });
+
+export const createCheckitem = (token, idCl, body) =>
+  fetch(`https://api.trello.com/1/checklists/${idCl}/checkItems`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      ...body,
       pos: "bottom",
       key: APP_KEY,
       token,
