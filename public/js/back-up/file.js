@@ -6,6 +6,7 @@
 
 import { APP_KEY } from "/js/env.js";
 import {
+  listKeys,
   cardKeys,
   aKeys,
   coverKeys,
@@ -20,8 +21,7 @@ export const boardToFile = (board, zip) => {
 };
 
 export const listToFile = (list, zip, i) => {
-  list = { ...list };
-  delete list.cards;
+  list = listKeys.reduce((o, k) => ({ ...o, [k]: list[k] }), {});
   zip.file(`list${i}.json`, JSON.stringify(list, null, 2));
 };
 

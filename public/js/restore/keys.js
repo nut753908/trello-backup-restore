@@ -4,6 +4,8 @@
 // ci: checkitem
 // cfi: custom field item
 
+export const listKeys = ["name"];
+
 export const cardKeys = [
   "name",
   "desc",

@@ -15,6 +15,7 @@ import {
   updateCfi,
 } from "/js/restore/api.js";
 import {
+  listKeys,
   cardKeys,
   aKeys,
   coverKeys,
@@ -27,8 +28,8 @@ export const fileToList = (file, token, idBoard) =>
   file
     .async("string")
     .then(JSON.parse)
-    .then((list) => list?.name)
-    .then((name) => backoff(() => createList(token, idBoard, name)))
+    .then((list) => listKeys.reduce((o, k) => ({ ...o, [k]: list?.[k] }), {}))
+    .then((body) => backoff(() => createList(token, idBoard, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
 
