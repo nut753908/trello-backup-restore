@@ -70,7 +70,7 @@ export const fileToAttachment = (aFile, fileFile, token, idCard) =>
 
 const coverKeys = [
   "color",
-  "posAttachment",
+  "attachmentPos",
   "unsplashUrl",
   "size",
   "brightness",
@@ -89,9 +89,9 @@ export const fileToCover = (file, token, idCard, idsA) => {
     )
     .then((cover) => {
       cover.idAttachment =
-        cover.posAttachment >= 1 ? idsA[cover.posAttachment - 1] : null;
+        cover.attachmentPos >= 1 ? idsA[cover.attachmentPos - 1] : null;
       cover.url = cover.unsplashUrl;
-      delete cover.posAttachment;
+      delete cover.attachmentPos;
       delete cover.unsplashUrl;
       return { cover };
     })

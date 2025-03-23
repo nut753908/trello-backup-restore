@@ -59,7 +59,7 @@ export const fileToFile = async (a, zip, i, j, n, token) => {
 
 const coverKeys = [
   "color",
-  "posAttachment",
+  "attachmentPos",
   "unsplashUrl",
   "size",
   "brightness",
@@ -68,7 +68,7 @@ const coverKeys = [
 export const coverToFile = (cover, attachments, zip, i, j) => {
   if (cover.color || cover.idAttachment || cover.idUploadedBackground) {
     const pos = attachments.findIndex((a) => a.id === cover.idAttachment);
-    cover.posAttachment = pos !== -1 ? pos + 1 : null;
+    cover.attachmentPos = pos !== -1 ? pos + 1 : null;
     cover.unsplashUrl = cover.idUploadedBackground
       ? cover.sharedSourceUrl
       : null;
