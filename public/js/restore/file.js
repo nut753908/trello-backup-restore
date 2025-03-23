@@ -6,7 +6,7 @@ import {
   updateCard,
   createChecklist,
   createCheckitem,
-  updateCustomField,
+  updateCustomFieldItems,
 } from "/js/restore/api.js";
 
 export const fileToList = (file, token, idBoard) =>
@@ -125,7 +125,7 @@ export const fileToCheckitem = (file, token, idCl) =>
 const cfiKeys = ["idCustomField", "value", "idValue"];
 
 // cfi: CustomFieldItem
-export const fileToCustomFieldItem = async (files, token, idCard) => {
+export const filesToCustomFieldItems = async (files, token, idCard) => {
   if (files.length === 0) {
     return;
   }
@@ -138,5 +138,5 @@ export const fileToCustomFieldItem = async (files, token, idCard) => {
     )
   )
     .then((cfis) => ({ customFieldItems: cfis }))
-    .then((body) => backoff(() => updateCustomField(token, idCard, body)));
+    .then((body) => backoff(() => updateCustomFieldItems(token, idCard, body)));
 };

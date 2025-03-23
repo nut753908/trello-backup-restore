@@ -7,7 +7,7 @@ import {
   fileToCover,
   fileToChecklist,
   fileToCheckitem,
-  fileToCustomFieldItem,
+  filesToCustomFieldItems,
 } from "/js/restore/file.js";
 
 const compareName = (a, b) => (a.name > b.name ? 1 : -1);
@@ -49,7 +49,7 @@ const loopCustomFieldItem = async (i, j, zip, token, idCard) => {
   const re = new RegExp(`^list${i}_card${j}_customFieldItem(\\d+)\\.json$`);
   const files = zip.file(re).sort(compareName);
   if (files.length > 0) {
-    await fileToCustomFieldItem(files, token, idCard);
+    await filesToCustomFieldItems(files, token, idCard);
   }
 };
 

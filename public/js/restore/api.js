@@ -90,7 +90,7 @@ export const createCheckitem = (token, idCl, body) =>
     }),
   });
 
-export const updateCustomField = (token, idCard, body) =>
+export const updateCustomFieldItems = (token, idCard, body) =>
   fetch(`https://api.trello.com/1/cards/${idCard}/customFields`, {
     method: "PUT",
     headers: {
