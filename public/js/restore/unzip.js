@@ -6,6 +6,7 @@ import {
   getIdA,
   fileToAttachment,
   fileToCover,
+  fileToChecklist,
 } from "/js/restore/file.js";
 
 const compareName = (a, b) => (a.name > b.name ? 1 : -1);
@@ -24,6 +25,14 @@ const loopAttachment = async (i, j, zip, token, idCard) => {
   return mapIdA;
 };
 
+const loopChecklist = async (i, j, zip, token, idCard) => {
+  const re = new RegExp(`^list${i}_card${j}_checklist(\\d+)\\.json$`);
+  const files = zip.file(re).sort(compareName);
+  for (const file of files) {
+    await fileToChecklist(file, token, idCard);
+  }
+};
+
 const loopCard = async (i, zip, token, idList) => {
   const re = new RegExp(`^list${i}_card(\\d+)\\.json$`);
   const files = zip.file(re).sort(compareName);
@@ -35,6 +44,7 @@ const loopCard = async (i, zip, token, idList) => {
     const mapIdA = await loopAttachment(i, j, zip, token, idCard);
     const coverFile = zip.file(`list${i}_card${j}_cover.json`);
     await fileToCover(coverFile, token, idCard, mapIdA);
+    await loopChecklist(i, j, zip, token, idCard);
   }
 };
 

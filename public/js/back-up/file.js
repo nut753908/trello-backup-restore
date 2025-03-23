@@ -66,3 +66,9 @@ export const coverToFile = (cover, zip, i, j) => {
     zip.file(`list${i}_card${j}_cover.json`, JSON.stringify(cover, null, 2));
   }
 };
+
+// cl: checklist
+export const checklistToFile = (cl, zip, i, j, n) => {
+  cl = ["id", "name"].reduce((o, k) => ({ ...o, [k]: cl[k] }), {});
+  zip.file(`list${i}_card${j}_checklist${n}.json`, JSON.stringify(cl, null, 2));
+};

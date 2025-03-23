@@ -9,6 +9,7 @@ import {
   attachmentToFile,
   fileToFile,
   coverToFile,
+  checklistToFile,
 } from "/js/back-up/file.js";
 
 const getLists = {
@@ -43,6 +44,13 @@ const loopAttachment = async (attachments, zip, i, j, token) => {
   }
 };
 
+const loopChecklist = async (checklists, zip, i, j, token) => {
+  for (const [_n, checklist] of checklists.entries()) {
+    const n = _n + 1;
+    checklistToFile(checklist, zip, i, j, n);
+  }
+};
+
 const loopCard = async (cards, zip, i, token) => {
   for (const [_j, card] of cards.entries()) {
     const j = _j + 1;
@@ -50,6 +58,7 @@ const loopCard = async (cards, zip, i, token) => {
     descToFile(card.desc, zip, i, j);
     await loopAttachment(card.attachments, zip, i, j, token);
     coverToFile(card.cover, zip, i, j);
+    loopChecklist(card.checklists, zip, i, j);
   }
 };
 

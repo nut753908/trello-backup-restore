@@ -4,6 +4,7 @@ import {
   createCard,
   createAttachment,
   updateCard,
+  createChecklist,
 } from "/js/restore/api.js";
 
 export const fileToList = (file, token, idBoard) =>
@@ -92,3 +93,12 @@ export const fileToCover = (file, token, idCard, mapIdA) => {
     })
     .then((body) => backoff(() => updateCard(token, idCard, body)));
 };
+
+export const fileToChecklist = (file, token, idCard) =>
+  file
+    .async("string")
+    .then(JSON.parse)
+    .then((a) => ["name"].reduce((o, k) => ({ ...o, [k]: a?.[k] }), {}))
+    .then((name) => backoff(() => createChecklist(token, idCard, name)))
+    .then((res) => res.json())
+    .then((json) => json?.id);

@@ -58,3 +58,19 @@ export const updateCard = (token, idCard, body) =>
       token,
     }),
   });
+
+export const createChecklist = (token, idCard, body) =>
+  fetch(`https://api.trello.com/1/checklists`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      ...body,
+      idCard,
+      pos: "bottom",
+      key: APP_KEY,
+      token,
+    }),
+  });
