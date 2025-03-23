@@ -1,4 +1,5 @@
 /* global JSZip */
+import { backoff } from "/js/common/backoff.js";
 import { APP_KEY } from "/js/common/env.js";
 import { boardToFile } from "/js/back-up/file.js";
 import { loopList } from "/js/back-up/loop.js";
@@ -14,20 +15,23 @@ const getLists = {
   lists: (t) => t.lists("all"),
 };
 
-const addParams = async (idBoard, token, lists) => {
-  const res = await fetch(
-    `https://api.trello.com/1/boards/${idBoard}/cards` +
-      `?fields=cover&checklists=all&key=${APP_KEY}&token=${token}`
-  );
-  const json = await res.json();
-  const map = json.reduce((o, c) => ({ ...o, [c.id]: c }), {});
-  lists.forEach((l) => {
-    l.cards.forEach((c) => {
-      c.cover = map[c.id].cover;
-      c.checklists = map[c.id].checklists;
-    });
-  });
-};
+const addParams = async (idBoard, token, lists) =>
+  backoff(() =>
+    fetch(
+      `https://api.trello.com/1/boards/${idBoard}/cards` +
+        `?fields=cover&checklists=all&key=${APP_KEY}&token=${token}`
+    )
+  )
+    .then((res) => res.json())
+    .then((json) => json.reduce((o, c) => ({ ...o, [c.id]: c }), {}))
+    .then((map) =>
+      lists.forEach((l) => {
+        l.cards.forEach((c) => {
+          c.cover = map[c.id].cover;
+          c.checklists = map[c.id].checklists;
+        });
+      })
+    );
 
 export const createZipBlob = async (t, type) => {
   const token = await t.getRestApi().getToken();
