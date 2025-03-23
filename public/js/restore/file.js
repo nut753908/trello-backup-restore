@@ -104,7 +104,7 @@ export const fileToChecklist = (file, token, idCard) =>
     .async("string")
     .then(JSON.parse)
     .then((cl) => ["name"].reduce((o, k) => ({ ...o, [k]: cl?.[k] }), {}))
-    .then((name) => backoff(() => createChecklist(token, idCard, name)))
+    .then((body) => backoff(() => createChecklist(token, idCard, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
 
@@ -117,7 +117,7 @@ export const fileToCheckitem = (file, token, idCl) =>
     .async("string")
     .then(JSON.parse)
     .then((ci) => ciKeys.reduce((o, k) => ({ ...o, [k]: ci?.[k] }), {}))
-    .then((name) => backoff(() => createCheckitem(token, idCl, name)))
+    .then((body) => backoff(() => createCheckitem(token, idCl, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
 
