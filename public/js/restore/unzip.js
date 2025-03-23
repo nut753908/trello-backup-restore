@@ -48,9 +48,7 @@ const loopChecklist = async (i, j, zip, token, idCard) => {
 const loopCustomFieldItem = async (i, j, zip, token, idCard) => {
   const re = new RegExp(`^list${i}_card${j}_customFieldItem(\\d+)\\.json$`);
   const files = zip.file(re).sort(compareName);
-  if (files.length > 0) {
-    await filesToCustomFieldItems(files, token, idCard);
-  }
+  await filesToCustomFieldItems(files, token, idCard);
 };
 
 const loopCard = async (i, zip, token, idList) => {
