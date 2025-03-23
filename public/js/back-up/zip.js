@@ -19,7 +19,8 @@ const addParams = async (idBoard, token, lists) =>
   backoff(() =>
     fetch(
       `https://api.trello.com/1/boards/${idBoard}/cards` +
-        `?fields=cover&checklists=all&key=${APP_KEY}&token=${token}`
+        `?fields=cover&checklists=all&stickers=true` +
+        `&key=${APP_KEY}&token=${token}`
     )
   )
     .then((res) => res.json())
@@ -29,6 +30,7 @@ const addParams = async (idBoard, token, lists) =>
         l.cards.forEach((c) => {
           c.cover = map[c.id].cover;
           c.checklists = map[c.id].checklists;
+          c.stickers = map[c.id].stickers;
         });
       })
     );
