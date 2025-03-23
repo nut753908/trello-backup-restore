@@ -70,7 +70,7 @@ export const fileToA = (aFile, afFile, token, idCard) =>
     .then((json) => json?.id);
 
 export const fileToCover = (file, token, idCard, mapIdA) => {
-  if (file) {
+  if (!file) {
     return;
   }
   file
