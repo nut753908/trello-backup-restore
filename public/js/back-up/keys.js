@@ -3,6 +3,7 @@
 // cl: checklist
 // ci: checkitem
 // cfi: custom field item
+// s: sticker
 
 export const listKeys = ["id", "name"];
 
@@ -41,3 +42,5 @@ export const ciKeys = [
 ];
 
 export const cfiKeys = ["id", "idCustomField", "value", "idValue"];
+
+export const sKeys = ["id", "image", "top", "left", "zIndex", "rotate"];
