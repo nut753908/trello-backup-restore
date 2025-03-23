@@ -1,5 +1,5 @@
 /* global JSZip */
-import { APP_KEY } from "/js/env.js";
+import { APP_KEY } from "/js/common/env.js";
 import { boardToFile } from "/js/back-up/file.js";
 import { loopList } from "/js/back-up/loop.js";
 

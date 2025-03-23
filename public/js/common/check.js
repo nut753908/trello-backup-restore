@@ -1,4 +1,4 @@
-import { popupAuth } from "/js/popup.js";
+import { popupAuth } from "/js/common/popup.js";
 
 export const check = (func) => async (t) => {
   const token = await t.getRestApi().getToken();

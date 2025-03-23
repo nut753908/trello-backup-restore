@@ -1,15 +1,15 @@
 /* global TrelloPowerUp */
-
-import { protect } from "/js/protect.js";
-import { check } from "/js/check.js";
+import {
+  APP_KEY,
+  APP_NAME,
+  APP_AUTHOR,
+  BACKUP_ICON,
+  RESTORE_ICON,
+} from "/js/common/env.js";
+import { protect } from "/js/common/protect.js";
+import { check } from "/js/common/check.js";
 import { backUp } from "/js/back-up/back-up.js";
-import { popupRestore } from "/js/popup.js";
-import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/env.js";
-
-const BACKUP_ICON =
-  "https://cdn.glitch.global/0b64f33b-22b9-4fbd-8d4e-fdb824ae590b/file_download_32dp_1F1F1F.svg?v=1742271240648";
-const RESTORE_ICON =
-  "https://cdn.glitch.global/0b64f33b-22b9-4fbd-8d4e-fdb824ae590b/file_upload_32dp_1F1F1F.svg?v=1742271236878";
+import { popupRestore } from "/js/common/popup.js";
 
 TrelloPowerUp.initialize(
   {

@@ -7,11 +7,6 @@
   <body>
     <button type="button" class="mod-primary">Select file and Restore</button>
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
-    <script>
-      const t = TrelloPowerUp.iframe();
-      document
-        .querySelector("button")
-        .addEventListener("click", () => t.notifyParent("done"), false);
-    </script>
+    <script type="module" src="/js/restore.js"></script>
   </body>
 </html>

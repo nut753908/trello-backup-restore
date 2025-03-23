@@ -7,22 +7,6 @@
   <body>
     <button type="button" class="mod-primary">Click to authorize</button>
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
-    <script type="module">
-      import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/env.js";
-      const t = TrelloPowerUp.iframe({
-        appKey: APP_KEY,
-        appName: APP_NAME,
-        appAuthor: APP_AUTHOR,
-      });
-      document.querySelector("button").addEventListener(
-        "click",
-        async () => {
-          await t.getRestApi().clearToken();
-          await t.getRestApi().authorize({ scope: "read,write" });
-          t.notifyParent("done");
-        },
-        false
-      );
-    </script>
+    <script type="module" src="/js/authorize.js"></script>
   </body>
 </html>
