@@ -89,3 +89,17 @@ export const createCheckitem = (token, idCl, body) =>
       token,
     }),
   });
+
+export const updateCustomFieldItems = (token, idCard, body) =>
+  fetch(`https://api.trello.com/1/cards/${idCard}/customFields`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      ...body,
+      key: APP_KEY,
+      token,
+    }),
+  });
