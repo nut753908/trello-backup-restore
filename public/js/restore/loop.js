@@ -11,7 +11,7 @@ import {
   fileToCover,
   fileToCl,
   fileToCi,
-  filesToCfi,
+  filesToCfis,
 } from "/js/restore/file.js";
 
 const compare = (a, b) => (a.name > b.name ? 1 : -1);
@@ -51,7 +51,7 @@ const loopCl = async (i, j, zip, token, idCard) => {
 const loopCfi = async (i, j, zip, token, idCard) => {
   const re = new RegExp(`^list${i}_card${j}_customFieldItem(\\d+)\\.json$`);
   const files = zip.file(re).sort(compare);
-  await filesToCfi(files, token, idCard);
+  await filesToCfis(files, token, idCard);
 };
 
 const loopCard = async (i, zip, token, idList) => {

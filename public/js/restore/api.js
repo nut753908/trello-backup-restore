@@ -96,7 +96,7 @@ export const createCi = (token, idCl, body) =>
     }),
   });
 
-export const updateCfi = (token, idCard, body) =>
+export const updateCfis = (token, idCard, body) =>
   fetch(`https://api.trello.com/1/cards/${idCard}/customFields`, {
     method: "PUT",
     headers: {

@@ -12,7 +12,7 @@ import {
   updateCard,
   createCl,
   createCi,
-  updateCfi,
+  updateCfis,
 } from "/js/restore/api.js";
 import {
   listKeys,
@@ -107,7 +107,7 @@ export const fileToCi = (file, token, idCl) =>
     .then((res) => res.json())
     .then((json) => json?.id);
 
-export const filesToCfi = async (files, token, idCard) => {
+export const filesToCfis = async (files, token, idCard) => {
   if (files.length > 0) {
     Promise.all(
       files.map((file) =>
@@ -118,6 +118,6 @@ export const filesToCfi = async (files, token, idCard) => {
       )
     )
       .then((cfis) => ({ customFieldItems: cfis }))
-      .then((body) => backoff(() => updateCfi(token, idCard, body)));
+      .then((body) => backoff(() => updateCfis(token, idCard, body)));
   }
 };
