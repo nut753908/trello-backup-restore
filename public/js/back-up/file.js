@@ -1,4 +1,19 @@
+// a: attachment
+// af: attachment file
+// cl: checklist
+// ci: checkitem
+// cfi: custom field item
+
 import { APP_KEY } from "/js/env.js";
+import {
+  cardKeys,
+  aKeys,
+  coverKeys,
+  clKeys,
+  ciKeys,
+  cfiKeys,
+} from "/js/back-up/keys.js";
+import { downloadUrlRe, trelloHostRe, proxyHost } from "/js/back-up/url.js";
 
 export const boardToFile = (board, zip) => {
   zip.file("_board.json", JSON.stringify(board, null, 2));
@@ -9,19 +24,6 @@ export const listToFile = (list, zip, i) => {
   delete list.cards;
   zip.file(`list${i}.json`, JSON.stringify(list, null, 2));
 };
-
-const cardKeys = [
-  "id",
-  "name",
-  "due",
-  "start",
-  "dueComplete",
-  "idMembers",
-  "idLabels",
-  "address",
-  "locationName",
-  "coordinates",
-];
 
 export const cardToFile = (card, zip, i, j) => {
   card.idMembers = card.members.map((v) => v.id);
@@ -36,19 +38,12 @@ export const descToFile = (desc, zip, i, j) => {
   }
 };
 
-// a: attachment
-export const attachmentToFile = (a, zip, i, j, n) => {
-  a = ["id", "name", "url"].reduce((o, k) => ({ ...o, [k]: a[k] }), {});
+export const aToFile = (a, zip, i, j, n) => {
+  a = aKeys.reduce((o, k) => ({ ...o, [k]: a[k] }), {});
   zip.file(`list${i}_card${j}_attachment${n}.json`, JSON.stringify(a, null, 2));
 };
 
-const downloadUrlRe =
-  /^https:\/\/trello\.com\/1\/cards\/[0-9a-f]{24}\/attachments\/[0-9a-f]{24}\/download\/.+/;
-const trelloHostRe = /^https:\/\/trello\.com/;
-const proxyHost = "https://trello-backup-restore.glitch.me";
-
-// a: attachment
-export const fileToFile = async (a, zip, i, j, n, token) => {
+export const afToFile = async (a, zip, i, j, n, token) => {
   if (downloadUrlRe.test(a.url)) {
     const proxyUrl = a.url.replace(trelloHostRe, proxyHost);
     const res = await fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
@@ -57,17 +52,9 @@ export const fileToFile = async (a, zip, i, j, n, token) => {
   }
 };
 
-const coverKeys = [
-  "color",
-  "attachmentPos",
-  "unsplashUrl",
-  "size",
-  "brightness",
-];
-
-export const coverToFile = (cover, attachments, zip, i, j) => {
+export const coverToFile = (cover, a_s, zip, i, j) => {
   if (cover.color || cover.idAttachment || cover.idUploadedBackground) {
-    const pos = attachments.findIndex((a) => a.id === cover.idAttachment);
+    const pos = a_s.findIndex((a) => a.id === cover.idAttachment);
     cover.attachmentPos = pos !== -1 ? pos + 1 : null;
     cover.unsplashUrl = cover.idUploadedBackground
       ? cover.sharedSourceUrl
@@ -77,17 +64,12 @@ export const coverToFile = (cover, attachments, zip, i, j) => {
   }
 };
 
-// cl: checklist
-export const checklistToFile = (cl, zip, i, j, n) => {
-  cl = ["id", "name"].reduce((o, k) => ({ ...o, [k]: cl[k] }), {});
+export const clToFile = (cl, zip, i, j, n) => {
+  cl = clKeys.reduce((o, k) => ({ ...o, [k]: cl[k] }), {});
   zip.file(`list${i}_card${j}_checklist${n}.json`, JSON.stringify(cl, null, 2));
 };
 
-// ci: checkitem
-const ciKeys = ["id", "name", "checked", "due", "dueReminder", "idMember"];
-
-// ci: checkitem
-export const checkitemToFile = (ci, zip, i, j, n, m) => {
+export const ciToFile = (ci, zip, i, j, n, m) => {
   ci.checked = ci.state === "complete";
   ci = ciKeys.reduce((o, k) => ({ ...o, [k]: ci[k] }), {});
   zip.file(
@@ -96,11 +78,7 @@ export const checkitemToFile = (ci, zip, i, j, n, m) => {
   );
 };
 
-// cfi: customFieldItem
-const cfiKeys = ["id", "idCustomField", "value", "idValue"];
-
-// cfi: customFieldItem
-export const customFieldItemToFile = (cfi, zip, i, j, n) => {
+export const cfiToFile = (cfi, zip, i, j, n) => {
   cfi = cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi[k] }), {});
   zip.file(
     `list${i}_card${j}_customFieldItem${n}.json`,
