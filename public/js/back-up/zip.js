@@ -47,7 +47,7 @@ const loopAttachment = async (attachments, zip, i, j, token) => {
   }
 };
 
-const loopCheckitem = async (checkitems, zip, i, j, n) => {
+const loopCheckitem = (checkitems, zip, i, j, n) => {
   if (checkitems) {
     for (const [_m, checkitem] of checkitems.entries()) {
       const m = _m + 1;
@@ -56,7 +56,7 @@ const loopCheckitem = async (checkitems, zip, i, j, n) => {
   }
 };
 
-const loopChecklist = async (checklists, zip, i, j) => {
+const loopChecklist = (checklists, zip, i, j) => {
   for (const [_n, checklist] of checklists.entries()) {
     const n = _n + 1;
     checklistToFile(checklist, zip, i, j, n);
