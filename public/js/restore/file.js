@@ -70,23 +70,22 @@ export const fileToA = (aFile, afFile, token, idCard) =>
     .then((json) => json?.id);
 
 export const fileToCover = (file, token, idCard, mapIdA) => {
-  if (!file) {
-    return;
+  if (file) {
+    file
+      .async("string")
+      .then(JSON.parse)
+      .then((cover) =>
+        coverKeys.reduce((o, k) => ({ ...o, [k]: cover?.[k] }), {})
+      )
+      .then((cover) => {
+        cover.idAttachment = mapIdA[cover.attachmentPos];
+        cover.url = cover.unsplashUrl;
+        delete cover.attachmentPos;
+        delete cover.unsplashUrl;
+        return { cover };
+      })
+      .then((body) => backoff(() => updateCard(token, idCard, body)));
   }
-  file
-    .async("string")
-    .then(JSON.parse)
-    .then((cover) =>
-      coverKeys.reduce((o, k) => ({ ...o, [k]: cover?.[k] }), {})
-    )
-    .then((cover) => {
-      cover.idAttachment = mapIdA[cover.attachmentPos];
-      cover.url = cover.unsplashUrl;
-      delete cover.attachmentPos;
-      delete cover.unsplashUrl;
-      return { cover };
-    })
-    .then((body) => backoff(() => updateCard(token, idCard, body)));
 };
 
 export const fileToCl = (file, token, idCard) =>
@@ -108,17 +107,16 @@ export const fileToCi = (file, token, idCl) =>
     .then((json) => json?.id);
 
 export const filesToCfi = async (files, token, idCard) => {
-  if (files.length === 0) {
-    return;
-  }
-  Promise.all(
-    files.map((file) =>
-      file
-        .async("string")
-        .then(JSON.parse)
-        .then((cfi) => cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {}))
+  if (files.length > 0) {
+    Promise.all(
+      files.map((file) =>
+        file
+          .async("string")
+          .then(JSON.parse)
+          .then((cfi) => cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {}))
+      )
     )
-  )
-    .then((cfis) => ({ customFieldItems: cfis }))
-    .then((body) => backoff(() => updateCfi(token, idCard, body)));
+      .then((cfis) => ({ customFieldItems: cfis }))
+      .then((body) => backoff(() => updateCfi(token, idCard, body)));
+  }
 };
