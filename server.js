@@ -17,12 +17,12 @@ app.use(cors({ origin: "https://trello.com" }));
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
-const DOWNLOAD_PATH_RE =
+const downloadPathRe =
   /^\/1\/cards\/[0-9a-f]{24}\/attachments\/[0-9a-f]{24}\/download\/.+/;
-const API_HOST = "https://api.trello.com";
+const apiHost = "https://api.trello.com";
 
-app.get(DOWNLOAD_PATH_RE, (req, res) => {
-  fetch(`${API_HOST}${req.path}`, {
+app.get(downloadPathRe, (req, res) => {
+  fetch(`${apiHost}${req.path}`, {
     headers: {
       Authorization: `OAuth oauth_consumer_key="${req.query.key}", oauth_token="${req.query.token}"`,
     },

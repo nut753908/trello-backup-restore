@@ -5,12 +5,6 @@
 // cfi: custom field item
 
 import {
-  APP_KEY,
-  DOWNLOAD_URL_RE,
-  DOWNLOAD_HOST_RE,
-  PROXY_HOST,
-} from "/js/common/env.js";
-import {
   listKeys,
   cardKeys,
   aKeys,
@@ -19,6 +13,7 @@ import {
   ciKeys,
   cfiKeys,
 } from "/js/back-up/keys.js";
+import { APP_KEY, PROXY_HOST } from "/js/common/env.js";
 
 export const boardToFile = (board, zip) => {
   zip.file("_board.json", JSON.stringify(board, null, 2));
@@ -47,9 +42,13 @@ export const aToFile = (a, zip, i, j, n) => {
   zip.file(`list${i}_card${j}_attachment${n}.json`, JSON.stringify(a, null, 2));
 };
 
+const downloadUrlRe =
+  /^https:\/\/trello\.com\/1\/cards\/[0-9a-f]{24}\/attachments\/[0-9a-f]{24}\/download\/.+/;
+const downloadHostRe = /^https:\/\/trello\.com/;
+
 export const afToFile = async (a, zip, i, j, n, token) => {
-  if (DOWNLOAD_URL_RE.test(a.url)) {
-    const proxyUrl = a.url.replace(DOWNLOAD_HOST_RE, PROXY_HOST);
+  if (downloadUrlRe.test(a.url)) {
+    const proxyUrl = a.url.replace(downloadHostRe, PROXY_HOST);
     const res = await fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
     const blob = await res.blob();
     zip.file(`list${i}_card${j}_attachment${n}_file`, blob);
