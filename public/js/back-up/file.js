@@ -72,3 +72,16 @@ export const checklistToFile = (cl, zip, i, j, n) => {
   cl = ["id", "name"].reduce((o, k) => ({ ...o, [k]: cl[k] }), {});
   zip.file(`list${i}_card${j}_checklist${n}.json`, JSON.stringify(cl, null, 2));
 };
+
+// ci: checkitem
+const ciKeys = ["id", "name", "checked", "due", "dueReminder", "idMember"];
+
+// ci: checkitem
+export const checkitemToFile = (ci, zip, i, j, n, m) => {
+  ci.checked = ci.state === "complete";
+  ci = ciKeys.reduce((o, k) => ({ ...o, [k]: ci[k] }), {});
+  zip.file(
+    `list${i}_card${j}_checklist${n}_checkitem${m}.json`,
+    JSON.stringify(ci, null, 2)
+  );
+};

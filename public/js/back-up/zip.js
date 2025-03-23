@@ -10,6 +10,7 @@ import {
   fileToFile,
   coverToFile,
   checklistToFile,
+  checkitemToFile,
 } from "/js/back-up/file.js";
 
 const getLists = {
@@ -46,10 +47,20 @@ const loopAttachment = async (attachments, zip, i, j, token) => {
   }
 };
 
-const loopChecklist = async (checklists, zip, i, j, token) => {
+const loopCheckitem = async (checkitems, zip, i, j, n) => {
+  if (checkitems) {
+    for (const [_m, checkitem] of checkitems.entries()) {
+      const m = _m + 1;
+      checkitemToFile(checkitem, zip, i, j, n, m);
+    }
+  }
+};
+
+const loopChecklist = async (checklists, zip, i, j) => {
   for (const [_n, checklist] of checklists.entries()) {
     const n = _n + 1;
     checklistToFile(checklist, zip, i, j, n);
+    loopCheckitem(checklist.checkItems, zip, i, j, n);
   }
 };
 
