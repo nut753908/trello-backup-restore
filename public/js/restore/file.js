@@ -77,7 +77,7 @@ const coverKeys = [
 ];
 
 // a: attachment
-export const fileToCover = (file, token, idCard, idsA) => {
+export const fileToCover = (file, token, idCard, mapIdA) => {
   if (!file) {
     return;
   }
@@ -88,8 +88,7 @@ export const fileToCover = (file, token, idCard, idsA) => {
       coverKeys.reduce((o, k) => ({ ...o, [k]: cover?.[k] }), {})
     )
     .then((cover) => {
-      cover.idAttachment =
-        cover.attachmentPos >= 1 ? idsA[cover.attachmentPos - 1] : null;
+      cover.idAttachment = mapIdA[cover.attachmentPos];
       cover.url = cover.unsplashUrl;
       delete cover.attachmentPos;
       delete cover.unsplashUrl;
