@@ -4,7 +4,12 @@
 // ci: checkitem
 // cfi: custom field item
 
-import { APP_KEY } from "/js/common/env.js";
+import {
+  APP_KEY,
+  DOWNLOAD_URL_RE,
+  DOWNLOAD_HOST_RE,
+  PROXY_HOST,
+} from "/js/common/env.js";
 import {
   listKeys,
   cardKeys,
@@ -14,7 +19,6 @@ import {
   ciKeys,
   cfiKeys,
 } from "/js/back-up/keys.js";
-import { downloadUrlRe, trelloHostRe, proxyHost } from "/js/back-up/url.js";
 
 export const boardToFile = (board, zip) => {
   zip.file("_board.json", JSON.stringify(board, null, 2));
@@ -44,8 +48,8 @@ export const aToFile = (a, zip, i, j, n) => {
 };
 
 export const afToFile = async (a, zip, i, j, n, token) => {
-  if (downloadUrlRe.test(a.url)) {
-    const proxyUrl = a.url.replace(trelloHostRe, proxyHost);
+  if (DOWNLOAD_URL_RE.test(a.url)) {
+    const proxyUrl = a.url.replace(DOWNLOAD_HOST_RE, PROXY_HOST);
     const res = await fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
     const blob = await res.blob();
     zip.file(`list${i}_card${j}_attachment${n}_file`, blob);
