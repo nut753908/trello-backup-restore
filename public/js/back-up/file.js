@@ -4,7 +4,7 @@
 // ci: checkitem
 // cfi: custom field item
 
-import { APP_KEY } from "/js/env.js";
+import { APP_KEY } from "/js/common/env.js";
 import {
   listKeys,
   cardKeys,

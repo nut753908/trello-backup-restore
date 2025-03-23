@@ -1,4 +1,4 @@
-import { protect } from "/js/protect.js";
+import { protect } from "/js/common/protect.js";
 import { unzip } from "/js/restore/unzip.js";
 
 const selectFile = () =>
