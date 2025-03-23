@@ -3,6 +3,7 @@
 // cl: checklist
 // ci: checkitem
 // cfi: custom field item
+// s: sticker
 
 import {
   fileToList,
@@ -12,6 +13,7 @@ import {
   fileToCl,
   fileToCi,
   filesToCfis,
+  fileToS,
 } from "/js/restore/file.js";
 
 const compare = (a, b) => (a.name > b.name ? 1 : -1);
@@ -54,6 +56,14 @@ const loopCfi = async (i, j, zip, token, idCard) => {
   await filesToCfis(files, token, idCard);
 };
 
+const loopS = async (i, j, zip, token, idCard) => {
+  const re = new RegExp(`^list${i}_card${j}_sticker(\\d+)\\.json$`);
+  const files = zip.file(re).sort(compare);
+  for (const file of files) {
+    await fileToS(file, token, idCard);
+  }
+};
+
 const loopCard = async (i, zip, token, idList) => {
   const re = new RegExp(`^list${i}_card(\\d+)\\.json$`);
   const files = zip.file(re).sort(compare);
@@ -66,6 +76,7 @@ const loopCard = async (i, zip, token, idList) => {
     await fileToCover(coverFile, token, idCard, mapIdA);
     await loopCl(i, j, zip, token, idCard);
     await loopCfi(i, j, zip, token, idCard);
+    await loopS(i, j, zip, token, idCard);
   }
 };
 

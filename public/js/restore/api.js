@@ -3,6 +3,7 @@
 // cl: checklist
 // ci: checkitem
 // cfi: custom field item
+// s: sticker
 
 import { APP_KEY } from "/js/common/env.js";
 
@@ -99,6 +100,20 @@ export const createCi = (token, idCl, body) =>
 export const updateCfis = (token, idCard, body) =>
   fetch(`https://api.trello.com/1/cards/${idCard}/customFields`, {
     method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      ...body,
+      key: APP_KEY,
+      token,
+    }),
+  });
+
+export const addS = (token, idCard, body) =>
+  fetch(`https://api.trello.com/1/cards/${idCard}/stickers`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
