@@ -6,6 +6,7 @@ import {
   updateCard,
   createChecklist,
   createCheckitem,
+  updateCustomField,
 } from "/js/restore/api.js";
 
 export const fileToList = (file, token, idBoard) =>
@@ -119,3 +120,23 @@ export const fileToCheckitem = (file, token, idCl) =>
     .then((name) => backoff(() => createCheckitem(token, idCl, name)))
     .then((res) => res.json())
     .then((json) => json?.id);
+
+// cfi: CustomFieldItem
+const cfiKeys = ["idCustomField", "value", "idValue"];
+
+// cfi: CustomFieldItem
+export const fileToCustomFieldItem = async (files, token, idCard) => {
+  if (files.length === 0) {
+    return;
+  }
+  Promise.all(
+    files.map((file) =>
+      file
+        .async("string")
+        .then(JSON.parse)
+        .then((cfi) => cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {}))
+    )
+  )
+    .then((cfis) => ({ customFieldItems: cfis }))
+    .then((body) => backoff(() => updateCustomField(token, idCard, body)));
+};

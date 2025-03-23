@@ -7,6 +7,7 @@ import {
   fileToCover,
   fileToChecklist,
   fileToCheckitem,
+  fileToCustomFieldItem,
 } from "/js/restore/file.js";
 
 const compareName = (a, b) => (a.name > b.name ? 1 : -1);
@@ -44,6 +45,14 @@ const loopChecklist = async (i, j, zip, token, idCard) => {
   }
 };
 
+const loopCustomFieldItem = async (i, j, zip, token, idCard) => {
+  const re = new RegExp(`^list${i}_card${j}_customFieldItem(\\d+)\\.json$`);
+  const files = zip.file(re).sort(compareName);
+  if (files.length > 0) {
+    await fileToCustomFieldItem(files, token, idCard);
+  }
+};
+
 const loopCard = async (i, zip, token, idList) => {
   const re = new RegExp(`^list${i}_card(\\d+)\\.json$`);
   const files = zip.file(re).sort(compareName);
@@ -56,6 +65,7 @@ const loopCard = async (i, zip, token, idList) => {
     const coverFile = zip.file(`list${i}_card${j}_cover.json`);
     await fileToCover(coverFile, token, idCard, mapIdA);
     await loopChecklist(i, j, zip, token, idCard);
+    await loopCustomFieldItem(i, j, zip, token, idCard);
   }
 };
 
