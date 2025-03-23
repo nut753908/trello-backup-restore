@@ -3,7 +3,6 @@
 import {
   fileToList,
   fileToCard,
-  getIdA,
   fileToAttachment,
   fileToCover,
   fileToChecklist,
@@ -20,8 +19,7 @@ const loopAttachment = async (i, j, zip, token, idCard) => {
   for (const aFile of files) {
     const n = aFile.name.match(re)[1];
     const fileFile = zip.file(`list${i}_card${j}_attachment${n}_file`);
-    const idA = await getIdA(aFile);
-    mapIdA[idA] = await fileToAttachment(aFile, fileFile, token, idCard);
+    mapIdA[n] = await fileToAttachment(aFile, fileFile, token, idCard);
   }
   return mapIdA;
 };
