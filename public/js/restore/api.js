@@ -1,6 +1,12 @@
+// a: attachment
+// af: attachment file
+// cl: checklist
+// ci: checkitem
+// cfi: custom field item
+
 import { APP_KEY } from "/js/env.js";
 
-export const createList = (token, idBoard, name) =>
+export const createList = (token, idBoard, body) =>
   fetch(`https://api.trello.com/1/boards/${idBoard}/lists`, {
     method: "POST",
     headers: {
@@ -8,7 +14,7 @@ export const createList = (token, idBoard, name) =>
       Accept: "application/json",
     },
     body: JSON.stringify({
-      name,
+      ...body,
       pos: "bottom",
       key: APP_KEY,
       token,
@@ -31,7 +37,7 @@ export const createCard = (token, idList, body) =>
     }),
   });
 
-export const createAttachment = (token, idCard, body) => {
+export const createA = (token, idCard, body) => {
   const formData = new FormData();
   Object.entries(body).forEach(([k, v]) => formData.append(k, v));
   formData.append("key", APP_KEY);
@@ -59,7 +65,7 @@ export const updateCard = (token, idCard, body) =>
     }),
   });
 
-export const createChecklist = (token, idCard, body) =>
+export const createCl = (token, idCard, body) =>
   fetch("https://api.trello.com/1/checklists", {
     method: "POST",
     headers: {
@@ -75,7 +81,7 @@ export const createChecklist = (token, idCard, body) =>
     }),
   });
 
-export const createCheckitem = (token, idCl, body) =>
+export const createCi = (token, idCl, body) =>
   fetch(`https://api.trello.com/1/checklists/${idCl}/checkItems`, {
     method: "POST",
     headers: {
@@ -90,7 +96,7 @@ export const createCheckitem = (token, idCl, body) =>
     }),
   });
 
-export const updateCustomFieldItems = (token, idCard, body) =>
+export const updateCfis = (token, idCard, body) =>
   fetch(`https://api.trello.com/1/cards/${idCard}/customFields`, {
     method: "PUT",
     headers: {

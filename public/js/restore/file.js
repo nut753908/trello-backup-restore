@@ -1,35 +1,37 @@
+// a: attachment
+// af: attachment file
+// cl: checklist
+// ci: checkitem
+// cfi: custom field item
+
 import { backoff } from "/js/restore/backoff.js";
 import {
   createList,
   createCard,
-  createAttachment,
+  createA,
   updateCard,
-  createChecklist,
-  createCheckitem,
-  updateCustomFieldItems,
+  createCl,
+  createCi,
+  updateCfis,
 } from "/js/restore/api.js";
+import {
+  listKeys,
+  cardKeys,
+  aKeys,
+  coverKeys,
+  clKeys,
+  ciKeys,
+  cfiKeys,
+} from "/js/restore/keys.js";
 
 export const fileToList = (file, token, idBoard) =>
   file
     .async("string")
     .then(JSON.parse)
-    .then((list) => list?.name)
-    .then((name) => backoff(() => createList(token, idBoard, name)))
+    .then((list) => listKeys.reduce((o, k) => ({ ...o, [k]: list?.[k] }), {}))
+    .then((body) => backoff(() => createList(token, idBoard, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
-
-const cardKeys = [
-  "name",
-  "desc",
-  "due",
-  "start",
-  "dueComplete",
-  "idMembers",
-  "idLabels",
-  "address",
-  "locationName",
-  "coordinates",
-];
 
 export const fileToCard = (cardFile, descFile, token, idList) =>
   cardFile
@@ -46,17 +48,16 @@ export const fileToCard = (cardFile, descFile, token, idList) =>
     .then((res) => res.json())
     .then((json) => json?.id);
 
-// a: attachment
-export const fileToAttachment = (aFile, fileFile, token, idCard) =>
+export const fileToA = (aFile, afFile, token, idCard) =>
   aFile
     .async("string")
     .then(JSON.parse)
-    .then((a) => ["name", "url"].reduce((o, k) => ({ ...o, [k]: a?.[k] }), {}))
+    .then((a) => aKeys.reduce((o, k) => ({ ...o, [k]: a?.[k] }), {}))
     .then(async (a) => {
       a.setCover = false;
-      if (fileFile) {
+      if (afFile) {
         a.file = new File(
-          [await fileFile.async("blob")],
+          [await afFile.async("blob")],
           a.url
             ? decodeURI(a.url.split("/").pop())
             : decodeURI(a.name.split("/").pop())
@@ -65,78 +66,60 @@ export const fileToAttachment = (aFile, fileFile, token, idCard) =>
       }
       return a;
     })
-    .then((body) => backoff(() => createAttachment(token, idCard, body)))
+    .then((body) => backoff(() => createA(token, idCard, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
 
-const coverKeys = [
-  "color",
-  "attachmentPos",
-  "unsplashUrl",
-  "size",
-  "brightness",
-];
-
-// a: attachment
 export const fileToCover = (file, token, idCard, mapIdA) => {
-  if (!file) {
-    return;
+  if (file) {
+    file
+      .async("string")
+      .then(JSON.parse)
+      .then((cover) =>
+        coverKeys.reduce((o, k) => ({ ...o, [k]: cover?.[k] }), {})
+      )
+      .then((cover) => {
+        cover.idAttachment = mapIdA[cover.attachmentPos];
+        cover.url = cover.unsplashUrl;
+        delete cover.attachmentPos;
+        delete cover.unsplashUrl;
+        return { cover };
+      })
+      .then((body) => backoff(() => updateCard(token, idCard, body)));
   }
-  file
-    .async("string")
-    .then(JSON.parse)
-    .then((cover) =>
-      coverKeys.reduce((o, k) => ({ ...o, [k]: cover?.[k] }), {})
-    )
-    .then((cover) => {
-      cover.idAttachment = mapIdA[cover.attachmentPos];
-      cover.url = cover.unsplashUrl;
-      delete cover.attachmentPos;
-      delete cover.unsplashUrl;
-      return { cover };
-    })
-    .then((body) => backoff(() => updateCard(token, idCard, body)));
 };
 
-// cl: checklist
-export const fileToChecklist = (file, token, idCard) =>
+export const fileToCl = (file, token, idCard) =>
   file
     .async("string")
     .then(JSON.parse)
-    .then((cl) => ["name"].reduce((o, k) => ({ ...o, [k]: cl?.[k] }), {}))
-    .then((name) => backoff(() => createChecklist(token, idCard, name)))
+    .then((cl) => clKeys.reduce((o, k) => ({ ...o, [k]: cl?.[k] }), {}))
+    .then((body) => backoff(() => createCl(token, idCard, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
 
-// ci: checkitem
-const ciKeys = ["name", "checked", "due", "dueReminder", "idMember"];
-
-// ci: checkitem
-export const fileToCheckitem = (file, token, idCl) =>
+export const fileToCi = (file, token, idCl) =>
   file
     .async("string")
     .then(JSON.parse)
     .then((ci) => ciKeys.reduce((o, k) => ({ ...o, [k]: ci?.[k] }), {}))
-    .then((name) => backoff(() => createCheckitem(token, idCl, name)))
+    .then((body) => backoff(() => createCi(token, idCl, body)))
     .then((res) => res.json())
     .then((json) => json?.id);
 
-// cfi: CustomFieldItem
-const cfiKeys = ["idCustomField", "value", "idValue"];
-
-// cfi: CustomFieldItem
-export const filesToCustomFieldItems = async (files, token, idCard) => {
-  if (files.length === 0) {
-    return;
-  }
-  Promise.all(
-    files.map((file) =>
-      file
-        .async("string")
-        .then(JSON.parse)
-        .then((cfi) => cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {}))
+export const filesToCfis = async (files, token, idCard) => {
+  if (files.length > 0) {
+    Promise.all(
+      files.map((file) =>
+        file
+          .async("string")
+          .then(JSON.parse)
+          .then((cfi) =>
+            cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {})
+          )
+      )
     )
-  )
-    .then((cfis) => ({ customFieldItems: cfis }))
-    .then((body) => backoff(() => updateCustomFieldItems(token, idCard, body)));
+      .then((cfis) => ({ customFieldItems: cfis }))
+      .then((body) => backoff(() => updateCfis(token, idCard, body)));
+  }
 };
