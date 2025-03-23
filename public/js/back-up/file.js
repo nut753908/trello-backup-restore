@@ -18,7 +18,7 @@ import {
 import { APP_KEY, PROXY_HOST } from "/js/common/env.js";
 
 export const boardToFile = (board, zip) => {
-  zip.file("_board.json", JSON.stringify(board, null, 2));
+  zip.file("board.json", JSON.stringify(board, null, 2));
 };
 
 export const listToFile = (list, zip, i) => {
