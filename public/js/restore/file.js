@@ -114,7 +114,9 @@ export const filesToCfis = async (files, token, idCard) => {
         file
           .async("string")
           .then(JSON.parse)
-          .then((cfi) => cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {}))
+          .then((cfi) =>
+            cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {})
+          )
       )
     )
       .then((cfis) => ({ customFieldItems: cfis }))
