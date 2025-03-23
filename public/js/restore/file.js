@@ -101,14 +101,13 @@ export const fileToCl = (file, token, idCard) =>
     .then((res) => res.json())
     .then((json) => json?.id);
 
-export const fileToCi = (file, token, idCl) =>
+export const fileToCi = (file, token, idCl) => {
   file
     .async("string")
     .then(JSON.parse)
     .then((ci) => ciKeys.reduce((o, k) => ({ ...o, [k]: ci?.[k] }), {}))
-    .then((body) => backoff(() => createCi(token, idCl, body)))
-    .then((res) => res.json())
-    .then((json) => json?.id);
+    .then((body) => backoff(() => createCi(token, idCl, body)));
+};
 
 export const filesToCfis = async (files, token, idCard) => {
   if (files.length > 0) {
@@ -127,11 +126,10 @@ export const filesToCfis = async (files, token, idCard) => {
   }
 };
 
-export const fileToS = (file, token, idCard) =>
+export const fileToS = (file, token, idCard) => {
   file
     .async("string")
     .then(JSON.parse)
     .then((s) => sKeys.reduce((o, k) => ({ ...o, [k]: s?.[k] }), {}))
-    .then((body) => backoff(() => addS(token, idCard, body)))
-    .then((res) => res.json())
-    .then((json) => json?.id);
+    .then((body) => backoff(() => addS(token, idCard, body)));
+};
