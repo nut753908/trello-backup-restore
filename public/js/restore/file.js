@@ -46,13 +46,6 @@ export const fileToCard = (cardFile, descFile, token, idList) =>
     .then((json) => json?.id);
 
 // a: attachment
-export const getIdA = (file) =>
-  file
-    .async("string")
-    .then(JSON.parse)
-    .then((a) => a.id);
-
-// a: attachment
 export const fileToAttachment = (aFile, fileFile, token, idCard) =>
   aFile
     .async("string")
@@ -75,10 +68,10 @@ export const fileToAttachment = (aFile, fileFile, token, idCard) =>
     .then((res) => res.json())
     .then((json) => json?.id);
 
-const coverKeys = ["color", "idAttachment", "url", "size", "brightness"];
+const coverKeys = ["color", "posAttachment", "url", "size", "brightness"];
 
 // a: attachment
-export const fileToCover = (file, token, idCard, mapIdA) => {
+export const fileToCover = (file, token, idCard, idsA) => {
   if (!file) {
     return;
   }
@@ -89,7 +82,9 @@ export const fileToCover = (file, token, idCard, mapIdA) => {
       coverKeys.reduce((o, k) => ({ ...o, [k]: cover?.[k] }), {})
     )
     .then((cover) => {
-      cover.idAttachment = mapIdA[cover.idAttachment] ?? null;
+      cover.idAttachment =
+        cover.posAttachment >= 1 ? idsA[cover.posAttachment - 1] : null;
+      delete cover.posAttachment;
       return { cover };
     })
     .then((body) => backoff(() => updateCard(token, idCard, body)));

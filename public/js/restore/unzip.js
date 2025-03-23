@@ -3,7 +3,6 @@
 import {
   fileToList,
   fileToCard,
-  getIdA,
   fileToAttachment,
   fileToCover,
   fileToChecklist,
@@ -16,14 +15,13 @@ const loopAttachment = async (i, j, zip, token, idCard) => {
   const re = new RegExp(`^list${i}_card${j}_attachment(\\d+)\\.json$`);
   const files = zip.file(re).sort(compareName);
   // a: attachment
-  const mapIdA = {};
+  const idsA = [];
   for (const aFile of files) {
     const n = aFile.name.match(re)[1];
     const fileFile = zip.file(`list${i}_card${j}_attachment${n}_file`);
-    const idA = await getIdA(aFile);
-    mapIdA[idA] = await fileToAttachment(aFile, fileFile, token, idCard);
+    idsA.push(await fileToAttachment(aFile, fileFile, token, idCard));
   }
-  return mapIdA;
+  return idsA;
 };
 
 const loopCheckitem = async (i, j, n, zip, token, idCl) => {
@@ -54,9 +52,9 @@ const loopCard = async (i, zip, token, idList) => {
     const descFile = zip.file(`list${i}_card${j}_desc.md`);
     const idCard = await fileToCard(cardFile, descFile, token, idList);
     // a: attachment
-    const mapIdA = await loopAttachment(i, j, zip, token, idCard);
+    const idsA = await loopAttachment(i, j, zip, token, idCard);
     const coverFile = zip.file(`list${i}_card${j}_cover.json`);
-    await fileToCover(coverFile, token, idCard, mapIdA);
+    await fileToCover(coverFile, token, idCard, idsA);
     await loopChecklist(i, j, zip, token, idCard);
   }
 };

@@ -68,7 +68,7 @@ const loopCard = async (cards, zip, i, token) => {
     cardToFile(card, zip, i, j);
     descToFile(card.desc, zip, i, j);
     await loopAttachment(card.attachments, zip, i, j, token);
-    coverToFile(card.cover, zip, i, j);
+    coverToFile(card.cover, card.attachments, zip, i, j);
     loopChecklist(card.checklists, zip, i, j);
   }
 };
