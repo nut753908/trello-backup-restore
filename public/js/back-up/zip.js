@@ -37,7 +37,7 @@ const addParams = (idBoard, token, lists) =>
 
 export const createZipBlob = async (t, type) => {
   const token = await t.getRestApi().getToken();
-  const board = await t.board("id", "name");
+  const board = await t.board("all");
   const lists = await getLists[type](t);
   await addParams(board.id, token, lists);
   const zip = new JSZip();
