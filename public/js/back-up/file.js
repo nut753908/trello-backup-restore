@@ -1,3 +1,6 @@
+// m: member
+// cf: custom field
+// cfo: custom field option
 // a: attachment
 // af: attachment file
 // cl: checklist
@@ -7,6 +10,10 @@
 
 import {
   boardKeys,
+  mKeys,
+  labelKeys,
+  cfKeys,
+  cfoKeys,
   listKeys,
   cardKeys,
   aKeys,
@@ -19,6 +26,21 @@ import {
 import { APP_KEY, PROXY_HOST } from "/js/common/env.js";
 
 export const boardToFile = (board, zip) => {
+  board.members = board.members.map((m) =>
+    mKeys.reduce((o, k) => ({ ...o, [k]: m[k] }), {})
+  );
+  board.labels = board.labels.map((l) =>
+    labelKeys.reduce((o, k) => ({ ...o, [k]: l[k] }), {})
+  );
+  board.customFields = board.customFields.map((cf) => {
+    console.log(JSON.stringify(cf, null, 2));
+    if (cf.options) {
+      cf.options = cf.options.map((cfo) =>
+        cfoKeys.reduce((o, k) => ({ ...o, [k]: cfo[k] }), {})
+      );
+    }
+    return cfKeys.reduce((o, k) => ({ ...o, [k]: cf[k] }), {});
+  });
   board = boardKeys.reduce((o, k) => ({ ...o, [k]: board[k] }), {});
   zip.file("_board.json", JSON.stringify(board, null, 2));
 };
