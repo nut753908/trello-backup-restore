@@ -1,4 +1,5 @@
 import { createZipBlob } from "/js/back-up/zip.js";
+import { storeError } from "/js/common/error.js";
 
 const createFilename = (t, type) =>
   ({
@@ -21,8 +22,15 @@ const download = (blob, name) => {
 };
 
 export const backUp = (type) => async (t) => {
-  t.alert({ message: `Backing up ${type}` });
-  const blob = await createZipBlob(t, type);
-  const name = await createFilename(t, type);
-  download(blob, name);
+  try {
+    t.alert({ message: `Backing up ${type}` });
+    const blob = await createZipBlob(t, type);
+    const name = await createFilename(t, type);
+    download(blob, name);
+  } catch (e) {
+    console.error(e);
+    await t.hideAlert();
+    t.alert({ message: `❌ Failed to back up ${type}` });
+    storeError(t, e);
+  }
 };
