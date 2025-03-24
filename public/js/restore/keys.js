@@ -22,13 +22,7 @@ export const cardKeys = [
 
 export const aKeys = ["name", "url"];
 
-export const coverKeys = [
-  "color",
-  "idAttachment",
-  "unsplashUrl",
-  "size",
-  "brightness",
-];
+export const coverKeys = ["color", "idAttachment", "url", "size", "brightness"];
 
 export const clKeys = ["name"];
 

@@ -51,7 +51,7 @@ export const fileToCard = (cardFile, descFile, token, idList) =>
     .then((res) => res.json())
     .then((json) => json?.id);
 
-export const getIdA = (file) => 
+export const getIdA = (file) =>
   file
     .async("string")
     .then(JSON.parse)
@@ -89,8 +89,6 @@ export const fileToCover = (file, token, idCard, mapIdA) => {
       )
       .then((cover) => {
         cover.idAttachment = mapIdA[cover.idAttachment];
-        cover.url = cover.unsplashUrl;
-        delete cover.unsplashUrl;
         return { cover };
       })
       .then((body) => backoff(() => updateCard(token, idCard, body)));

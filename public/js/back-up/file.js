@@ -83,9 +83,7 @@ export const afToFile = async (a, zip, i, j, n, token) => {
 
 export const coverToFile = (cover, a_s, zip, i, j) => {
   if (cover.color || cover.idAttachment || cover.idUploadedBackground) {
-    cover.unsplashUrl = cover.idUploadedBackground
-      ? cover.sharedSourceUrl
-      : null;
+    cover.url = cover.idUploadedBackground ? cover.sharedSourceUrl : null;
     cover = coverKeys.reduce((o, k) => ({ ...o, [k]: cover[k] }), {});
     zip.file(`list${i}_card${j}_cover.json`, JSON.stringify(cover, null, 2));
   }
