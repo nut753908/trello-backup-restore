@@ -5,6 +5,8 @@
 // cfi: custom field item
 // s: sticker
 
+export const boardKeys = ["id", "name", "members", "labels", "customFields"];
+
 export const listKeys = ["id", "name"];
 
 export const cardKeys = [
