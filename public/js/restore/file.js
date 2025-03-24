@@ -5,6 +5,16 @@
 // cfi: custom field item
 // s: sticker
 
+import {
+  listKeys,
+  cardKeys,
+  aKeys,
+  coverKeys,
+  clKeys,
+  ciKeys,
+  cfiKeys,
+  sKeys,
+} from "/js/restore/keys.js";
 import { backoff } from "/js/common/backoff.js";
 import {
   createList,
@@ -16,16 +26,6 @@ import {
   updateCfis,
   addS,
 } from "/js/restore/api.js";
-import {
-  listKeys,
-  cardKeys,
-  aKeys,
-  coverKeys,
-  clKeys,
-  ciKeys,
-  cfiKeys,
-  sKeys,
-} from "/js/restore/keys.js";
 
 export const fileToList = (file, token, idBoard) =>
   file

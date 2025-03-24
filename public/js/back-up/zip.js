@@ -15,7 +15,7 @@ const getLists = {
   lists: (t) => t.lists("all"),
 };
 
-const addParams = async (idBoard, token, lists) =>
+const addParams = (idBoard, token, lists) =>
   backoff(() =>
     fetch(
       `https://api.trello.com/1/boards/${idBoard}/cards` +
@@ -25,15 +25,15 @@ const addParams = async (idBoard, token, lists) =>
   )
     .then((res) => res.json())
     .then((json) => json.reduce((o, c) => ({ ...o, [c.id]: c }), {}))
-    .then((map) =>
+    .then((map) => {
       lists.forEach((l) => {
         l.cards.forEach((c) => {
           c.cover = map[c.id].cover;
           c.checklists = map[c.id].checklists;
           c.stickers = map[c.id].stickers;
         });
-      })
-    );
+      });
+    });
 
 export const createZipBlob = async (t, type) => {
   const token = await t.getRestApi().getToken();
