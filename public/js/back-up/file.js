@@ -79,6 +79,9 @@ export const afToFile = async (a, zip, i, j, n, token) => {
       () => fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`),
       false
     );
+    if (!res.ok) {
+      throw new Error(JSON.stringify({ status: res.status, url: proxyUrl }));
+    }
     const blob = await res.blob();
     zip.file(`list${i}_card${j}_attachment${n}_file`, blob);
   }

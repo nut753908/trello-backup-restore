@@ -23,6 +23,11 @@ const addParams = async (idBoard, token, lists) => {
         `&key=${APP_KEY}&token=${token}`
     )
   );
+  if (!res.ok) {
+    throw new Error(
+      JSON.stringify({ status: res.status, url: res.url.split("?")[0] })
+    );
+  }
   const cards = await res.json();
   const map = cards.reduce((o, c) => ({ ...o, [c.id]: c }), {});
   lists.forEach((l) => {
