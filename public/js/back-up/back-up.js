@@ -21,7 +21,7 @@ const download = (blob, name) => {
 };
 
 export const backUp = (type) => async (t) => {
-  t.alert({ message: `Backing up ${type}, please wait...` });
+  t.alert({ message: `Backing up ${type}` });
   const blob = await createZipBlob(t, type);
   const name = await createFilename(t, type);
   download(blob, name);
