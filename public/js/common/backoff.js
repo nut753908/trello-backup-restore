@@ -5,7 +5,7 @@ const fullJitter = () =>
     setTimeout(resolve, Math.min(32000, 1000 * 2 ** attempt) * Math.random())
   );
 
-export const backoff = async (func) => {
+export const backoff = async (func, rateLimit = true) => {
   const res = await func();
   if (res.status === 429) {
     await fullJitter();
@@ -13,8 +13,9 @@ export const backoff = async (func) => {
     return backoff(func);
   }
   if (
-    res.headers.get("x-rate-limit-api-key-remaining") <= 100 ||
-    res.headers.get("x-rate-limit-api-token-remaining") <= 50
+    rateLimit &&
+    (res.headers.get("x-rate-limit-api-key-remaining") <= 100 ||
+      res.headers.get("x-rate-limit-api-token-remaining") <= 50)
   ) {
     await fullJitter();
     attempt++;

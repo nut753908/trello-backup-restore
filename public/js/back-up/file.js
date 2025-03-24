@@ -24,6 +24,7 @@ import {
   sKeys,
 } from "/js/back-up/keys.js";
 import { APP_KEY, PROXY_HOST } from "/js/common/env.js";
+import { backoff } from "/js/common/backoff.js";
 
 export const boardToFile = (board, zip) => {
   board.members = board.members.map((m) =>
@@ -74,7 +75,10 @@ const downloadHostRe = /^https:\/\/trello\.com/;
 export const afToFile = async (a, zip, i, j, n, token) => {
   if (downloadUrlRe.test(a.url)) {
     const proxyUrl = a.url.replace(downloadHostRe, PROXY_HOST);
-    const res = await fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`);
+    const res = await backoff(
+      () => fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`),
+      false
+    );
     const blob = await res.blob();
     zip.file(`list${i}_card${j}_attachment${n}_file`, blob);
   }
