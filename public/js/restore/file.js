@@ -27,112 +27,94 @@ import {
   addS,
 } from "/js/restore/api.js";
 
-export const fileToList = (file, token, idBoard) =>
-  file
-    .async("string")
-    .then(JSON.parse)
-    .then((list) => listKeys.reduce((o, k) => ({ ...o, [k]: list?.[k] }), {}))
-    .then((body) => backoff(() => createList(token, idBoard, body)))
-    .then((res) => res.json())
-    .then((json) => json?.id);
+export const fileToList = async (file, token, idBoard) => {
+  const text = await file.async("string");
+  let list = JSON.parse(text);
+  list = listKeys.reduce((o, k) => ({ ...o, [k]: list?.[k] }), {});
+  const res = await backoff(() => createList(token, idBoard, list));
+  const json = await res.json();
+  return json?.id;
+};
 
-export const fileToCard = (cardFile, descFile, token, idList) =>
-  cardFile
-    .async("string")
-    .then(JSON.parse)
-    .then((card) => cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {}))
-    .then(async (card) => {
-      if (descFile) {
-        card.desc = await descFile.async("string");
-      }
-      return card;
-    })
-    .then((body) => backoff(() => createCard(token, idList, body)))
-    .then((res) => res.json())
-    .then((json) => json?.id);
+export const fileToCard = async (cardFile, descFile, token, idList) => {
+  const text = await cardFile.async("string");
+  let card = JSON.parse(text);
+  card = cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {});
+  if (descFile) {
+    card.desc = await descFile.async("string");
+  }
+  const res = await backoff(() => createCard(token, idList, card));
+  const json = await res.json();
+  return json?.id;
+};
 
-export const getIdA = (file) =>
-  file
-    .async("string")
-    .then(JSON.parse)
-    .then((a) => a.id);
+export const getIdA = async (file) => {
+  const text = await file.async("string");
+  const a = JSON.parse(text);
+  return a.id;
+};
 
-export const fileToA = (aFile, afFile, token, idCard) =>
-  aFile
-    .async("string")
-    .then(JSON.parse)
-    .then((a) => aKeys.reduce((o, k) => ({ ...o, [k]: a?.[k] }), {}))
-    .then(async (a) => {
-      a.setCover = false;
-      if (afFile) {
-        a.file = new File(
-          [await afFile.async("blob")],
-          a.url
-            ? decodeURI(a.url.split("/").pop())
-            : decodeURI(a.name.split("/").pop())
-        );
-        delete a.url;
-      }
-      return a;
-    })
-    .then((body) => backoff(() => createA(token, idCard, body)))
-    .then((res) => res.json())
-    .then((json) => json?.id);
+export const fileToA = async (aFile, afFile, token, idCard) => {
+  const text = await aFile.async("string");
+  let a = JSON.parse(text);
+  a = aKeys.reduce((o, k) => ({ ...o, [k]: a?.[k] }), {});
+  a.setCover = false;
+  if (afFile) {
+    a.file = new File(
+      [await afFile.async("blob")],
+      a.url
+        ? decodeURI(a.url.split("/").pop())
+        : decodeURI(a.name.split("/").pop())
+    );
+    delete a.url;
+  }
+  const res = await backoff(() => createA(token, idCard, a));
+  const json = await res.json();
+  return json?.id;
+};
 
-export const fileToCover = (file, token, idCard, mapIdA) => {
+export const fileToCover = async (file, token, idCard, mapIdA) => {
   if (file) {
-    file
-      .async("string")
-      .then(JSON.parse)
-      .then((cover) =>
-        coverKeys.reduce((o, k) => ({ ...o, [k]: cover?.[k] }), {})
-      )
-      .then((cover) => {
-        cover.idAttachment = mapIdA[cover.idAttachment];
-        return { cover };
-      })
-      .then((body) => backoff(() => updateCard(token, idCard, body)));
+    const text = await file.async("string");
+    let cover = JSON.parse(text);
+    cover = coverKeys.reduce((o, k) => ({ ...o, [k]: cover?.[k] }), {});
+    cover.idAttachment = mapIdA[cover.idAttachment];
+    await backoff(() => updateCard(token, idCard, { cover }));
   }
 };
 
-export const fileToCl = (file, token, idCard) =>
-  file
-    .async("string")
-    .then(JSON.parse)
-    .then((cl) => clKeys.reduce((o, k) => ({ ...o, [k]: cl?.[k] }), {}))
-    .then((body) => backoff(() => createCl(token, idCard, body)))
-    .then((res) => res.json())
-    .then((json) => json?.id);
+export const fileToCl = async (file, token, idCard) => {
+  const text = await file.async("string");
+  let cl = JSON.parse(text);
+  cl = clKeys.reduce((o, k) => ({ ...o, [k]: cl?.[k] }), {});
+  const res = await backoff(() => createCl(token, idCard, cl));
+  const json = await res.json();
+  return json?.id;
+};
 
-export const fileToCi = (file, token, idCl) => {
-  file
-    .async("string")
-    .then(JSON.parse)
-    .then((ci) => ciKeys.reduce((o, k) => ({ ...o, [k]: ci?.[k] }), {}))
-    .then((body) => backoff(() => createCi(token, idCl, body)));
+export const fileToCi = async (file, token, idCl) => {
+  const text = await file.async("string");
+  let ci = JSON.parse(text);
+  ci = ciKeys.reduce((o, k) => ({ ...o, [k]: ci?.[k] }), {});
+  await backoff(() => createCi(token, idCl, ci));
 };
 
 export const filesToCfis = async (files, token, idCard) => {
   if (files.length > 0) {
-    Promise.all(
-      files.map((file) =>
-        file
-          .async("string")
-          .then(JSON.parse)
-          .then((cfi) =>
-            cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {})
-          )
-      )
-    )
-      .then((cfis) => ({ customFieldItems: cfis }))
-      .then((body) => backoff(() => updateCfis(token, idCard, body)));
+    const cfis = [];
+    for (const file of files) {
+      const text = await file.async("string");
+      let cfi = JSON.parse(text);
+      cfi = cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {});
+      cfis.push(cfi);
+    }
+    await backoff(() => updateCfis(token, idCard, { customFieldItems: cfis }));
   }
 };
 
-export const fileToS = (file, token, idCard) => {
-  file
-    .async("string")
-    .then(JSON.parse)
-    .then((s) => sKeys.reduce((o, k) => ({ ...o, [k]: s?.[k] }), {}))
-    .then((body) => backoff(() => addS(token, idCard, body)));
+export const fileToS = async (file, token, idCard) => {
+  const text = await file.async("string");
+  let s = JSON.parse(text);
+  s = sKeys.reduce((o, k) => ({ ...o, [k]: s?.[k] }), {});
+  await backoff(() => addS(token, idCard, s));
 };
