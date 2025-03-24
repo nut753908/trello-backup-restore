@@ -8,6 +8,7 @@
 import {
   fileToList,
   fileToCard,
+  getIdA,
   fileToA,
   fileToCover,
   fileToCl,
@@ -25,7 +26,7 @@ const loopA = async (dir, i, j, zip, token, idCard) => {
   for (const aFile of files) {
     const n = aFile.name.match(re)[1];
     const afFile = zip.file(`${dir}list${i}_card${j}_attachment${n}_file`);
-    mapIdA[n] = await fileToA(aFile, afFile, token, idCard);
+    mapIdA[await getIdA(aFile)] = await fileToA(aFile, afFile, token, idCard);
   }
   return mapIdA;
 };

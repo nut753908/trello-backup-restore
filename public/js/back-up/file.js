@@ -83,8 +83,6 @@ export const afToFile = async (a, zip, i, j, n, token) => {
 
 export const coverToFile = (cover, a_s, zip, i, j) => {
   if (cover.color || cover.idAttachment || cover.idUploadedBackground) {
-    const pos = a_s.findIndex((a) => a.id === cover.idAttachment);
-    cover.attachmentPos = pos !== -1 ? pos + 1 : null;
     cover.unsplashUrl = cover.idUploadedBackground
       ? cover.sharedSourceUrl
       : null;

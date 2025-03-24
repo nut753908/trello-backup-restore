@@ -24,7 +24,7 @@ export const aKeys = ["name", "url"];
 
 export const coverKeys = [
   "color",
-  "attachmentPos",
+  "idAttachment",
   "unsplashUrl",
   "size",
   "brightness",
