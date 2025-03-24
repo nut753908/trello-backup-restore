@@ -33,7 +33,6 @@ export const boardToFile = (board, zip) => {
     labelKeys.reduce((o, k) => ({ ...o, [k]: l[k] }), {})
   );
   board.customFields = board.customFields.map((cf) => {
-    console.log(JSON.stringify(cf, null, 2));
     if (cf.options) {
       cf.options = cf.options.map((cfo) =>
         cfoKeys.reduce((o, k) => ({ ...o, [k]: cfo[k] }), {})
@@ -83,11 +82,7 @@ export const afToFile = async (a, zip, i, j, n, token) => {
 
 export const coverToFile = (cover, a_s, zip, i, j) => {
   if (cover.color || cover.idAttachment || cover.idUploadedBackground) {
-    const pos = a_s.findIndex((a) => a.id === cover.idAttachment);
-    cover.attachmentPos = pos !== -1 ? pos + 1 : null;
-    cover.unsplashUrl = cover.idUploadedBackground
-      ? cover.sharedSourceUrl
-      : null;
+    cover.url = cover.idUploadedBackground ? cover.sharedSourceUrl : null;
     cover = coverKeys.reduce((o, k) => ({ ...o, [k]: cover[k] }), {});
     zip.file(`list${i}_card${j}_cover.json`, JSON.stringify(cover, null, 2));
   }
