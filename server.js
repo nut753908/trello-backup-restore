@@ -26,7 +26,7 @@ app.get(downloadPathRe, (req, res) => {
     headers: {
       Authorization: `OAuth oauth_consumer_key="${req.query.key}", oauth_token="${req.query.token}"`,
     },
-  }).then((r) => r.body.pipe(res));
+  }).then((r) => r.body.pipe(res.status(r.status)));
 });
 
 // listen for requests :)
