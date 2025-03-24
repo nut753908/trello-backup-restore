@@ -33,7 +33,6 @@ export const boardToFile = (board, zip) => {
     labelKeys.reduce((o, k) => ({ ...o, [k]: l[k] }), {})
   );
   board.customFields = board.customFields.map((cf) => {
-    console.log(JSON.stringify(cf, null, 2));
     if (cf.options) {
       cf.options = cf.options.map((cfo) =>
         cfoKeys.reduce((o, k) => ({ ...o, [k]: cfo[k] }), {})
