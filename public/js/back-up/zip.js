@@ -44,8 +44,9 @@ export const createZipBlob = async (t, type) => {
   const board = await t.board("all");
   const lists = await getLists[type](t);
   await addParams(board.id, token, lists);
+  const withFile = await t.get("board", "shared", "withFile", false);
   const zip = new JSZip();
   boardToFile(board, zip);
-  await loopList(lists, zip, token);
+  await loopList(lists, zip, token, withFile);
   return zip.generateAsync({ type: "blob" });
 };

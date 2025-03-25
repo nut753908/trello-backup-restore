@@ -19,14 +19,15 @@ import {
 
 const compare = (a, b) => (a.name > b.name ? 1 : -1);
 
-const loopA = async (dir, i, j, zip, token, idCard) => {
+const loopA = async (dir, i, j, zip, token, idCard, withFile) => {
   const re = new RegExp(`^${dir}list${i}_card${j}_attachment(\\d+)\\.json$`);
   const files = zip.file(re).sort(compare);
   const mapIdA = {};
   for (const aFile of files) {
     const n = aFile.name.match(re)[1];
     const afFile = zip.file(`${dir}list${i}_card${j}_attachment${n}_file`);
-    mapIdA[await getIdA(aFile)] = await fileToA(aFile, afFile, token, idCard);
+    const idA = await getIdA(aFile);
+    mapIdA[idA] = await fileToA(aFile, afFile, token, idCard, withFile);
   }
   return mapIdA;
 };
@@ -67,14 +68,14 @@ const loopS = async (dir, i, j, zip, token, idCard) => {
   }
 };
 
-const loopCard = async (dir, i, zip, token, idList) => {
+const loopCard = async (dir, i, zip, token, idList, withFile) => {
   const re = new RegExp(`^${dir}list${i}_card(\\d+)\\.json$`);
   const files = zip.file(re).sort(compare);
   for (const cardFile of files) {
     const j = cardFile.name.match(re)[1];
     const descFile = zip.file(`${dir}list${i}_card${j}_desc.md`);
     const idCard = await fileToCard(cardFile, descFile, token, idList);
-    const mapIdA = await loopA(dir, i, j, zip, token, idCard);
+    const mapIdA = await loopA(dir, i, j, zip, token, idCard, withFile);
     const coverFile = zip.file(`${dir}list${i}_card${j}_cover.json`);
     await fileToCover(coverFile, token, idCard, mapIdA);
     await loopCl(dir, i, j, zip, token, idCard);
@@ -83,23 +84,23 @@ const loopCard = async (dir, i, zip, token, idList) => {
   }
 };
 
-const loopList = async (dir, zip, token, idBoard) => {
+const loopList = async (dir, zip, token, idBoard, withFile) => {
   const re = new RegExp(`^${dir}list(\\d+)\\.json$`);
   const files = zip.file(re).sort(compare);
   for (const file of files) {
     const i = file.name.match(re)[1];
     const idList = await fileToList(file, token, idBoard);
-    await loopCard(dir, i, zip, token, idList);
+    await loopCard(dir, i, zip, token, idList, withFile);
   }
 };
 
-export const loopDir = async (zip, token, idBoard) => {
-  await loopList("", zip, token, idBoard);
+export const loopDir = async (zip, token, idBoard, withFile) => {
+  await loopList("", zip, token, idBoard, withFile);
   const dirs = zip
     .folder(/.*/)
     .sort(compare)
     .map((d) => d.name);
   for (const dir of dirs) {
-    await loopList(dir, zip, token, idBoard);
+    await loopList(dir, zip, token, idBoard, withFile);
   }
 };

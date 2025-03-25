@@ -6,6 +6,6 @@ export const storeError = async (t, e) => {
   if (stack.indexOf(message) !== -1) {
     delete error.message;
   }
-  t.set("member", "private", "errorForBackupRestore", error);
+  t.set("member", "private", "error", error);
   console.error(error);
 };

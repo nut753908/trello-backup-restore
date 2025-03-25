@@ -9,7 +9,7 @@ import {
 import { protect } from "/js/common/protect.js";
 import { check } from "/js/common/check.js";
 import { backUp } from "/js/back-up/back-up.js";
-import { popupRestore } from "/js/common/popup.js";
+import { popupRestore, popupSettings } from "/js/common/popup.js";
 
 TrelloPowerUp.initialize(
   {
@@ -38,6 +38,7 @@ TrelloPowerUp.initialize(
         callback: protect(check(popupRestore)),
       },
     ],
+    'show-settings': popupSettings
   },
   {
     appKey: APP_KEY,

@@ -18,11 +18,11 @@ import {
   sToFile,
 } from "/js/back-up/file.js";
 
-const loopA = async (a_s, zip, i, j, token) => {
+const loopA = async (a_s, zip, i, j, token, withFile) => {
   for (const [_n, a] of a_s.entries()) {
     const n = _n + 1;
     aToFile(a, zip, i, j, n);
-    await afToFile(a, zip, i, j, n, token);
+    await afToFile(a, zip, i, j, n, token, withFile);
   }
 };
 
@@ -55,12 +55,12 @@ const loopS = (ss, zip, i, j) => {
   }
 };
 
-const loopCard = async (cards, zip, i, token) => {
+const loopCard = async (cards, zip, i, token, withFile) => {
   for (const [_j, card] of cards.entries()) {
     const j = _j + 1;
     cardToFile(card, zip, i, j);
     descToFile(card.desc, zip, i, j);
-    await loopA(card.attachments, zip, i, j, token);
+    await loopA(card.attachments, zip, i, j, token, withFile);
     coverToFile(card.cover, card.attachments, zip, i, j);
     loopCl(card.checklists, zip, i, j);
     loopCfi(card.customFieldItems, zip, i, j);
@@ -68,10 +68,10 @@ const loopCard = async (cards, zip, i, token) => {
   }
 };
 
-export const loopList = async (lists, zip, token) => {
+export const loopList = async (lists, zip, token, withFile) => {
   for (const [_i, list] of lists.entries()) {
     const i = _i + 1;
     listToFile(list, zip, i);
-    await loopCard(list.cards, zip, i, token);
+    await loopCard(list.cards, zip, i, token, withFile);
   }
 };

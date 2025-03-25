@@ -72,8 +72,8 @@ const downloadUrlRe =
   /^https:\/\/trello\.com\/1\/cards\/[0-9a-f]{24}\/attachments\/[0-9a-f]{24}\/download\/.+/;
 const downloadHostRe = /^https:\/\/trello\.com/;
 
-export const afToFile = async (a, zip, i, j, n, token) => {
-  if (downloadUrlRe.test(a.url)) {
+export const afToFile = async (a, zip, i, j, n, token, withFile) => {
+  if (withFile && downloadUrlRe.test(a.url)) {
     const proxyUrl = a.url.replace(downloadHostRe, PROXY_HOST);
     const res = await backoff(
       () => fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`),
