@@ -6,19 +6,19 @@ export const popupRestore = (t) =>
     callback: restore,
     title: "Restore",
     url: "/restore.html",
-    height: 40,
+    height: 42,
   });
 
 export const popupAuth = (t) =>
   t.popup({
     title: "Authorize",
     url: "/authorize.html",
-    height: 40,
+    height: 42,
   });
 
 export const popupSettings = (t) =>
   t.popup({
     title: `${APP_NAME} Settings`,
     url: "./settings.html",
-    height: 90,
+    height: 250,
   });
