@@ -1,0 +1,21 @@
+body {
+  overflow-y: hidden;
+}
+fieldset {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+legend,
+label {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+label input[type="checkbox"],
+label input[type="radio"] {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 4px;
+}
+label span {
+  font-weight: normal;
+}
