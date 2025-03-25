@@ -3,18 +3,43 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" />
+    <link rel="stylesheet" href="/settings.css" />
   </head>
   <body>
-    <div>
+    <label>
+      <input type="checkbox" id="withFile" />
+      <span>With attachment files when backing up or restoring either card, list or lists</span>
+    </label>
+    <fieldset>
+      <legend>Where to restore</legend>
       <label>
-        <input type="checkbox" id="withFile" />
-        <span style="font-weight: normal">with attachment files</span>
+        <input type="radio" id="toLeft" name="side" />
+        <span>Left side for all open lists on this board</span>
       </label>
       <label>
-        <input type="checkbox" id="toLeft" />
-        <span style="font-weight: normal">restore to left side</span>
+        <input type="radio" id="toRight" name="side" />
+        <span>Right side for all open lists on this board</span>
       </label>
-    </div>
+    </fieldset>
+    <fieldset>
+      <legend>Show buttons</legend>
+      <label>
+        <input type="checkbox" id="showBC" />
+        <span>Card button to back up card</span>
+      </label>
+      <label>
+        <input type="checkbox" id="showBL" />
+        <span>List action to back up list</span>
+      </label>
+      <label>
+        <input type="checkbox" id="showBLs" />
+        <span>Board button to back up all open lists</span>
+      </label>
+      <label>
+        <input type="checkbox" id="showR" />
+        <span>Board button to restore either card, list or lists</span>
+      </label>
+    </fieldset>
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
     <script type="module" src="/js/settings.js"></script>
   </body>
