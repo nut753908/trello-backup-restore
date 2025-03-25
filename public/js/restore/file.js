@@ -27,13 +27,15 @@ import {
   addS,
 } from "/js/restore/api.js";
 
-export const fileToList = async (file, token, idBoard) => {
+export const fileToList = async (file, token, idBoard, pos) => {
   const text = await file.async("string");
   let list = JSON.parse(text);
   list = listKeys.reduce((o, k) => ({ ...o, [k]: list?.[k] }), {});
-  const res = await backoff(() => createList(token, idBoard, list));
+  const res = await backoff(() => createList(token, idBoard, list, pos));
   if (!res.ok) {
-    throw new Error(JSON.stringify({ list, status: res.status, url: res.url }));
+    throw new Error(
+      JSON.stringify({ list, pos, status: res.status, url: res.url })
+    );
   }
   const json = await res.json();
   return json?.id;

@@ -7,7 +7,7 @@
 
 import { APP_KEY } from "/js/common/env.js";
 
-export const createList = (token, idBoard, body) =>
+export const createList = (token, idBoard, body, pos) =>
   fetch(`https://api.trello.com/1/boards/${idBoard}/lists`, {
     method: "POST",
     headers: {
@@ -16,7 +16,7 @@ export const createList = (token, idBoard, body) =>
     },
     body: JSON.stringify({
       ...body,
-      pos: "bottom",
+      pos,
       key: APP_KEY,
       token,
     }),
