@@ -89,7 +89,7 @@ const loopList = async (dir, zip, token, idBoard, withFile, toLeft) => {
   const files = zip.file(re).sort(compare);
   for (const [_pos, file] of files.entries()) {
     const i = file.name.match(re)[1];
-    const pos = toLeft ? (_pos + 1) : "bottom";
+    const pos = toLeft ? _pos + 1 : "bottom";
     const idList = await fileToList(file, token, idBoard, pos);
     await loopCard(dir, i, zip, token, idList, withFile);
   }
