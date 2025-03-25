@@ -62,12 +62,12 @@ export const getIdA = async (file) => {
   return a.id;
 };
 
-export const fileToA = async (aFile, afFile, token, idCard) => {
+export const fileToA = async (aFile, afFile, token, idCard, withFile) => {
   const text = await aFile.async("string");
   let a = JSON.parse(text);
   a = aKeys.reduce((o, k) => ({ ...o, [k]: a?.[k] }), {});
   a.setCover = false;
-  if (afFile) {
+  if (withFile && afFile) {
     a.file = new File(
       [await afFile.async("blob")],
       a.url
@@ -81,7 +81,7 @@ export const fileToA = async (aFile, afFile, token, idCard) => {
     throw new Error(JSON.stringify({ a, status: res.status, url: res.url }));
   }
   const json = await res.json();
-  return json?.id;
+  return a.file ? json?.id : null;
 };
 
 export const fileToCover = async (file, token, idCard, mapIdA) => {

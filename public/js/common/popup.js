@@ -1,4 +1,5 @@
 import { restore } from "/js/restore/restore.js";
+import { APP_NAME } from "/js/common/env.js";
 
 export const popupRestore = (t) =>
   t.popup({
@@ -13,4 +14,11 @@ export const popupAuth = (t) =>
     title: "Authorize",
     url: "/authorize.html",
     height: 40,
+  });
+
+export const popupSettings = (t) =>
+  t.popup({
+    title: `${APP_NAME} Settings`,
+    url: "./settings.html",
+    height: 45,
   });
