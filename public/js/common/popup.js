@@ -9,7 +9,7 @@ export const popupRestore = (t) =>
     height: 42,
   });
 
-export const popupAuth = (t) =>
+export const popupAuthorize = (t) =>
   t.popup({
     title: "Authorize",
     url: "/authorize.html",
