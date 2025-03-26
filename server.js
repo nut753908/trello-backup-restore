@@ -15,6 +15,7 @@ app.use(compression());
 app.use(cors({ origin: "https://trello.com" }));
 
 // http://expressjs.com/en/starter/static-files.html
+app.use(express.static("js"));
 app.use(express.static("public"));
 
 const downloadPathRe =
