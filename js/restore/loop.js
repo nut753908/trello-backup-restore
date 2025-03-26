@@ -15,7 +15,7 @@ import {
   fileToCi,
   filesToCfis,
   fileToS,
-} from "/restore/file.js";
+} from "./file.js";
 
 const ascend = (a, b) => (a.name > b.name ? 1 : -1);
 const descend = (a, b) => (a.name < b.name ? 1 : -1);
