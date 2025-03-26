@@ -1,3 +1,8 @@
+// BC: Back up Card
+// BL: Back up List
+// BLs: Back up Lists
+// R: Restore
+
 /* global TrelloPowerUp */
 import {
   APP_KEY,
