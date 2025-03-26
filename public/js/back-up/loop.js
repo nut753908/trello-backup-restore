@@ -56,8 +56,8 @@ const loopS = (ss, zip, i, j) => {
 };
 
 const loopCard = async (cards, zip, i, token, withFile) => {
-  for (const [_j, card] of cards.entries()) {
-    const j = _j + 1;
+  for (const card of cards) {
+    const j = card.j + 1;
     cardToFile(card, zip, i, j);
     descToFile(card.desc, zip, i, j);
     await loopA(card.attachments, zip, i, j, token, withFile);
@@ -69,8 +69,8 @@ const loopCard = async (cards, zip, i, token, withFile) => {
 };
 
 export const loopList = async (lists, zip, token, withFile) => {
-  for (const [_i, list] of lists.entries()) {
-    const i = _i + 1;
+  for (const list of lists) {
+    const i = list.i + 1;
     listToFile(list, zip, i);
     await loopCard(list.cards, zip, i, token, withFile);
   }
