@@ -1,4 +1,5 @@
 import { createZipBlob } from "/js/back-up/zip.js";
+import { download } from "/js/common/download.js";
 import { storeError } from "/js/common/error.js";
 
 const createFilename = (t, type) =>
@@ -11,15 +12,6 @@ const createFilename = (t, type) =>
     .get("name")
     .then((n) => n.replace(/[<>:"\/\\|?*]/g, ""))
     .then((n) => `${type}_${n}.zip`));
-
-const download = (blob, name) => {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = name;
-  a.click();
-  URL.revokeObjectURL(url);
-};
 
 export const backUp = (type) => async (t) => {
   try {
