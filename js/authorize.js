@@ -1,5 +1,5 @@
 /* global TrelloPowerUp */
-import { APP_KEY, APP_NAME, APP_AUTHOR } from "/js/common/env.js";
+import { APP_KEY, APP_NAME, APP_AUTHOR } from "/common/env.js";
 
 const t = TrelloPowerUp.iframe({
   appKey: APP_KEY,

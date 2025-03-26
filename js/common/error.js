@@ -1,4 +1,4 @@
-import { download } from "/js/common/download.js";
+import { download } from "/common/download.js";
 
 export const storeError = async (t, e) => {
   const message = e.message ?? "";

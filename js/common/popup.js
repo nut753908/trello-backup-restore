@@ -1,5 +1,5 @@
-import { restore } from "/js/restore/restore.js";
-import { APP_NAME } from "/js/common/env.js";
+import { restore } from "/restore/restore.js";
+import { APP_NAME } from "/common/env.js";
 
 export const popupRestore = (t) =>
   t.popup({

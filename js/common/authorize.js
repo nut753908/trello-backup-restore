@@ -1,4 +1,4 @@
-import { popupAuthorize } from "/js/common/popup.js";
+import { popupAuthorize } from "/common/popup.js";
 
 export const isAuthorized = async (t) => {
   const token = await t.getRestApi().getToken();

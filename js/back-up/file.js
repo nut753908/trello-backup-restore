@@ -22,9 +22,9 @@ import {
   ciKeys,
   cfiKeys,
   sKeys,
-} from "/js/back-up/keys.js";
-import { APP_KEY, PROXY_HOST } from "/js/common/env.js";
-import { backoff } from "/js/common/backoff.js";
+} from "/back-up/keys.js";
+import { APP_KEY, PROXY_HOST } from "/common/env.js";
+import { backoff } from "/common/backoff.js";
 
 export const boardToFile = (board, zip) => {
   board.members = board.members.map((m) =>

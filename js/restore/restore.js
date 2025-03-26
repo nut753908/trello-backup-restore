@@ -1,5 +1,5 @@
-import { protect } from "/js/common/protect.js";
-import { unzip } from "/js/restore/unzip.js";
+import { protect } from "/common/protect.js";
+import { unzip } from "/restore/unzip.js";
 
 const selectFile = () =>
   new Promise((resolve) => {
