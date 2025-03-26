@@ -8,12 +8,12 @@ export const storeError = async (t, e) => {
   if (stack.indexOf(message) !== -1) {
     delete error.message;
   }
-  await t.set("member", "private", "error", error);
+  await t.set("board", "shared", "error", error);
   console.error(error);
 };
 
 export const downloadError = async (t) => {
-  const error = await t.get("member", "private", "error", {});
+  const error = await t.get("board", "shared", "error", {});
   const blob = new Blob([JSON.stringify(error, null, 2)], {
     type: "application/json",
   });
