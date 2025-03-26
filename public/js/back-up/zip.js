@@ -15,6 +15,20 @@ const getLists = {
   lists: (t) => t.lists("all"),
 };
 
+const addIJ = async (t, type, lists) => {
+  const _lists = type === "lists" ? lists : await t.lists("all");
+  const mapI = _lists.reduce((o, l, i) => ({ ...o, [l.id]: i }), {});
+  const mapJ = _lists
+    .map((l) => l.cards.reduce((o, c, j) => ({ ...o, [c.id]: j }), {}))
+    .reduce((o, map) => ({ ...o, ...map }), {});
+  lists.forEach((l) => {
+    l.i = mapI[l.id];
+    l.cards.forEach((c) => {
+      c.j = mapJ[c.id];
+    });
+  });
+};
+
 const addParams = async (idBoard, token, lists) => {
   const res = await backoff(() =>
     fetch(
@@ -43,6 +57,7 @@ export const createZipBlob = async (t, type) => {
   const token = await t.getRestApi().getToken();
   const board = await t.board("all");
   const lists = await getLists[type](t);
+  await addIJ(t, type, lists);
   await addParams(board.id, token, lists);
   const withFile = await t.get("board", "shared", "withFile", false);
   const zip = new JSZip();
