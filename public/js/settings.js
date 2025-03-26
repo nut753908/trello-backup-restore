@@ -4,6 +4,7 @@
 // R: Restore
 
 /* global TrelloPowerUp */
+import { downloadError } from "/js/common/error.js";
 
 const t = TrelloPowerUp.iframe();
 Object.entries({
@@ -31,3 +32,6 @@ document
   .addEventListener("click", (e) =>
     t.set("board", "shared", "toLeft", !e.target.checked)
   );
+document
+  .querySelector("button")
+  .addEventListener("click", () => downloadError(t), false);
