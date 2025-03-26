@@ -14,8 +14,8 @@ import {
   ciKeys,
   cfiKeys,
   sKeys,
-} from "/js/restore/keys.js";
-import { backoff } from "/js/common/backoff.js";
+} from "/restore/keys.js";
+import { backoff } from "/common/backoff.js";
 import {
   createList,
   createCard,
@@ -25,7 +25,7 @@ import {
   createCi,
   updateCfis,
   addS,
-} from "/js/restore/api.js";
+} from "/restore/api.js";
 
 export const fileToList = async (file, token, idBoard, pos) => {
   const text = await file.async("string");

@@ -4,7 +4,7 @@
 // R: Restore
 
 /* global TrelloPowerUp */
-import { downloadError } from "/js/common/error.js";
+import { downloadError } from "/common/error.js";
 
 const t = TrelloPowerUp.iframe();
 Object.entries({

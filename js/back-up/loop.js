@@ -16,7 +16,7 @@ import {
   ciToFile,
   cfiToFile,
   sToFile,
-} from "/js/back-up/file.js";
+} from "/back-up/file.js";
 
 const loopA = async (a_s, zip, i, j, token, withFile) => {
   for (const [_n, a] of a_s.entries()) {
