@@ -10,7 +10,7 @@ export const unzip = (file) => async (t) => {
     const token = await t.getRestApi().getToken();
     const idBoard = t.getContext().board;
     const withFile = await t.get("board", "shared", "withFile", false);
-    const toRight = await t.get("board", "shared", "toRight", false);
+    const toRight = await t.get("board", "shared", "toRight", true);
     await loopDir(zip, token, idBoard, withFile, toRight);
     await t.hideAlert();
     t.alert({ message: "Restoration complete 🎉" });
