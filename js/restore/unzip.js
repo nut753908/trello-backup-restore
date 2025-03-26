@@ -1,6 +1,6 @@
 /* global JSZip */
-import { loopDir } from "/restore/loop.js";
-import { storeError } from "/common/error.js";
+import { loopDir } from "./loop.js";
+import { storeError } from "../common/error.js";
 
 export const unzip = (file) => async (t) => {
   try {

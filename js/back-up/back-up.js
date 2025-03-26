@@ -1,6 +1,6 @@
-import { createZipBlob } from "/back-up/zip.js";
-import { download } from "/common/download.js";
-import { storeError } from "/common/error.js";
+import { createZipBlob } from "./zip.js";
+import { download } from "../common/download.js";
+import { storeError } from "../common/error.js";
 
 const createFilename = (t, type) =>
   ({

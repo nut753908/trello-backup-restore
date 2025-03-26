@@ -5,7 +5,7 @@
 // cfi: custom field item
 // s: sticker
 
-import { APP_KEY } from "/common/env.js";
+import { APP_KEY } from "../common/env.js";
 
 export const createList = (token, idBoard, body, pos) =>
   fetch(`https://api.trello.com/1/boards/${idBoard}/lists`, {

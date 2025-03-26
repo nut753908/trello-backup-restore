@@ -1,8 +1,8 @@
 /* global JSZip */
-import { backoff } from "/common/backoff.js";
-import { APP_KEY } from "/common/env.js";
-import { boardToFile } from "/back-up/file.js";
-import { loopList } from "/back-up/loop.js";
+import { backoff } from "../common/backoff.js";
+import { APP_KEY } from "../common/env.js";
+import { boardToFile } from "./file.js";
+import { loopList } from "./loop.js";
 
 const getLists = {
   card: async (t) => [

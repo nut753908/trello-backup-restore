@@ -10,11 +10,11 @@ import {
   APP_AUTHOR,
   BACKUP_ICON,
   RESTORE_ICON,
-} from "/common/env.js";
-import { protect } from "/common/protect.js";
-import { isAuthorized, authorize } from "/common/authorize.js";
-import { backUp } from "/back-up/back-up.js";
-import { popupRestore, popupAuthorize, popupSettings } from "/common/popup.js";
+} from "./common/env.js";
+import { protect } from "./common/protect.js";
+import { isAuthorized, authorize } from "./common/authorize.js";
+import { backUp } from "./back-up/back-up.js";
+import { popupRestore, popupAuthorize, popupSettings } from "./common/popup.js";
 
 TrelloPowerUp.initialize(
   {
