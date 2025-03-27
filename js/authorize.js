@@ -6,7 +6,9 @@ const t = TrelloPowerUp.iframe({
   appName: APP_NAME,
   appAuthor: APP_AUTHOR,
 });
-document.querySelector("button").addEventListener(
+const button = document.querySelector("button");
+button.hidden = false;
+button.addEventListener(
   "click",
   async () => {
     await t.getRestApi().clearToken();
