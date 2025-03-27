@@ -64,12 +64,12 @@ export const getIdA = async (file) => {
   return a.id;
 };
 
-export const fileToA = async (aFile, afFile, token, idCard, withFile) => {
+export const fileToA = async (aFile, afFile, token, idCard) => {
   const text = await aFile.async("string");
   let a = JSON.parse(text);
   a = aKeys.reduce((o, k) => ({ ...o, [k]: a?.[k] }), {});
   a.setCover = false;
-  if (withFile && afFile) {
+  if (afFile) {
     a.file = new File(
       [await afFile.async("blob")],
       a.url
