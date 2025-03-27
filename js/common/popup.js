@@ -5,14 +5,14 @@ export const popupRestore = (t) =>
   t.popup({
     callback: restore,
     title: "Restore",
-    url: "/restore.html",
+    url: "./restore.html",
     height: 42,
   });
 
 export const popupAuthorize = (t) =>
   t.popup({
     title: "Authorize",
-    url: "/authorize.html",
+    url: "./authorize.html",
     height: 42,
   });
 
