@@ -1,6 +1,18 @@
-import { createZipBlob } from "./zip.js";
-import { download } from "../common/download.js";
+/* global JSZip */
+import { getLists } from "./lists.js";
+import { boardToFile } from "./file.js";
+import { loopList } from "./loop.js";
+import { download } from "../common/file.js";
 import { storeError } from "../common/error.js";
+
+const createZipBlob = async (t, type) => {
+  const board = await t.board("all");
+  const lists = await getLists(t, type);
+  const zip = new JSZip();
+  boardToFile(board, zip);
+  loopList(lists, zip);
+  return zip.generateAsync({ type: "blob" });
+};
 
 const createFilename = (t, type) =>
   ({
@@ -20,7 +32,6 @@ export const backUp = (type) => async (t) => {
     const name = await createFilename(t, type);
     download(blob, name);
   } catch (e) {
-    console.error(e);
     await t.hideAlert();
     t.alert({ message: `❌ Failed to back up ${type}` });
     storeError(t, e);

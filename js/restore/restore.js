@@ -1,20 +1,31 @@
+/* global JSZip */
+import { loopDir } from "./loop.js";
+import { storeError } from "../common/error.js";
+import { selectFile } from "../common/file.js";
 import { protect } from "../common/protect.js";
-import { unzip } from "./unzip.js";
 
-const selectFile = () =>
-  new Promise((resolve) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".zip";
-    input.addEventListener("change", () => resolve(input.files[0]), false);
-    input.addEventListener("cancel", () => resolve(null), false);
-    input.click();
-  });
+const restore = (file) => async (t) => {
+  try {
+    t.alert({ message: "Restoring, please wait..." });
+    const newZip = new JSZip();
+    const zip = await newZip.loadAsync(file);
+    const token = await t.getRestApi().getToken();
+    const idBoard = t.getContext().board;
+    const toRight = await t.get("board", "shared", "toRight", true);
+    await loopDir(zip, token, idBoard, toRight);
+    await t.hideAlert();
+    t.alert({ message: "Restoration complete 🎉" });
+  } catch (e) {
+    await t.hideAlert();
+    t.alert({ message: "❌ Failed to restore" });
+    storeError(t, e);
+  }
+};
 
-export const restore = async (t) => {
+export const selectFileAndRestore = async (t) => {
   const file = await selectFile();
   t.closePopup();
   if (/\.zip$/.test(file?.name)) {
-    await protect(unzip(file))(t);
+    await protect(restore(file))(t);
   }
 };

@@ -1,10 +1,7 @@
-/* global JSZip */
 import { backoff } from "../common/backoff.js";
 import { APP_KEY } from "../common/env.js";
-import { boardToFile } from "./file.js";
-import { loopList } from "./loop.js";
 
-const getLists = {
+const getRawLists = {
   card: async (t) => [
     {
       ...(await t.list("id", "name")),
@@ -29,7 +26,9 @@ const addIJ = async (t, type, lists) => {
   });
 };
 
-const addParams = async (idBoard, token, lists) => {
+const addParams = async (t, lists) => {
+  const token = await t.getRestApi().getToken();
+  const idBoard = t.getContext().board;
   const res = await backoff(() =>
     fetch(
       `https://api.trello.com/1/boards/${idBoard}/cards` +
@@ -53,14 +52,9 @@ const addParams = async (idBoard, token, lists) => {
   });
 };
 
-export const createZipBlob = async (t, type) => {
-  const token = await t.getRestApi().getToken();
-  const board = await t.board("all");
-  const lists = await getLists[type](t);
+export const getLists = async (t, type) => {
+  const lists = await getRawLists[type](t);
   await addIJ(t, type, lists);
-  await addParams(board.id, token, lists);
-  const zip = new JSZip();
-  boardToFile(board, zip);
-  await loopList(lists, zip, token);
-  return zip.generateAsync({ type: "blob" });
+  await addParams(t, lists);
+  return lists;
 };

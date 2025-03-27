@@ -1,19 +1,18 @@
 // m: member
-// cf: custom field
 // cfo: custom field option
+// cf: custom field
 // a: attachment
-// af: attachment file
 // cl: checklist
 // ci: checkitem
 // cfi: custom field item
 // s: sticker
 
 import {
-  boardKeys,
   mKeys,
   labelKeys,
-  cfKeys,
   cfoKeys,
+  cfKeys,
+  boardKeys,
   listKeys,
   cardKeys,
   aKeys,
@@ -23,8 +22,6 @@ import {
   cfiKeys,
   sKeys,
 } from "./keys.js";
-import { APP_KEY, PROXY_HOST } from "../common/env.js";
-import { backoff } from "../common/backoff.js";
 
 export const boardToFile = (board, zip) => {
   board.members = board.members.map((m) =>
@@ -68,26 +65,7 @@ export const aToFile = (a, zip, i, j, n) => {
   zip.file(`list${i}_card${j}_attachment${n}.json`, JSON.stringify(a, null, 2));
 };
 
-const downloadUrlRe =
-  /^https:\/\/trello\.com\/1\/cards\/[0-9a-f]{24}\/attachments\/[0-9a-f]{24}\/download\/.+/;
-const downloadHostRe = /^https:\/\/trello\.com/;
-
-export const afToFile = async (a, zip, i, j, n, token) => {
-  if (downloadUrlRe.test(a.url)) {
-    const proxyUrl = a.url.replace(downloadHostRe, PROXY_HOST);
-    const res = await backoff(
-      () => fetch(`${proxyUrl}?key=${APP_KEY}&token=${token}`),
-      false
-    );
-    if (!res.ok) {
-      throw new Error(JSON.stringify({ status: res.status, url: proxyUrl }));
-    }
-    const blob = await res.blob();
-    zip.file(`list${i}_card${j}_attachment${n}_file`, blob);
-  }
-};
-
-export const coverToFile = (cover, a_s, zip, i, j) => {
+export const coverToFile = (cover, zip, i, j) => {
   if (cover.color || cover.idAttachment || cover.idUploadedBackground) {
     cover.url = cover.idUploadedBackground ? cover.sharedSourceUrl : null;
     cover = coverKeys.reduce((o, k) => ({ ...o, [k]: cover[k] }), {});

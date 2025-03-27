@@ -4,7 +4,6 @@
 const compression = require("compression");
 const cors = require("cors");
 const express = require("express");
-const fetch = require("node-fetch");
 
 const app = express();
 
@@ -16,17 +15,6 @@ app.use(cors({ origin: "https://trello.com" }));
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
-
-const downloadPathRe =
-  /^\/1\/cards\/[0-9a-f]{24}\/attachments\/[0-9a-f]{24}\/download\/.+/;
-
-app.get(downloadPathRe, (req, res) => {
-  fetch(`https://api.trello.com${req.path}`, {
-    headers: {
-      Authorization: `OAuth oauth_consumer_key="${req.query.key}", oauth_token="${req.query.token}"`,
-    },
-  }).then((r) => r.body.pipe(res.status(r.status)));
-});
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function () {
