@@ -2,8 +2,8 @@ body {
   overflow-y: hidden;
 }
 fieldset {
-  margin-top: 12px;
-  margin-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 12px;
 }
 legend,
 label {
@@ -18,4 +18,7 @@ label input[type="radio"] {
 }
 label span {
   font-weight: normal;
+}
+button {
+  margin-top: 0;
 }
