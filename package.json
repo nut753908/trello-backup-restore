@@ -11,8 +11,7 @@
   "dependencies": {
     "compression": "^1.8.0",
     "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "node-fetch": "^2.7.0"
+    "express": "^4.21.2"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",

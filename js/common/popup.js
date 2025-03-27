@@ -1,9 +1,9 @@
-import { restore } from "../restore/restore.js";
+import { selectFileAndRestore } from "../restore/restore.js";
 import { APP_NAME } from "./env.js";
 
 export const popupRestore = (t) =>
   t.popup({
-    callback: restore,
+    callback: selectFileAndRestore,
     title: "Restore",
     url: "./restore.html",
     height: 42,

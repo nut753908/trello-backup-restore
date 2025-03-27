@@ -1,22 +1,21 @@
 // m: member
-// cf: custom field
 // cfo: custom field option
+// cf: custom field
 // a: attachment
-// af: attachment file
 // cl: checklist
 // ci: checkitem
 // cfi: custom field item
 // s: sticker
 
-export const boardKeys = ["id", "name", "members", "labels", "customFields"];
-
 export const mKeys = ["id", "fullName", "username"];
 
 export const labelKeys = ["id", "name", "color"];
 
+export const cfoKeys = ["id", "value", "color"];
+
 export const cfKeys = ["id", "name", "type", "options"];
 
-export const cfoKeys = ["id", "value", "color"];
+export const boardKeys = ["id", "name", "members", "labels", "customFields"];
 
 export const listKeys = ["id", "name"];
 
