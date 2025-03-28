@@ -6,7 +6,7 @@
   "repository": "https://github.com/nut753908/trello-backup-restore",
   "scripts": {
     "start": "node --env-file=.env server.cjs",
-    "build": "rollup -c --bundleConfigAsCjs"
+    "build": "bash pre.sh && rollup -c --bundleConfigAsCjs; bash post.sh"
   },
   "dependencies": {
     "@rollup/plugin-terser": "^0.4.4",
