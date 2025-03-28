@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": "https://github.com/nut753908/trello-backup-restore",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server.cjs",
     "build": "rollup -c --bundleConfigAsCjs"
   },
   "dependencies": {
@@ -14,7 +14,10 @@
     "express": "^4.21.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.23.0",
     "@rollup/plugin-terser": "^0.4.4",
+    "eslint": "^9.23.0",
+    "globals": "^16.0.0",
     "rollup": "^3.29.4"
   },
   "engines": {

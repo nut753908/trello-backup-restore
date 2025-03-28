@@ -14,16 +14,17 @@ const createZipBlob = async (t, type) => {
   return zip.generateAsync({ type: "blob" });
 };
 
-const createFilename = (t, type) =>
-  ({
+const createFilename = (t, type) => {
+  const getName = {
     card: (t) => t.card("name"),
     list: (t) => t.list("name"),
     lists: (t) => t.board("name"),
-  }
-    [type](t)
+  };
+  return getName[type](t)
     .get("name")
-    .then((n) => n.replace(/[<>:"\/\\|?*]/g, ""))
-    .then((n) => `${type}_${n}.zip`));
+    .then((n) => n.replace(/[<>:"/\\|?*]/g, ""))
+    .then((n) => `${type}_${n}.zip`);
+};
 
 export const backUp = (type) => async (t) => {
   try {

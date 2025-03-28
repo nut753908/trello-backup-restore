@@ -1,6 +1,7 @@
 // where your node app starts
 // server.js
 
+/* global process */
 const compression = require("compression");
 const cors = require("cors");
 const express = require("express");

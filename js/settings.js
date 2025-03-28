@@ -23,10 +23,10 @@ Object.entries({
 });
 document
   .getElementById("toLeft")
-  .addEventListener("click", (e) => t.set("board", "shared", "toRight", false));
+  .addEventListener("click", () => t.set("board", "shared", "toRight", false));
 document
   .getElementById("toRight")
-  .addEventListener("click", (e) => t.set("board", "shared", "toLeft", false));
+  .addEventListener("click", () => t.set("board", "shared", "toLeft", false));
 document
   .querySelector("button")
   .addEventListener("click", () => downloadError(t), false);
