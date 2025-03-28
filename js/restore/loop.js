@@ -97,10 +97,8 @@ const loopList = async (dir, zip, token, idBoard, toRight) => {
 };
 
 export const loopDir = async (zip, token, idBoard, toRight) => {
-  await loopList("", zip, token, idBoard, toRight);
-  const dirs = zip
-    .folder(/.*/)
-    .sort(ascend)
+  const dirs = [{ name: "" }, ...zip.folder(/.*/)]
+    .sort(toRight ? ascend : descend)
     .map((d) => d.name);
   for (const dir of dirs) {
     await loopList(dir, zip, token, idBoard, toRight);
