@@ -18,9 +18,9 @@
     "@rollup/plugin-terser": "^0.4.4",
     "eslint": "^9.23.0",
     "globals": "^16.0.0",
-    "rollup": "^3.29.4"
+    "rollup": "^4.37.0"
   },
   "engines": {
-    "node": "16.x"
+    "node": "22.x"
   }
 }
