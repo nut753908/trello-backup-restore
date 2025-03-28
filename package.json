@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": "https://github.com/nut753908/trello-backup-restore",
   "scripts": {
-    "start": "node server.cjs",
+    "start": "node --env-file=.env server.cjs",
     "build": "rollup -c --bundleConfigAsCjs"
   },
   "dependencies": {

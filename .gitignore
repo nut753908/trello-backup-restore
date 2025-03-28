@@ -2,3 +2,4 @@
 .glitch-assets
 public/*.min.js
 node_modules/
+.env
