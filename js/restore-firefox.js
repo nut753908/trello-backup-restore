@@ -12,7 +12,7 @@ button.addEventListener(
   "click",
   async () => {
     button.hidden = true;
-    document.querySelector("p").hidden = false;
+    document.getElementById("warn").hidden = false;
     t.sizeTo(document.body);
     await selectFileAndRestoreFirefox(t);
   },
