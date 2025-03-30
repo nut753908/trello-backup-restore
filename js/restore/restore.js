@@ -23,9 +23,17 @@ const restore = (file) => async (t) => {
 };
 
 export const selectFileAndRestore = async (t) => {
-  const file = await selectFile();
   t.closePopup();
+  const file = await selectFile();
   if (/\.zip$/.test(file?.name)) {
     await protect(restore(file))(t);
   }
+};
+
+export const selectFileAndRestoreFirefox = async (t) => {
+  const file = await selectFile();
+  if (/\.zip$/.test(file?.name)) {
+    await restore(file)(t);
+  }
+  t.closePopup();
 };

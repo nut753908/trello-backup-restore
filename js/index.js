@@ -14,7 +14,14 @@ import {
 import { protect } from "./common/protect.js";
 import { isAuthorized, authorize } from "./common/authorize.js";
 import { backUp } from "./back-up/back-up.js";
-import { popupRestore, popupAuthorize, popupSettings } from "./common/popup.js";
+import {
+  popupRestore,
+  popupRestoreFirefox,
+  popupAuthorize,
+  popupSettings,
+} from "./common/popup.js";
+
+const isFirefox = window.navigator.userAgent.indexOf("Firefox") !== -1;
 
 TrelloPowerUp.initialize(
   {
@@ -52,7 +59,9 @@ TrelloPowerUp.initialize(
         r.push({
           icon: RESTORE_ICON,
           text: "Restore",
-          callback: protect(authorize(popupRestore)),
+          callback: protect(
+            authorize(isFirefox ? popupRestoreFirefox : popupRestore)
+          ),
         });
       }
       return r;
