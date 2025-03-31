@@ -131,13 +131,13 @@ export const fileToCi = async (file, token, idCl, pos) => {
 
 export const filesToCfis = async (files, token, idCard) => {
   if (files.length > 0) {
-    const cfis = [];
-    for (const file of files) {
-      const text = await file.async("string");
-      let cfi = JSON.parse(text);
-      cfi = cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {});
-      cfis.push(cfi);
-    }
+    const cfis = await Promise.all(
+      files.map(async (file) => {
+        const text = await file.async("string");
+        const cfi = JSON.parse(text);
+        return cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {});
+      })
+    );
     const res = await backoff(() =>
       updateCfis(token, idCard, { customFieldItems: cfis })
     );
