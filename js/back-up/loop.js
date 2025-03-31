@@ -17,34 +17,34 @@ import {
 } from "./file.js";
 
 const loopA = (a_s, zip, i, j) =>
-  a_s.forEach((a, _n) => {
-    const n = _n + 1;
-    aToFile(a, zip, i, j, n);
+  a_s.forEach((a, _m) => {
+    const m = _m + 1;
+    aToFile(a, zip, i, j, m);
   });
 
-const loopCi = (cis, zip, i, j, n) =>
-  cis.forEach((ci, _m) => {
-    const m = _m + 1;
-    ciToFile(ci, zip, i, j, n, m);
+const loopCi = (cis, zip, i, j, m) =>
+  cis.forEach((ci, _n) => {
+    const n = _n + 1;
+    ciToFile(ci, zip, i, j, m, n);
   });
 
 const loopCl = (cls, zip, i, j) =>
-  cls.forEach((cl, _n) => {
-    const n = _n + 1;
-    clToFile(cl, zip, i, j, n);
-    loopCi(cl.checkItems ?? null, zip, i, j, n);
+  cls.forEach((cl, _m) => {
+    const m = _m + 1;
+    clToFile(cl, zip, i, j, m);
+    loopCi(cl.checkItems ?? null, zip, i, j, m);
   });
 
 const loopCfi = (cfis, zip, i, j) =>
-  cfis.forEach((cfi, _n) => {
-    const n = _n + 1;
-    cfiToFile(cfi, zip, i, j, n);
+  cfis.forEach((cfi, _m) => {
+    const m = _m + 1;
+    cfiToFile(cfi, zip, i, j, m);
   });
 
 const loopS = (ss, zip, i, j) =>
-  ss.forEach((s, _n) => {
-    const n = _n + 1;
-    sToFile(s, zip, i, j, n);
+  ss.forEach((s, _m) => {
+    const m = _m + 1;
+    sToFile(s, zip, i, j, m);
   });
 
 const loopCard = (cards, zip, i) =>

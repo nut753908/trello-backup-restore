@@ -1,4 +1,3 @@
-// m: member
 // cfo: custom field option
 // cf: custom field
 // a: attachment
@@ -7,7 +6,7 @@
 // cfi: custom field item
 // s: sticker
 
-export const mKeys = ["id", "fullName", "username"];
+export const memberKeys = ["id", "fullName", "username"];
 
 export const labelKeys = ["id", "name", "color"];
 
