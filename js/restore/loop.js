@@ -16,7 +16,6 @@ import {
   filesToCfis,
   fileToS,
 } from "./file.js";
-import { getOffset } from "./offset.js";
 
 const ascend = (a, b) => (a.name > b.name ? 1 : -1);
 const descend = (a, b) => (a.name < b.name ? 1 : -1);
@@ -113,10 +112,11 @@ const loopList = async (dir, zip, token, idBoard, toRight, posParams) => {
   );
 };
 
+let count = 0;
+
 export const loopDir = async (zip, token, idBoard, toRight) => {
   const sign = toRight ? 1 : -1;
-  const offset = await getOffset(token, idBoard, toRight);
-  let count = 0;
+  const offset = toRight ? 10000000000 : 4095;
   await Promise.all(
     [{ name: "" }, ...zip.folder(/.*/)]
       .sort(toRight ? ascend : descend)
