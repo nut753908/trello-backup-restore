@@ -28,6 +28,7 @@ const createFilename = (t, type) => {
 
 export const backUp = (type) => async (t) => {
   try {
+    await t.hideAlert();
     t.alert({ message: `Backing up ${type}` });
     const blob = await createZipBlob(t, type);
     const name = await createFilename(t, type);

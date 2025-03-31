@@ -6,6 +6,7 @@ import { protect } from "../common/protect.js";
 
 const restore = (file) => async (t) => {
   try {
+    await t.hideAlert();
     t.alert({ message: "Restoring, please wait..." });
     const newZip = new JSZip();
     const zip = await newZip.loadAsync(file);
