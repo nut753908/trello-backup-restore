@@ -41,17 +41,17 @@ export const fileToList = async (file, token, idBoard, pos) => {
   return json?.id;
 };
 
-export const fileToCard = async (cardFile, descFile, token, idList, pos) => {
+export const fileToCard = async (cardFile, descFile, token, idList) => {
   const text = await cardFile.async("string");
   let card = JSON.parse(text);
   card = cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {});
   if (descFile) {
     card.desc = await descFile.async("string");
   }
-  const res = await backoff(() => createCard(token, idList, card, pos));
+  const res = await backoff(() => createCard(token, idList, card));
   if (!res.ok) {
     throw new Error(
-      JSON.stringify({ idList, card, pos, status: res.status, url: res.url })
+      JSON.stringify({ idList, card, status: res.status, url: res.url })
     );
   }
   const json = await res.json();
@@ -64,7 +64,7 @@ export const getIdA = async (file) => {
   return a.id;
 };
 
-export const fileToA = async (aFile, afFile, token, idCard, pos) => {
+export const fileToA = async (aFile, afFile, token, idCard) => {
   const text = await aFile.async("string");
   let a = JSON.parse(text);
   a = aKeys.reduce((o, k) => ({ ...o, [k]: a?.[k] }), {});
@@ -78,11 +78,9 @@ export const fileToA = async (aFile, afFile, token, idCard, pos) => {
     );
     delete a.url;
   }
-  const res = await backoff(() => createA(token, idCard, a, pos));
+  const res = await backoff(() => createA(token, idCard, a));
   if (!res.ok) {
-    throw new Error(
-      JSON.stringify({ a, pos, status: res.status, url: res.url })
-    );
+    throw new Error(JSON.stringify({ a, status: res.status, url: res.url }));
   }
   const json = await res.json();
   return a.file ? json?.id : null;
@@ -103,41 +101,39 @@ export const fileToCover = async (file, token, idCard, mapIdA) => {
   }
 };
 
-export const fileToCl = async (file, token, idCard, pos) => {
+export const fileToCl = async (file, token, idCard) => {
   const text = await file.async("string");
   let cl = JSON.parse(text);
   cl = clKeys.reduce((o, k) => ({ ...o, [k]: cl?.[k] }), {});
-  const res = await backoff(() => createCl(token, idCard, cl, pos));
+  const res = await backoff(() => createCl(token, idCard, cl));
   if (!res.ok) {
     throw new Error(
-      JSON.stringify({ idCard, cl, pos, status: res.status, url: res.url })
+      JSON.stringify({ idCard, cl, status: res.status, url: res.url })
     );
   }
   const json = await res.json();
   return json?.id;
 };
 
-export const fileToCi = async (file, token, idCl, pos) => {
+export const fileToCi = async (file, token, idCl) => {
   const text = await file.async("string");
   let ci = JSON.parse(text);
   ci = ciKeys.reduce((o, k) => ({ ...o, [k]: ci?.[k] }), {});
-  const res = await backoff(() => createCi(token, idCl, ci, pos));
+  const res = await backoff(() => createCi(token, idCl, ci));
   if (!res.ok) {
-    throw new Error(
-      JSON.stringify({ ci, pos, status: res.status, url: res.url })
-    );
+    throw new Error(JSON.stringify({ ci, status: res.status, url: res.url }));
   }
 };
 
 export const filesToCfis = async (files, token, idCard) => {
   if (files.length > 0) {
-    const cfis = await Promise.all(
-      files.map(async (file) => {
-        const text = await file.async("string");
-        const cfi = JSON.parse(text);
-        return cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {});
-      })
-    );
+    const cfis = [];
+    for (const file of files) {
+      const text = await file.async("string");
+      let cfi = JSON.parse(text);
+      cfi = cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {});
+      cfis.push(cfi);
+    }
     const res = await backoff(() =>
       updateCfis(token, idCard, { customFieldItems: cfis })
     );
