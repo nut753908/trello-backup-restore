@@ -33,6 +33,7 @@ export const backUp = (type) => async (t) => {
     const name = await createFilename(t, type);
     download(blob, name);
   } catch (e) {
+    console.error(e);
     await t.hideAlert();
     t.alert({ message: `❌ Failed to back up ${type}` });
     storeError(t, e);
