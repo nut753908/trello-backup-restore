@@ -12,7 +12,9 @@ export const selectFile = (accept = ".zip") =>
     const input = document.createElement("input");
     input.type = "file";
     input.accept = accept;
+    input.hidden = true;
     input.addEventListener("change", () => resolve(input.files[0]), false);
     input.addEventListener("cancel", () => resolve(null), false);
+    document.body.appendChild(input);
     input.click();
   });
