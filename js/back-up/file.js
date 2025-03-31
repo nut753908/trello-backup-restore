@@ -1,4 +1,3 @@
-// m: member
 // cfo: custom field option
 // cf: custom field
 // a: attachment
@@ -8,7 +7,7 @@
 // s: sticker
 
 import {
-  mKeys,
+  memberKeys,
   labelKeys,
   cfoKeys,
   cfKeys,
@@ -25,7 +24,7 @@ import {
 
 export const boardToFile = (board, zip) => {
   board.members = board.members.map((m) =>
-    mKeys.reduce((o, k) => ({ ...o, [k]: m[k] }), {})
+    memberKeys.reduce((o, k) => ({ ...o, [k]: m[k] }), {})
   );
   board.labels = board.labels.map((l) =>
     labelKeys.reduce((o, k) => ({ ...o, [k]: l[k] }), {})
