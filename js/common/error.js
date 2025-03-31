@@ -10,7 +10,6 @@ export const storeError = async (t, e) => {
     delete error.message;
   }
   await t.set("board", "shared", "error", error);
-  console.error(error);
 };
 
 export const downloadError = async (t) => {
