@@ -25,17 +25,17 @@ const loopA = async (dir, i, j, zip, token, idCard) => {
   const files = zip.file(re).sort(ascend);
   const mapIdA = {};
   for (const aFile of files) {
-    const n = aFile.name.match(re)[1];
-    const afFile = zip.file(`${dir}list${i}_card${j}_attachment${n}_file`);
+    const m = aFile.name.match(re)[1];
+    const afFile = zip.file(`${dir}list${i}_card${j}_attachment${m}_file`);
     const idA = await getIdA(aFile);
     mapIdA[idA] = await fileToA(aFile, afFile, token, idCard);
   }
   return mapIdA;
 };
 
-const loopCi = async (dir, i, j, n, zip, token, idCl) => {
+const loopCi = async (dir, i, j, m, zip, token, idCl) => {
   const re = new RegExp(
-    `^${dir}list${i}_card${j}_checklist${n}_checkitem(\\d+)\\.json$`
+    `^${dir}list${i}_card${j}_checklist${m}_checkitem(\\d+)\\.json$`
   );
   const files = zip.file(re).sort(ascend);
   for (const file of files) {
@@ -47,9 +47,9 @@ const loopCl = async (dir, i, j, zip, token, idCard) => {
   const re = new RegExp(`^${dir}list${i}_card${j}_checklist(\\d+)\\.json$`);
   const files = zip.file(re).sort(ascend);
   for (const file of files) {
-    const n = file.name.match(re)[1];
+    const m = file.name.match(re)[1];
     const idCl = await fileToCl(file, token, idCard);
-    await loopCi(dir, i, j, n, zip, token, idCl);
+    await loopCi(dir, i, j, m, zip, token, idCl);
   }
 };
 
