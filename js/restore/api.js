@@ -40,6 +40,7 @@ export const createCard = (token, idList, body) =>
 export const createA = (token, idCard, body) => {
   const formData = new FormData();
   Object.entries(body).forEach(([k, v]) => formData.append(k, v));
+  formData.append("pos", "bottom");
   formData.append("key", APP_KEY);
   formData.append("token", token);
   return fetch(`https://api.trello.com/1/cards/${idCard}/attachments`, {
