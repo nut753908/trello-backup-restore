@@ -1,3 +1,4 @@
+// m: member
 // cfo: custom field option
 // cf: custom field
 // a: attachment
@@ -7,7 +8,7 @@
 // s: sticker
 
 import {
-  memberKeys,
+  mKeys,
   labelKeys,
   cfoKeys,
   cfKeys,
@@ -24,7 +25,7 @@ import {
 
 export const boardToFile = (board, zip) => {
   board.members = board.members.map((m) =>
-    memberKeys.reduce((o, k) => ({ ...o, [k]: m[k] }), {})
+    mKeys.reduce((o, k) => ({ ...o, [k]: m[k] }), {})
   );
   board.labels = board.labels.map((l) =>
     labelKeys.reduce((o, k) => ({ ...o, [k]: l[k] }), {})
@@ -59,9 +60,9 @@ export const descToFile = (desc, zip, i, j) => {
   }
 };
 
-export const aToFile = (a, zip, i, j, m) => {
+export const aToFile = (a, zip, i, j, n) => {
   a = aKeys.reduce((o, k) => ({ ...o, [k]: a[k] }), {});
-  zip.file(`list${i}_card${j}_attachment${m}.json`, JSON.stringify(a, null, 2));
+  zip.file(`list${i}_card${j}_attachment${n}.json`, JSON.stringify(a, null, 2));
 };
 
 export const coverToFile = (cover, zip, i, j) => {
@@ -72,29 +73,29 @@ export const coverToFile = (cover, zip, i, j) => {
   }
 };
 
-export const clToFile = (cl, zip, i, j, m) => {
+export const clToFile = (cl, zip, i, j, n) => {
   cl = clKeys.reduce((o, k) => ({ ...o, [k]: cl[k] }), {});
-  zip.file(`list${i}_card${j}_checklist${m}.json`, JSON.stringify(cl, null, 2));
+  zip.file(`list${i}_card${j}_checklist${n}.json`, JSON.stringify(cl, null, 2));
 };
 
-export const ciToFile = (ci, zip, i, j, m, n) => {
+export const ciToFile = (ci, zip, i, j, n, m) => {
   ci.checked = ci.state === "complete";
   ci = ciKeys.reduce((o, k) => ({ ...o, [k]: ci[k] }), {});
   zip.file(
-    `list${i}_card${j}_checklist${m}_checkitem${n}.json`,
+    `list${i}_card${j}_checklist${n}_checkitem${m}.json`,
     JSON.stringify(ci, null, 2)
   );
 };
 
-export const cfiToFile = (cfi, zip, i, j, m) => {
+export const cfiToFile = (cfi, zip, i, j, n) => {
   cfi = cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi[k] }), {});
   zip.file(
-    `list${i}_card${j}_customFieldItem${m}.json`,
+    `list${i}_card${j}_customFieldItem${n}.json`,
     JSON.stringify(cfi, null, 2)
   );
 };
 
-export const sToFile = (s, zip, i, j, m) => {
+export const sToFile = (s, zip, i, j, n) => {
   s = sKeys.reduce((o, k) => ({ ...o, [k]: s[k] }), {});
-  zip.file(`list${i}_card${j}_sticker${m}.json`, JSON.stringify(s, null, 2));
+  zip.file(`list${i}_card${j}_sticker${n}.json`, JSON.stringify(s, null, 2));
 };

@@ -1,6 +1,7 @@
 import { download } from "./file.js";
 
 export const storeError = async (t, e) => {
+  console.error(e);
   const message = e.message ?? "";
   const stack = e.stack ?? "";
   const date = new Date().toISOString();
@@ -9,6 +10,7 @@ export const storeError = async (t, e) => {
     delete error.message;
   }
   await t.set("board", "shared", "error", error);
+  console.error(error);
 };
 
 export const downloadError = async (t) => {
