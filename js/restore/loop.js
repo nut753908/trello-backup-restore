@@ -98,29 +98,21 @@ const loopCard = async (dir, i, zip, token, idList) => {
   );
 };
 
-const loopList = async (
-  dir,
-  zip,
-  token,
-  idBoard,
-  toRight,
-  sign,
-  count,
-  offset
-) => {
+const loopList = async (dir, zip, token, idBoard, toRight, posParams) => {
+  const { sign, c0, offset } = posParams;
   const re = new RegExp(`^${dir}list(\\d+)\\.json$`);
   const files = zip.file(re).sort(toRight ? ascend : descend);
   await Promise.all(
-    files.map(async (file, h) => {
+    files.map(async (file, c) => {
       const i = file.name.match(re)[1];
-      const pos = sign * (h + count) + offset;
+      const pos = sign * (c + c0) + offset;
       const idList = await fileToList(file, token, idBoard, pos);
       await loopCard(dir, i, zip, token, idList);
     })
   );
 };
 
-let totalCount = 0;
+let count = 0;
 
 export const loopDir = async (zip, token, idBoard, toRight) => {
   const sign = toRight ? 1 : -1;
@@ -131,12 +123,12 @@ export const loopDir = async (zip, token, idBoard, toRight) => {
       .map((d) => d.name)
       .map((dir) => {
         const re = new RegExp(`^${dir}list\\d+\\.json$`);
-        const count = totalCount;
-        totalCount += zip.file(re).length;
-        return [dir, count];
+        const c0 = count;
+        count += zip.file(re).length;
+        return [dir, { sign, c0, offset }];
       })
-      .map(async ([dir, count]) => {
-        await loopList(dir, zip, token, idBoard, toRight, sign, count, offset);
+      .map(async ([dir, posParams]) => {
+        await loopList(dir, zip, token, idBoard, toRight, posParams);
       })
   );
 };
