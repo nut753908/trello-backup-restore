@@ -1,7 +1,7 @@
 {
   "name": "trello-backup-restore",
   "version": "0.0.1",
-  "description": "A Trello Power-Up which backups and restores kind of card",
+  "description": "A Trello Power-Up which backs up and restores card, list or lists",
   "license": "MIT",
   "repository": "https://github.com/nut753908/trello-backup-restore",
   "scripts": {
