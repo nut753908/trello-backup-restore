@@ -126,14 +126,14 @@ export const fileToCi = async (file, token, idCl) => {
   }
 };
 
-export const filesToCfis = async (files, token, idCard, idsCf) => {
+export const filesToCfis = async (files, token, idCard, idCfs) => {
   if (files.length > 0) {
     const cfis = [];
     for (const file of files) {
       const text = await file.async("string");
       let cfi = JSON.parse(text);
       cfi = cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {});
-      if (idsCf.indexOf(cfi.idCustomField) !== -1) {
+      if (idCfs.indexOf(cfi.idCustomField) !== -1) {
         cfis.push(cfi);
       }
     }

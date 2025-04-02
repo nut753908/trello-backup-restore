@@ -54,12 +54,12 @@ const loopCl = async (dir, i, j, zip, token, idCard) => {
   }
 };
 
-const loopCfi = async (dir, i, j, zip, token, idCard, idsCf) => {
+const loopCfi = async (dir, i, j, zip, token, idCard, idCfs) => {
   const re = new RegExp(
     `^${dir}list${i}_card${j}_customFieldItem(\\d+)\\.json$`
   );
   const files = zip.file(re).sort(ascend);
-  await filesToCfis(files, token, idCard, idsCf);
+  await filesToCfis(files, token, idCard, idCfs);
 };
 
 const loopS = async (dir, i, j, zip, token, idCard) => {
@@ -81,7 +81,7 @@ const loopCard = async (dir, i, zip, token, idList, cur) => {
     const coverFile = zip.file(`${dir}list${i}_card${j}_cover.json`);
     await fileToCover(coverFile, token, idCard, mapIdA);
     await loopCl(dir, i, j, zip, token, idCard);
-    await loopCfi(dir, i, j, zip, token, idCard, cur.idsCf);
+    await loopCfi(dir, i, j, zip, token, idCard, cur.idCfs);
     await loopS(dir, i, j, zip, token, idCard);
   }
 };

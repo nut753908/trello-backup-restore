@@ -10,7 +10,7 @@ const getCur = async (t) => {
   const board = await t.board("id", "customFields");
   return {
     idBoard: board.id,
-    idsCf: board.customFields.map((cf) => cf.id),
+    idCfs: board.customFields.map((cf) => cf.id),
   };
 };
 
