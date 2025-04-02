@@ -42,13 +42,20 @@ export const fileToList = async (file, token, idBoard, pos) => {
   return json?.id;
 };
 
-export const fileToCard = async (cardFile, descFile, token, idList) => {
+export const fileToCard = async (
+  cardFile,
+  descFile,
+  token,
+  idList,
+  idMembers
+) => {
   const text = await cardFile.async("string");
   let card = JSON.parse(text);
   card = cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {});
   if (descFile) {
     card.desc = await descFile.async("string");
   }
+  card.idMembers = card.idMembers.filter((id) => idMembers.indexOf(id) !== -1);
   const res = await backoff(() => createCard(token, idList, card));
   if (!res.ok) {
     throw new Error(

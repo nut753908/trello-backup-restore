@@ -76,7 +76,13 @@ const loopCard = async (dir, i, zip, token, idList, cur) => {
   for (const cardFile of files) {
     const j = cardFile.name.match(re)[1];
     const descFile = zip.file(`${dir}list${i}_card${j}_desc.md`);
-    const idCard = await fileToCard(cardFile, descFile, token, idList);
+    const idCard = await fileToCard(
+      cardFile,
+      descFile,
+      token,
+      idList,
+      cur.idMembers
+    );
     const mapIdA = await loopA(dir, i, j, zip, token, idCard);
     const coverFile = zip.file(`${dir}list${i}_card${j}_cover.json`);
     await fileToCover(coverFile, token, idCard, mapIdA);
