@@ -4,6 +4,8 @@
 // cfi: custom field item
 // s: sticker
 
+export const labelKeys = ["name", "color"];
+
 export const listKeys = ["name"];
 
 export const cardKeys = [

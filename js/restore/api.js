@@ -6,6 +6,20 @@
 
 import { APP_KEY } from "../common/env.js";
 
+export const createLabel = (token, idBoard, body) =>
+  fetch(`https://api.trello.com/1/board/${idBoard}/labels`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      ...body,
+      key: APP_KEY,
+      token,
+    }),
+  });
+
 export const createList = (token, idBoard, body, pos) =>
   fetch(`https://api.trello.com/1/boards/${idBoard}/lists`, {
     method: "POST",

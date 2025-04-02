@@ -8,6 +8,7 @@ import { downloadError } from "./common/error.js";
 
 const t = TrelloPowerUp.iframe();
 Object.entries({
+  addLabels: false,
   toLeft: false,
   toRight: true,
   showBC: true,

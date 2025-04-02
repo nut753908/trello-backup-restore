@@ -1,20 +1,11 @@
 // cf: custom field
 
 /* global JSZip */
+import { getCurBoard } from "./board.js";
 import { loopDir } from "./loop.js";
 import { storeError } from "../common/error.js";
 import { selectFile } from "../common/file.js";
 import { protect } from "../common/protect.js";
-
-const getCur = async (t) => {
-  const board = await t.board("id", "members", "labels", "customFields");
-  return {
-    idBoard: board.id,
-    idMembers: board.members.map((m) => m.id),
-    idLabels: board.labels.map((l) => l.id),
-    idCfs: board.customFields.map((cf) => cf.id),
-  };
-};
 
 const restore = (file) => async (t) => {
   try {
@@ -23,9 +14,19 @@ const restore = (file) => async (t) => {
     const newZip = new JSZip();
     const zip = await newZip.loadAsync(file);
     const token = await t.getRestApi().getToken();
-    const cur = await getCur(t);
+    const { idBoard, idMembers, idLabels, idCfs } = await getCurBoard(t);
+    const addLabels = await t.get("board", "shared", "addLabels", false);
     const toRight = await t.get("board", "shared", "toRight", true);
-    await loopDir(zip, token, cur, toRight);
+    await loopDir(
+      zip,
+      token,
+      idBoard,
+      idMembers,
+      idLabels,
+      idCfs,
+      addLabels,
+      toRight
+    );
     await t.hideAlert();
     t.alert({ message: "Restoration complete 🎉" });
   } catch (e) {
