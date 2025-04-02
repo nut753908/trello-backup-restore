@@ -81,7 +81,8 @@ const loopCard = async (dir, i, zip, token, idList, cur) => {
       descFile,
       token,
       idList,
-      cur.idMembers
+      cur.idMembers,
+      cur.idLabels
     );
     const mapIdA = await loopA(dir, i, j, zip, token, idCard);
     const coverFile = zip.file(`${dir}list${i}_card${j}_cover.json`);
