@@ -34,32 +34,32 @@ const loopA = async (dir, i, j, zip, token, idCard) => {
   return mapIdA;
 };
 
-const loopCi = async (dir, i, j, m, zip, token, idCl) => {
+const loopCi = async (dir, i, j, m, zip, token, idCl, idMembers) => {
   const re = new RegExp(
     `^${dir}list${i}_card${j}_checklist${m}_checkitem(\\d+)\\.json$`
   );
   const files = zip.file(re).sort(ascend);
   for (const file of files) {
-    await fileToCi(file, token, idCl);
+    await fileToCi(file, token, idCl, idMembers);
   }
 };
 
-const loopCl = async (dir, i, j, zip, token, idCard) => {
+const loopCl = async (dir, i, j, zip, token, idCard, cur) => {
   const re = new RegExp(`^${dir}list${i}_card${j}_checklist(\\d+)\\.json$`);
   const files = zip.file(re).sort(ascend);
   for (const file of files) {
     const m = file.name.match(re)[1];
     const idCl = await fileToCl(file, token, idCard);
-    await loopCi(dir, i, j, m, zip, token, idCl);
+    await loopCi(dir, i, j, m, zip, token, idCl, cur.idMembers);
   }
 };
 
-const loopCfi = async (dir, i, j, zip, token, idCard, idsCf) => {
+const loopCfi = async (dir, i, j, zip, token, idCard, idCfs) => {
   const re = new RegExp(
     `^${dir}list${i}_card${j}_customFieldItem(\\d+)\\.json$`
   );
   const files = zip.file(re).sort(ascend);
-  await filesToCfis(files, token, idCard, idsCf);
+  await filesToCfis(files, token, idCard, idCfs);
 };
 
 const loopS = async (dir, i, j, zip, token, idCard) => {
@@ -80,8 +80,8 @@ const loopCard = async (dir, i, zip, token, idList, cur) => {
     const mapIdA = await loopA(dir, i, j, zip, token, idCard);
     const coverFile = zip.file(`${dir}list${i}_card${j}_cover.json`);
     await fileToCover(coverFile, token, idCard, mapIdA);
-    await loopCl(dir, i, j, zip, token, idCard);
-    await loopCfi(dir, i, j, zip, token, idCard, cur.idsCf);
+    await loopCl(dir, i, j, zip, token, idCard, cur);
+    await loopCfi(dir, i, j, zip, token, idCard, cur.idCfs);
     await loopS(dir, i, j, zip, token, idCard);
   }
 };
