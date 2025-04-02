@@ -7,6 +7,7 @@
 // s: sticker
 
 import {
+  labelKeys,
   listKeys,
   cardKeys,
   aKeys,
@@ -18,6 +19,7 @@ import {
 } from "./keys.js";
 import { backoff } from "../common/backoff.js";
 import {
+  createLabel,
   createList,
   createCard,
   createA,
@@ -27,6 +29,18 @@ import {
   updateCfis,
   addS,
 } from "./api.js";
+
+export const objToLabel = async (label, token, idBoard) => {
+  label = labelKeys.reduce((o, k) => ({ ...o, [k]: label?.[k] }), {});
+  const res = await backoff(() => createLabel(token, idBoard, label));
+  if (!res.ok) {
+    throw new Error(
+      JSON.stringify({ label, status: res.status, url: res.url })
+    );
+  }
+  const json = await res.json();
+  return json?.id;
+};
 
 export const fileToList = async (file, token, idBoard, pos) => {
   const text = await file.async("string");
@@ -48,7 +62,7 @@ export const fileToCard = async (
   token,
   idList,
   idMembers,
-  idLabels
+  mapIdLabel
 ) => {
   const text = await cardFile.async("string");
   let card = JSON.parse(text);
@@ -57,7 +71,7 @@ export const fileToCard = async (
     card.desc = await descFile.async("string");
   }
   card.idMembers = card.idMembers.filter((id) => idMembers.indexOf(id) !== -1);
-  card.idLabels = card.idLabels.filter((id) => idLabels.indexOf(id) !== -1);
+  card.idLabels = card.idLabels.map((id) => mapIdLabel[id]).filter((id) => id);
   const res = await backoff(() => createCard(token, idList, card));
   if (!res.ok) {
     throw new Error(
