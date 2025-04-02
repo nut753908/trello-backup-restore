@@ -15,7 +15,7 @@ const restore = (file) => async (t) => {
     const zip = await newZip.loadAsync(file);
     const token = await t.getRestApi().getToken();
     const { idBoard, idMembers, idLabels, idCfs } = await getCurBoard(t);
-    const addLabels = await t.get("board", "shared", "addLabels", false);
+    const addLabels = await t.get("board", "shared", "addLabels", true);
     const toRight = await t.get("board", "shared", "toRight", true);
     await loopDir(
       zip,
