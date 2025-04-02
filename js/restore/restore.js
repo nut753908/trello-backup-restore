@@ -7,9 +7,10 @@ import { selectFile } from "../common/file.js";
 import { protect } from "../common/protect.js";
 
 const getCur = async (t) => {
-  const board = await t.board("id", "customFields");
+  const board = await t.board("id", "members", "customFields");
   return {
     idBoard: board.id,
+    idMembers: board.members.map((m) => m.id),
     idCfs: board.customFields.map((cf) => cf.id),
   };
 };

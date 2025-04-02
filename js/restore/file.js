@@ -116,10 +116,13 @@ export const fileToCl = async (file, token, idCard) => {
   return json?.id;
 };
 
-export const fileToCi = async (file, token, idCl) => {
+export const fileToCi = async (file, token, idCl, idMembers) => {
   const text = await file.async("string");
   let ci = JSON.parse(text);
   ci = ciKeys.reduce((o, k) => ({ ...o, [k]: ci?.[k] }), {});
+  if (idMembers.indexOf(ci.idMember) === -1) {
+    ci.idMember = null;
+  }
   const res = await backoff(() => createCi(token, idCl, ci));
   if (!res.ok) {
     throw new Error(JSON.stringify({ ci, status: res.status, url: res.url }));
