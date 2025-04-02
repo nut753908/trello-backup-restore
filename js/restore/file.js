@@ -2,6 +2,7 @@
 // af: attachment file
 // cl: checklist
 // ci: checkitem
+// cf: custom field
 // cfi: custom field item
 // s: sticker
 
@@ -125,14 +126,16 @@ export const fileToCi = async (file, token, idCl) => {
   }
 };
 
-export const filesToCfis = async (files, token, idCard) => {
+export const filesToCfis = async (files, token, idCard, idsCf) => {
   if (files.length > 0) {
     const cfis = [];
     for (const file of files) {
       const text = await file.async("string");
       let cfi = JSON.parse(text);
       cfi = cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {});
-      cfis.push(cfi);
+      if (idsCf.indexOf(cfi.idCustomField) !== -1) {
+        cfis.push(cfi);
+      }
     }
     const res = await backoff(() =>
       updateCfis(token, idCard, { customFieldItems: cfis })
