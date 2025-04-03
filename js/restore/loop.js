@@ -143,6 +143,7 @@ export const loopDir = async (
   idMembers,
   labels,
   cfs,
+  isFree,
   addLabels,
   addCfs,
   toRight
@@ -160,13 +161,9 @@ export const loopDir = async (
       labels,
       addLabels
     );
-    const { mapIdCf, mapIdCfo } = await getMapIdCf(
-      token,
-      idBoard,
-      _cfs,
-      cfs,
-      addCfs
-    );
+    const { mapIdCf, mapIdCfo } = isFree
+      ? {}
+      : await getMapIdCf(token, idBoard, _cfs, cfs, addCfs);
     await loopList(
       dir,
       zip,
