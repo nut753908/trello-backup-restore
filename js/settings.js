@@ -1,3 +1,4 @@
+// cf: custom field
 // BC: Back up Card
 // BL: Back up List
 // BLs: Back up Lists
@@ -8,7 +9,8 @@ import { downloadError } from "./common/error.js";
 
 const t = TrelloPowerUp.iframe();
 Object.entries({
-  addLabels: false,
+  addLabels: true,
+  addCfs: true,
   toLeft: false,
   toRight: true,
   showBC: true,
