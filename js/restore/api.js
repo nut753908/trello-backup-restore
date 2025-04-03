@@ -1,3 +1,4 @@
+// cf: custom field
 // a: attachment
 // cl: checklist
 // ci: checkitem
@@ -15,6 +16,23 @@ export const createLabel = (token, idBoard, body) =>
     },
     body: JSON.stringify({
       ...body,
+      key: APP_KEY,
+      token,
+    }),
+  });
+
+export const createCf = (token, idBoard, body) =>
+  fetch("https://api.trello.com/1/customFields", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      ...body,
+      idModel: idBoard,
+      modelType: "board",
+      pos: "bottom",
       key: APP_KEY,
       token,
     }),

@@ -1,3 +1,4 @@
+// cf: custom field
 // a: attachment
 // cl: checklist
 // ci: checkitem
@@ -5,6 +6,8 @@
 // s: sticker
 
 export const labelKeys = ["name", "color"];
+
+export const cfKeys = ["name", "type", "options"];
 
 export const listKeys = ["name"];
 

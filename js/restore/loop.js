@@ -1,12 +1,12 @@
+// cf: custom field
 // a: attachment
 // af: attachment file
 // cl: checklist
 // ci: checkitem
-// cf: custom field
 // cfi: custom field item
 // s: sticker
 
-import { getPreBoard, getMapIdLabel } from "./board.js";
+import { getPreBoard, getMapIdLabel, getMapIdCf } from "./board.js";
 import {
   fileToList,
   fileToCard,
@@ -55,12 +55,12 @@ const loopCl = async (dir, i, j, zip, token, idCard, idMembers) => {
   }
 };
 
-const loopCfi = async (dir, i, j, zip, token, idCard, idCfs) => {
+const loopCfi = async (dir, i, j, zip, token, idCard, mapIdCf, mapIdCfo) => {
   const re = new RegExp(
     `^${dir}list${i}_card${j}_customFieldItem(\\d+)\\.json$`
   );
   const files = zip.file(re).sort(ascend);
-  await filesToCfis(files, token, idCard, idCfs);
+  await filesToCfis(files, token, idCard, mapIdCf, mapIdCfo);
 };
 
 const loopS = async (dir, i, j, zip, token, idCard) => {
@@ -79,7 +79,8 @@ const loopCard = async (
   idList,
   idMembers,
   mapIdLabel,
-  idCfs
+  mapIdCf,
+  mapIdCfo
 ) => {
   const re = new RegExp(`^${dir}list${i}_card(\\d+)\\.json$`);
   const files = zip.file(re).sort(ascend);
@@ -98,7 +99,7 @@ const loopCard = async (
     const coverFile = zip.file(`${dir}list${i}_card${j}_cover.json`);
     await fileToCover(coverFile, token, idCard, mapIdA);
     await loopCl(dir, i, j, zip, token, idCard, idMembers);
-    await loopCfi(dir, i, j, zip, token, idCard, idCfs);
+    await loopCfi(dir, i, j, zip, token, idCard, mapIdCf, mapIdCfo);
     await loopS(dir, i, j, zip, token, idCard);
   }
 };
@@ -110,7 +111,8 @@ const loopList = async (
   idBoard,
   idMembers,
   mapIdLabel,
-  idCfs,
+  mapIdCf,
+  mapIdCfo,
   toRight
 ) => {
   const re = new RegExp(`^${dir}list(\\d+)\\.json$`);
@@ -119,7 +121,17 @@ const loopList = async (
   for (const file of files) {
     const i = file.name.match(re)[1];
     const idList = await fileToList(file, token, idBoard, pos);
-    await loopCard(dir, i, zip, token, idList, idMembers, mapIdLabel, idCfs);
+    await loopCard(
+      dir,
+      i,
+      zip,
+      token,
+      idList,
+      idMembers,
+      mapIdLabel,
+      mapIdCf,
+      mapIdCfo
+    );
   }
 };
 
@@ -131,6 +143,7 @@ export const loopDir = async (
   idLabels,
   idCfs,
   addLabels,
+  addCfs,
   toRight
 ) => {
   const dirs = [{ name: "" }, ...zip.folder(/.*/)]
@@ -138,13 +151,20 @@ export const loopDir = async (
     .map((d) => d.name);
   for (const dir of dirs) {
     const file = zip.file(`${dir}_board.json`);
-    const { labels } = await getPreBoard(file);
+    const { labels, cfs } = await getPreBoard(file);
     const mapIdLabel = await getMapIdLabel(
       token,
       idBoard,
       labels,
       idLabels,
       addLabels
+    );
+    const { mapIdCf, mapIdCfo } = await getMapIdCf(
+      token,
+      idBoard,
+      cfs,
+      idCfs,
+      addCfs
     );
     await loopList(
       dir,
@@ -153,7 +173,8 @@ export const loopDir = async (
       idBoard,
       idMembers,
       mapIdLabel,
-      idCfs,
+      mapIdCf,
+      mapIdCfo,
       toRight
     );
   }

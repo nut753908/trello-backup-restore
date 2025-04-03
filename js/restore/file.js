@@ -1,13 +1,14 @@
+// cf: custom field
 // a: attachment
 // af: attachment file
 // cl: checklist
 // ci: checkitem
-// cf: custom field
 // cfi: custom field item
 // s: sticker
 
 import {
   labelKeys,
+  cfKeys,
   listKeys,
   cardKeys,
   aKeys,
@@ -20,6 +21,7 @@ import {
 import { backoff } from "../common/backoff.js";
 import {
   createLabel,
+  createCf,
   createList,
   createCard,
   createA,
@@ -40,6 +42,17 @@ export const objToLabel = async (label, token, idBoard) => {
   }
   const json = await res.json();
   return json?.id;
+};
+
+export const objToCf = async (cf, token, idBoard) => {
+  cf = cfKeys.reduce((o, k) => ({ ...o, [k]: cf?.[k] }), {});
+  const res = await backoff(() => createCf(token, idBoard, cf));
+  if (!res.ok) {
+    throw new Error(
+      JSON.stringify({ idBoard, cf, status: res.status, url: res.url })
+    );
+  }
+  return await res.json();
 };
 
 export const fileToList = async (file, token, idBoard, pos) => {
@@ -152,14 +165,16 @@ export const fileToCi = async (file, token, idCl, idMembers) => {
   }
 };
 
-export const filesToCfis = async (files, token, idCard, idCfs) => {
+export const filesToCfis = async (files, token, idCard, mapIdCf, mapIdCfo) => {
   if (files.length > 0) {
     const cfis = [];
     for (const file of files) {
       const text = await file.async("string");
       let cfi = JSON.parse(text);
       cfi = cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {});
-      if (idCfs.indexOf(cfi.idCustomField) !== -1) {
+      cfi.idCustomField = mapIdCf[cfi.idCustomField];
+      cfi.idValue = mapIdCfo[cfi.idValue];
+      if (cfi.idCustomField) {
         cfis.push(cfi);
       }
     }
