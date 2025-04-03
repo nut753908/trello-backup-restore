@@ -54,6 +54,7 @@ export const getMapIdCf = async (token, idBoard, _cfs, cfs, addCfs) => {
       mapIdCf[cf.id] = curCf.id;
       if (cf.options) {
         for (const o of cf.options) {
+          // note: if several found, pick first one
           const curO = curCf.options.find(
             (o2) => o.value.text === o2.value.text && o.color === o2.color
           );
