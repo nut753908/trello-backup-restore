@@ -8,7 +8,7 @@ export const getCurBoard = async (t) => {
   return {
     idBoard: board.id,
     idMembers: board.members.map((m) => m.id),
-    idLabels: board.labels.map((l) => l.id),
+    labels: board.labels,
     cfs: board.customFields,
   };
 };
@@ -26,13 +26,16 @@ export const getMapIdLabel = async (
   token,
   idBoard,
   _labels,
-  idLabels,
+  labels,
   addLabels
 ) => {
   const map = {};
   for (let l of _labels) {
-    if (idLabels.indexOf(l.id) !== -1) {
-      map[l.id] = l.id;
+    const curL = labels.find(
+      (l2) => l.name === l2.name && l.color === l2.color
+    );
+    if (curL) {
+      map[l.id] = curL.id;
     } else if (addLabels) {
       map[l.id] = await objToLabel(l, token, idBoard);
     }
