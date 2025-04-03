@@ -1,3 +1,4 @@
+// cfo: custom field option
 // cf: custom field
 // a: attachment
 // af: attachment file

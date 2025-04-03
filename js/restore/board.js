@@ -1,3 +1,4 @@
+// cfo: custom field option
 // cf: custom field
 
 import { objToLabel, objToCfo, objToCf } from "./file.js";
