@@ -1,3 +1,4 @@
+// cfo: custom field option
 // cf: custom field
 // a: attachment
 // cl: checklist
@@ -16,6 +17,21 @@ export const createLabel = (token, idBoard, body) =>
     },
     body: JSON.stringify({
       ...body,
+      key: APP_KEY,
+      token,
+    }),
+  });
+
+export const addCfo = (token, idCf, body) =>
+  fetch(`https://api.trello.com/1/customFields/${idCf}/options`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      ...body,
+      pos: "bottom",
       key: APP_KEY,
       token,
     }),

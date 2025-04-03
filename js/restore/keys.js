@@ -1,3 +1,4 @@
+// cfo: custom field option
 // cf: custom field
 // a: attachment
 // cl: checklist
@@ -6,6 +7,8 @@
 // s: sticker
 
 export const labelKeys = ["name", "color"];
+
+export const cfoKeys = ["value", "color"];
 
 export const cfKeys = ["name", "type", "options"];
 
