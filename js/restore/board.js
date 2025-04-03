@@ -1,7 +1,7 @@
-// cfo: custom field option
 // cf: custom field
+// cfo: custom field option
 
-import { objToLabel, objToCfo, objToCf } from "./file.js";
+import { objToLabel, objToCf, objToCfo } from "./file.js";
 
 export const getCurBoard = async (t) => {
   const board = await t.board("all");

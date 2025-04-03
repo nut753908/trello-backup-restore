@@ -1,5 +1,5 @@
-// cfo: custom field option
 // cf: custom field
+// cfo: custom field option
 // a: attachment
 // cl: checklist
 // ci: checkitem
@@ -22,21 +22,6 @@ export const createLabel = (token, idBoard, body) =>
     }),
   });
 
-export const addCfo = (token, idCf, body) =>
-  fetch(`https://api.trello.com/1/customFields/${idCf}/options`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      ...body,
-      pos: "bottom",
-      key: APP_KEY,
-      token,
-    }),
-  });
-
 export const createCf = (token, idBoard, body) =>
   fetch("https://api.trello.com/1/customFields", {
     method: "POST",
@@ -48,6 +33,21 @@ export const createCf = (token, idBoard, body) =>
       ...body,
       idModel: idBoard,
       modelType: "board",
+      pos: "bottom",
+      key: APP_KEY,
+      token,
+    }),
+  });
+
+export const addCfo = (token, idCf, body) =>
+  fetch(`https://api.trello.com/1/customFields/${idCf}/options`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      ...body,
       pos: "bottom",
       key: APP_KEY,
       token,

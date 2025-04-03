@@ -1,5 +1,5 @@
-// cfo: custom field option
 // cf: custom field
+// cfo: custom field option
 // a: attachment
 // af: attachment file
 // cl: checklist
