@@ -10,6 +10,7 @@ export const getCurBoard = async (t) => {
     idMembers: board.members.map((m) => m.id),
     labels: board.labels,
     cfs: board.customFields,
+    isFree: board.paidStatus === "free",
   };
 };
 

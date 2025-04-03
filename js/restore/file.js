@@ -179,7 +179,7 @@ export const fileToCi = async (file, token, idCl, idMembers) => {
 };
 
 export const filesToCfis = async (files, token, idCard, mapIdCf, mapIdCfo) => {
-  if (files.length > 0) {
+  if (mapIdCf && mapIdCfo && files.length > 0) {
     const cfis = [];
     for (const file of files) {
       const text = await file.async("string");

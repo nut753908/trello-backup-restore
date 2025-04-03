@@ -8,6 +8,11 @@
 import { downloadError } from "./common/error.js";
 
 const t = TrelloPowerUp.iframe();
+t.board("paidStatus")
+  .get("paidStatus")
+  .then((p) => {
+    document.getElementById("addCfs").disabled = p === "free";
+  });
 Object.entries({
   addLabels: true,
   addCfs: true,
