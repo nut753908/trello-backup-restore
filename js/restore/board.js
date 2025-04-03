@@ -1,6 +1,6 @@
 // cf: custom field
 
-import { objToLabel, objToCf } from "./file.js";
+import { objToLabel, objToCfo, objToCf } from "./file.js";
 
 export const getCurBoard = async (t) => {
   const board = await t.board("all");
@@ -8,7 +8,7 @@ export const getCurBoard = async (t) => {
     idBoard: board.id,
     idMembers: board.members.map((m) => m.id),
     idLabels: board.labels.map((l) => l.id),
-    idCfs: board.customFields.map((cf) => cf.id),
+    cfs: board.customFields,
   };
 };
 
@@ -16,20 +16,20 @@ export const getPreBoard = async (file) => {
   const text = await file.async("string");
   const board = JSON.parse(text);
   return {
-    labels: board.labels,
-    cfs: board.customFields,
+    _labels: board.labels,
+    _cfs: board.customFields,
   };
 };
 
 export const getMapIdLabel = async (
   token,
   idBoard,
-  labels,
+  _labels,
   idLabels,
   addLabels
 ) => {
   const map = {};
-  for (let l of labels) {
+  for (let l of _labels) {
     if (idLabels.indexOf(l.id) !== -1) {
       map[l.id] = l.id;
     } else if (addLabels) {
@@ -39,20 +39,32 @@ export const getMapIdLabel = async (
   return map;
 };
 
-export const getMapIdCf = async (token, idBoard, cfs, idCfs, addCfs) => {
+export const getMapIdCf = async (token, idBoard, _cfs, cfs, addCfs) => {
   const mapIdCf = {};
   const mapIdCfo = {};
-  for (let cf of cfs) {
-    if (idCfs.indexOf(cf.id) !== -1) {
-      mapIdCf[cf.id] = cf.id;
+  for (let cf of _cfs) {
+    const curCf = cfs.find(
+      (cf2) => cf.name === cf2.name && cf.type === cf2.type
+    );
+    if (curCf) {
+      mapIdCf[cf.id] = curCf.id;
       if (cf.options) {
-        cf.options.forEach((o) => (mapIdCfo[o.id] = o.id));
+        for (const o of cf.options) {
+          const curO = curCf.options.find(
+            (o2) => o.value.text === o2.value.text && o.color === o2.color
+          );
+          if (curO) {
+            mapIdCfo[o.id] = curO.id;
+          } else if (addCfs) {
+            mapIdCfo[o.id] = await objToCfo(o, token, curCf.id);
+          }
+        }
       }
     } else if (addCfs) {
-      const cf2 = await objToCf(cf, token, idBoard);
-      mapIdCf[cf.id] = cf2.id;
+      const newCf = await objToCf(cf, token, idBoard);
+      mapIdCf[cf.id] = newCf.id;
       if (cf.options) {
-        cf.options.forEach((o, i) => (mapIdCfo[o.id] = cf2.options[i].id));
+        cf.options.forEach((o, i) => (mapIdCfo[o.id] = newCf.options[i].id));
       }
     }
   }

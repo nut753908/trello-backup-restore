@@ -8,6 +8,7 @@
 
 import {
   labelKeys,
+  cfoKeys,
   cfKeys,
   listKeys,
   cardKeys,
@@ -21,6 +22,7 @@ import {
 import { backoff } from "../common/backoff.js";
 import {
   createLabel,
+  addCfo,
   createCf,
   createList,
   createCard,
@@ -39,6 +41,16 @@ export const objToLabel = async (label, token, idBoard) => {
     throw new Error(
       JSON.stringify({ label, status: res.status, url: res.url })
     );
+  }
+  const json = await res.json();
+  return json.id;
+};
+
+export const objToCfo = async (cfo, token, idCf) => {
+  cfo = cfoKeys.reduce((o, k) => ({ ...o, [k]: cfo[k] }), {});
+  const res = await backoff(() => addCfo(token, idCf, cfo));
+  if (!res.ok) {
+    throw new Error(JSON.stringify({ cfo, status: res.status, url: res.url }));
   }
   const json = await res.json();
   return json.id;

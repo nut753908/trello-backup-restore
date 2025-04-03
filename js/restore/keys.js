@@ -7,6 +7,8 @@
 
 export const labelKeys = ["name", "color"];
 
+export const cfoKeys = ["value", "color"];
+
 export const cfKeys = ["name", "type", "options"];
 
 export const listKeys = ["name"];

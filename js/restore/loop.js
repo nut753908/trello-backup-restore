@@ -141,7 +141,7 @@ export const loopDir = async (
   idBoard,
   idMembers,
   idLabels,
-  idCfs,
+  cfs,
   addLabels,
   addCfs,
   toRight
@@ -151,19 +151,19 @@ export const loopDir = async (
     .map((d) => d.name);
   for (const dir of dirs) {
     const file = zip.file(`${dir}_board.json`);
-    const { labels, cfs } = await getPreBoard(file);
+    const { _labels, _cfs } = await getPreBoard(file);
     const mapIdLabel = await getMapIdLabel(
       token,
       idBoard,
-      labels,
+      _labels,
       idLabels,
       addLabels
     );
     const { mapIdCf, mapIdCfo } = await getMapIdCf(
       token,
       idBoard,
+      _cfs,
       cfs,
-      idCfs,
       addCfs
     );
     await loopList(
