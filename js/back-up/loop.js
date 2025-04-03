@@ -16,6 +16,8 @@ import {
   sToFile,
 } from "./file.js";
 
+const ascend = (a, b) => (a.pos > b.pos ? 1 : -1);
+
 const loopA = (a_s, zip, i, j) =>
   a_s.forEach((a, _m) => {
     const m = _m + 1;
@@ -23,13 +25,13 @@ const loopA = (a_s, zip, i, j) =>
   });
 
 const loopCi = (cis, zip, i, j, m) =>
-  cis.forEach((ci, _n) => {
+  cis.sort(ascend).forEach((ci, _n) => {
     const n = _n + 1;
     ciToFile(ci, zip, i, j, m, n);
   });
 
 const loopCl = (cls, zip, i, j) =>
-  cls.forEach((cl, _m) => {
+  cls.sort(ascend).forEach((cl, _m) => {
     const m = _m + 1;
     clToFile(cl, zip, i, j, m);
     loopCi(cl.checkItems ?? null, zip, i, j, m);
