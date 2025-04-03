@@ -1,5 +1,5 @@
-// cfo: custom field option
 // cf: custom field
+// cfo: custom field option
 // a: attachment
 // af: attachment file
 // cl: checklist
@@ -9,8 +9,8 @@
 
 import {
   labelKeys,
-  cfoKeys,
   cfKeys,
+  cfoKeys,
   listKeys,
   cardKeys,
   aKeys,
@@ -23,8 +23,8 @@ import {
 import { backoff } from "../common/backoff.js";
 import {
   createLabel,
-  addCfo,
   createCf,
+  addCfo,
   createList,
   createCard,
   createA,
@@ -47,16 +47,6 @@ export const objToLabel = async (label, token, idBoard) => {
   return json.id;
 };
 
-export const objToCfo = async (cfo, token, idCf) => {
-  cfo = cfoKeys.reduce((o, k) => ({ ...o, [k]: cfo[k] }), {});
-  const res = await backoff(() => addCfo(token, idCf, cfo));
-  if (!res.ok) {
-    throw new Error(JSON.stringify({ cfo, status: res.status, url: res.url }));
-  }
-  const json = await res.json();
-  return json.id;
-};
-
 export const objToCf = async (cf, token, idBoard) => {
   cf = cfKeys.reduce((o, k) => ({ ...o, [k]: cf[k] }), {});
   const res = await backoff(() => createCf(token, idBoard, cf));
@@ -66,6 +56,16 @@ export const objToCf = async (cf, token, idBoard) => {
     );
   }
   return await res.json();
+};
+
+export const objToCfo = async (cfo, token, idCf) => {
+  cfo = cfoKeys.reduce((o, k) => ({ ...o, [k]: cfo[k] }), {});
+  const res = await backoff(() => addCfo(token, idCf, cfo));
+  if (!res.ok) {
+    throw new Error(JSON.stringify({ cfo, status: res.status, url: res.url }));
+  }
+  const json = await res.json();
+  return json.id;
 };
 
 export const fileToList = async (file, token, idBoard, pos) => {
@@ -187,7 +187,7 @@ export const filesToCfis = async (files, token, idCard, mapIdCf, mapIdCfo) => {
       cfi = cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi[k] }), {});
       cfi.idCustomField = mapIdCf[cfi.idCustomField];
       cfi.idValue = mapIdCfo[cfi.idValue];
-      if (cfi.idCustomField) {
+      if (cfi.idCustomField && (cfi.value || cfi.idValue)) {
         cfis.push(cfi);
       }
     }

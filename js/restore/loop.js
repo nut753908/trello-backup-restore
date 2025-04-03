@@ -1,5 +1,5 @@
-// cfo: custom field option
 // cf: custom field
+// cfo: custom field option
 // a: attachment
 // af: attachment file
 // cl: checklist
@@ -141,7 +141,7 @@ export const loopDir = async (
   token,
   idBoard,
   idMembers,
-  idLabels,
+  labels,
   cfs,
   addLabels,
   addCfs,
@@ -157,7 +157,7 @@ export const loopDir = async (
       token,
       idBoard,
       _labels,
-      idLabels,
+      labels,
       addLabels
     );
     const { mapIdCf, mapIdCfo } = await getMapIdCf(
