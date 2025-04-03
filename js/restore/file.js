@@ -33,7 +33,7 @@ import {
 } from "./api.js";
 
 export const objToLabel = async (label, token, idBoard) => {
-  label = labelKeys.reduce((o, k) => ({ ...o, [k]: label?.[k] }), {});
+  label = labelKeys.reduce((o, k) => ({ ...o, [k]: label[k] }), {});
   const res = await backoff(() => createLabel(token, idBoard, label));
   if (!res.ok) {
     throw new Error(
@@ -41,11 +41,11 @@ export const objToLabel = async (label, token, idBoard) => {
     );
   }
   const json = await res.json();
-  return json?.id;
+  return json.id;
 };
 
 export const objToCf = async (cf, token, idBoard) => {
-  cf = cfKeys.reduce((o, k) => ({ ...o, [k]: cf?.[k] }), {});
+  cf = cfKeys.reduce((o, k) => ({ ...o, [k]: cf[k] }), {});
   const res = await backoff(() => createCf(token, idBoard, cf));
   if (!res.ok) {
     throw new Error(
@@ -58,7 +58,7 @@ export const objToCf = async (cf, token, idBoard) => {
 export const fileToList = async (file, token, idBoard, pos) => {
   const text = await file.async("string");
   let list = JSON.parse(text);
-  list = listKeys.reduce((o, k) => ({ ...o, [k]: list?.[k] }), {});
+  list = listKeys.reduce((o, k) => ({ ...o, [k]: list[k] }), {});
   const res = await backoff(() => createList(token, idBoard, list, pos));
   if (!res.ok) {
     throw new Error(
@@ -66,7 +66,7 @@ export const fileToList = async (file, token, idBoard, pos) => {
     );
   }
   const json = await res.json();
-  return json?.id;
+  return json.id;
 };
 
 export const fileToCard = async (
@@ -79,7 +79,7 @@ export const fileToCard = async (
 ) => {
   const text = await cardFile.async("string");
   let card = JSON.parse(text);
-  card = cardKeys.reduce((o, k) => ({ ...o, [k]: card?.[k] }), {});
+  card = cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {});
   if (descFile) {
     card.desc = await descFile.async("string");
   }
@@ -92,7 +92,7 @@ export const fileToCard = async (
     );
   }
   const json = await res.json();
-  return json?.id;
+  return json.id;
 };
 
 export const getIdA = async (file) => {
@@ -104,7 +104,7 @@ export const getIdA = async (file) => {
 export const fileToA = async (aFile, afFile, token, idCard) => {
   const text = await aFile.async("string");
   let a = JSON.parse(text);
-  a = aKeys.reduce((o, k) => ({ ...o, [k]: a?.[k] }), {});
+  a = aKeys.reduce((o, k) => ({ ...o, [k]: a[k] }), {});
   a.setCover = false;
   if (afFile) {
     a.file = new File(
@@ -120,14 +120,14 @@ export const fileToA = async (aFile, afFile, token, idCard) => {
     throw new Error(JSON.stringify({ a, status: res.status, url: res.url }));
   }
   const json = await res.json();
-  return a.file ? json?.id : null;
+  return a.file ? json.id : null;
 };
 
 export const fileToCover = async (file, token, idCard, mapIdA) => {
   if (file) {
     const text = await file.async("string");
     let cover = JSON.parse(text);
-    cover = coverKeys.reduce((o, k) => ({ ...o, [k]: cover?.[k] }), {});
+    cover = coverKeys.reduce((o, k) => ({ ...o, [k]: cover[k] }), {});
     cover.idAttachment = mapIdA[cover.idAttachment];
     const res = await backoff(() => updateCard(token, idCard, { cover }));
     if (!res.ok) {
@@ -141,7 +141,7 @@ export const fileToCover = async (file, token, idCard, mapIdA) => {
 export const fileToCl = async (file, token, idCard) => {
   const text = await file.async("string");
   let cl = JSON.parse(text);
-  cl = clKeys.reduce((o, k) => ({ ...o, [k]: cl?.[k] }), {});
+  cl = clKeys.reduce((o, k) => ({ ...o, [k]: cl[k] }), {});
   const res = await backoff(() => createCl(token, idCard, cl));
   if (!res.ok) {
     throw new Error(
@@ -149,13 +149,13 @@ export const fileToCl = async (file, token, idCard) => {
     );
   }
   const json = await res.json();
-  return json?.id;
+  return json.id;
 };
 
 export const fileToCi = async (file, token, idCl, idMembers) => {
   const text = await file.async("string");
   let ci = JSON.parse(text);
-  ci = ciKeys.reduce((o, k) => ({ ...o, [k]: ci?.[k] }), {});
+  ci = ciKeys.reduce((o, k) => ({ ...o, [k]: ci[k] }), {});
   if (idMembers.indexOf(ci.idMember) === -1) {
     ci.idMember = null;
   }
@@ -171,7 +171,7 @@ export const filesToCfis = async (files, token, idCard, mapIdCf, mapIdCfo) => {
     for (const file of files) {
       const text = await file.async("string");
       let cfi = JSON.parse(text);
-      cfi = cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi?.[k] }), {});
+      cfi = cfiKeys.reduce((o, k) => ({ ...o, [k]: cfi[k] }), {});
       cfi.idCustomField = mapIdCf[cfi.idCustomField];
       cfi.idValue = mapIdCfo[cfi.idValue];
       if (cfi.idCustomField) {
@@ -192,7 +192,7 @@ export const filesToCfis = async (files, token, idCard, mapIdCf, mapIdCfo) => {
 export const fileToS = async (file, token, idCard) => {
   const text = await file.async("string");
   let s = JSON.parse(text);
-  s = sKeys.reduce((o, k) => ({ ...o, [k]: s?.[k] }), {});
+  s = sKeys.reduce((o, k) => ({ ...o, [k]: s[k] }), {});
   const res = await backoff(() => addS(token, idCard, s));
   if (!res.ok) {
     throw new Error(JSON.stringify({ s, status: res.status, url: res.url }));
