@@ -34,7 +34,7 @@ const loopCl = (cls, zip, i, j) =>
   cls.sort(ascend).forEach((cl, _m) => {
     const m = _m + 1;
     clToFile(cl, zip, i, j, m);
-    loopCi(cl.checkItems ?? null, zip, i, j, m);
+    loopCi(cl.checkItems, zip, i, j, m);
   });
 
 const loopCfi = (cfis, zip, i, j) =>
