@@ -31,7 +31,7 @@ export const getMapIdLabel = async (
   addLabels
 ) => {
   const map = {};
-  for (let l of _labels) {
+  for (const l of _labels) {
     const curL = labels.find(
       (l2) => l.name === l2.name && l.color === l2.color
     );
@@ -47,7 +47,7 @@ export const getMapIdLabel = async (
 export const getMapIdCf = async (token, idBoard, _cfs, cfs, addCfs) => {
   const mapIdCf = {};
   const mapIdCfo = {};
-  for (let cf of _cfs) {
+  for (const cf of _cfs) {
     const curCf = cfs.find(
       (cf2) => cf.name === cf2.name && cf.type === cf2.type
     );
