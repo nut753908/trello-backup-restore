@@ -11,7 +11,7 @@ const createJsonBlob = async (t, type) => {
     board: filterBoard(board),
     lists: loopList(lists),
   };
-  return new Blob([JSON.stringify(obj, null, 2)], {
+  return new Blob([JSON.stringify(obj)], {
     type: "application/json",
   });
 };
