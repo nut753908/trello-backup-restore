@@ -5,63 +5,40 @@
 // s: sticker
 
 import {
-  listToFile,
-  cardToFile,
-  aToFile,
-  coverToFile,
-  clToFile,
-  ciToFile,
-  cfiToFile,
-  sToFile,
-} from "./file.js";
+  filterList,
+  filterCard,
+  filterA,
+  filterCover,
+  filterCl,
+  filterCi,
+  filterCfi,
+  filterS,
+} from "./filter.js";
 
 const ascend = (a, b) => (a.pos > b.pos ? 1 : -1);
 
-const loopA = (a_s, zip, i, j) =>
-  a_s.forEach((a, _m) => {
-    const m = _m + 1;
-    aToFile(a, zip, i, j, m);
-  });
+const loopA = (as) => as.map((a) => filterA(a));
 
-const loopCi = (cis, zip, i, j, m) =>
-  cis.sort(ascend).forEach((ci, _n) => {
-    const n = _n + 1;
-    ciToFile(ci, zip, i, j, m, n);
-  });
+const loopCi = (cis) => cis.sort(ascend).map((ci) => filterCi(ci));
 
-const loopCl = (cls, zip, i, j) =>
-  cls.sort(ascend).forEach((cl, _m) => {
-    const m = _m + 1;
-    clToFile(cl, zip, i, j, m);
-    loopCi(cl.checkItems, zip, i, j, m);
-  });
+const loopCl = (cls) =>
+  cls
+    .sort(ascend)
+    .map((cl) => ({ ...filterCl(cl), checkItems: loopCi(cl.checkItems) }));
 
-const loopCfi = (cfis, zip, i, j) =>
-  cfis.forEach((cfi, _m) => {
-    const m = _m + 1;
-    cfiToFile(cfi, zip, i, j, m);
-  });
+const loopCfi = (cfis) => cfis.map((cfi) => filterCfi(cfi));
 
-const loopS = (ss, zip, i, j) =>
-  ss.forEach((s, _m) => {
-    const m = _m + 1;
-    sToFile(s, zip, i, j, m);
-  });
+const loopS = (ss) => ss.map((s) => filterS(s));
 
-const loopCard = (cards, zip, i) =>
-  cards.forEach((card) => {
-    const j = card.j + 1;
-    cardToFile(card, zip, i, j);
-    loopA(card.attachments, zip, i, j);
-    coverToFile(card.cover, zip, i, j);
-    loopCl(card.checklists, zip, i, j);
-    loopCfi(card.customFieldItems, zip, i, j);
-    loopS(card.stickers, zip, i, j);
-  });
+const loopCard = (cards) =>
+  cards.map((card) => ({
+    ...filterCard(card),
+    attachments: loopA(card.attachments),
+    cover: filterCover(card.cover),
+    checklists: loopCl(card.checklists),
+    customFieldItems: loopCfi(card.customFieldItems),
+    stickers: loopS(card.stickers),
+  }));
 
-export const loopList = (lists, zip) =>
-  lists.forEach((list) => {
-    const i = list.i + 1;
-    listToFile(list, zip, i);
-    loopCard(list.cards, zip, i);
-  });
+export const loopList = (lists) =>
+  lists.map((list) => ({ ...filterList(list), cards: loopCard(list.cards) }));

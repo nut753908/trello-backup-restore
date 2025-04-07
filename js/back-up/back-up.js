@@ -1,17 +1,19 @@
-/* global JSZip */
 import { getLists } from "./lists.js";
-import { boardToFile } from "./file.js";
+import { filterBoard } from "./filter.js";
 import { loopList } from "./loop.js";
 import { download } from "../common/file.js";
 import { storeError } from "../common/error.js";
 
-const createZipBlob = async (t, type) => {
+const createJsonBlob = async (t, type) => {
   const board = await t.board("all");
   const lists = await getLists(t, type);
-  const zip = new JSZip();
-  boardToFile(board, zip);
-  loopList(lists, zip);
-  return zip.generateAsync({ type: "blob" });
+  const obj = {
+    board: filterBoard(board),
+    lists: loopList(lists),
+  };
+  return new Blob([JSON.stringify(obj, null, 2)], {
+    type: "application/json",
+  });
 };
 
 const createFilename = (t, type) => {
@@ -23,14 +25,14 @@ const createFilename = (t, type) => {
   return getName[type](t)
     .get("name")
     .then((n) => n.replace(/[<>:"/\\|?*]/g, ""))
-    .then((n) => `${type}_${n}.zip`);
+    .then((n) => `${type}_${n}.json`);
 };
 
 export const backUp = (type) => async (t) => {
   try {
     await t.hideAlert();
     t.alert({ message: `Backing up ${type}` });
-    const blob = await createZipBlob(t, type);
+    const blob = await createJsonBlob(t, type);
     const name = await createFilename(t, type);
     download(blob, name);
   } catch (e) {
