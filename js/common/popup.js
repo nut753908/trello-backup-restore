@@ -33,5 +33,5 @@ export const popupSettings = (t) =>
   t.popup({
     title: `${APP_NAME} Settings`,
     url: "/settings.html",
-    height: 366,
+    height: 382,
   });
