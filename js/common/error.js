@@ -13,7 +13,7 @@ export const storeError = async (t, e) => {
 
 export const downloadError = async (t) => {
   const error = await t.get("board", "shared", "error", {});
-  const blob = new Blob([JSON.stringify(error, null, 2)], {
+  const blob = new Blob([JSON.stringify(error)], {
     type: "application/json",
   });
   download(blob, "error.json");
