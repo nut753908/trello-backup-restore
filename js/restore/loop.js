@@ -11,7 +11,6 @@ import { getPreBoard, getMapIdLabel, getMapIdCf } from "./board.js";
 import {
   fileToList,
   fileToCard,
-  getIdA,
   fileToA,
   fileToCover,
   fileToCl,
@@ -26,14 +25,9 @@ const descend = (a, b) => (a.name < b.name ? 1 : -1);
 const loopA = async (dir, i, j, zip, token, idCard) => {
   const re = new RegExp(`^${dir}list${i}_card${j}_attachment(\\d+)\\.json$`);
   const files = zip.file(re).sort(ascend);
-  const mapIdA = {};
   for (const aFile of files) {
-    const m = aFile.name.match(re)[1];
-    const afFile = zip.file(`${dir}list${i}_card${j}_attachment${m}_file`);
-    const idA = await getIdA(aFile);
-    mapIdA[idA] = await fileToA(aFile, afFile, token, idCard);
+    await fileToA(aFile, token, idCard);
   }
-  return mapIdA;
 };
 
 const loopCi = async (dir, i, j, m, zip, token, idCl, idMembers) => {
@@ -96,9 +90,9 @@ const loopCard = async (
       idMembers,
       mapIdLabel
     );
-    const mapIdA = await loopA(dir, i, j, zip, token, idCard);
+    await loopA(dir, i, j, zip, token, idCard);
     const coverFile = zip.file(`${dir}list${i}_card${j}_cover.json`);
-    await fileToCover(coverFile, token, idCard, mapIdA);
+    await fileToCover(coverFile, token, idCard);
     await loopCl(dir, i, j, zip, token, idCard, idMembers);
     await loopCfi(dir, i, j, zip, token, idCard, mapIdCf, mapIdCfo);
     await loopS(dir, i, j, zip, token, idCard);

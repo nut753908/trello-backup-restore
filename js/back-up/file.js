@@ -65,7 +65,7 @@ export const aToFile = (a, zip, i, j, m) => {
 };
 
 export const coverToFile = (cover, zip, i, j) => {
-  if (cover.color || cover.idAttachment || cover.idUploadedBackground) {
+  if (cover.color || cover.idUploadedBackground) {
     cover.url = cover.idUploadedBackground ? cover.sharedSourceUrl : null;
     cover = coverKeys.reduce((o, k) => ({ ...o, [k]: cover[k] }), {});
     zip.file(`list${i}_card${j}_cover.json`, JSON.stringify(cover, null, 2));

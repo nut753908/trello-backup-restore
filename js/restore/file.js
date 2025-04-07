@@ -108,40 +108,22 @@ export const fileToCard = async (
   return json.id;
 };
 
-export const getIdA = async (file) => {
-  const text = await file.async("string");
-  const a = JSON.parse(text);
-  return a.id;
-};
-
-export const fileToA = async (aFile, afFile, token, idCard) => {
+export const fileToA = async (aFile, token, idCard) => {
   const text = await aFile.async("string");
   let a = JSON.parse(text);
   a = aKeys.reduce((o, k) => ({ ...o, [k]: a[k] }), {});
   a.setCover = false;
-  if (afFile) {
-    a.file = new File(
-      [await afFile.async("blob")],
-      a.url
-        ? decodeURI(a.url.split("/").pop())
-        : decodeURI(a.name.split("/").pop())
-    );
-    delete a.url;
-  }
   const res = await backoff(() => createA(token, idCard, a));
   if (!res.ok) {
     throw new Error(JSON.stringify({ a, status: res.status, url: res.url }));
   }
-  const json = await res.json();
-  return a.file ? json.id : null;
 };
 
-export const fileToCover = async (file, token, idCard, mapIdA) => {
+export const fileToCover = async (file, token, idCard) => {
   if (file) {
     const text = await file.async("string");
     let cover = JSON.parse(text);
     cover = coverKeys.reduce((o, k) => ({ ...o, [k]: cover[k] }), {});
-    cover.idAttachment = mapIdA[cover.idAttachment];
     const res = await backoff(() => updateCard(token, idCard, { cover }));
     if (!res.ok) {
       throw new Error(
