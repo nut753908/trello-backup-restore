@@ -84,7 +84,6 @@ export const fileToList = async (file, token, idBoard, pos) => {
 
 export const fileToCard = async (
   cardFile,
-  descFile,
   token,
   idList,
   idMembers,
@@ -93,9 +92,6 @@ export const fileToCard = async (
   const text = await cardFile.async("string");
   let card = JSON.parse(text);
   card = cardKeys.reduce((o, k) => ({ ...o, [k]: card[k] }), {});
-  if (descFile) {
-    card.desc = await descFile.async("string");
-  }
   card.idMembers = card.idMembers.filter((id) => idMembers.indexOf(id) !== -1);
   card.idLabels = card.idLabels.map((id) => mapIdLabel[id]).filter((id) => id);
   const res = await backoff(() => createCard(token, idList, card));

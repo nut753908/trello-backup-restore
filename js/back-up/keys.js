@@ -21,6 +21,7 @@ export const listKeys = ["id", "name"];
 export const cardKeys = [
   "id",
   "name",
+  "desc",
   "due",
   "start",
   "dueComplete",

@@ -7,7 +7,6 @@
 import {
   listToFile,
   cardToFile,
-  descToFile,
   aToFile,
   coverToFile,
   clToFile,
@@ -53,7 +52,6 @@ const loopCard = (cards, zip, i) =>
   cards.forEach((card) => {
     const j = card.j + 1;
     cardToFile(card, zip, i, j);
-    descToFile(card.desc, zip, i, j);
     loopA(card.attachments, zip, i, j);
     coverToFile(card.cover, zip, i, j);
     loopCl(card.checklists, zip, i, j);

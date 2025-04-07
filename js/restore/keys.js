@@ -18,6 +18,7 @@ export const cardKeys = [
   "name",
   "desc",
   "due",
+  "desc",
   "start",
   "dueComplete",
   "idMembers",

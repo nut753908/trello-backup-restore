@@ -81,10 +81,8 @@ const loopCard = async (
   const files = zip.file(re).sort(ascend);
   for (const cardFile of files) {
     const j = cardFile.name.match(re)[1];
-    const descFile = zip.file(`${dir}list${i}_card${j}_desc.md`);
     const idCard = await fileToCard(
       cardFile,
-      descFile,
       token,
       idList,
       idMembers,
