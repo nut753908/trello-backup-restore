@@ -1,7 +1,7 @@
 // cf: custom field
 // cfo: custom field option
 
-import { objToLabel, objToCf, objToCfo } from "./file.js";
+import { objToLabel, objToCf, objToCfo } from "./obj.js";
 
 export const getCurBoard = async (t) => {
   const board = await t.board("all");
@@ -11,15 +11,6 @@ export const getCurBoard = async (t) => {
     labels: board.labels,
     cfs: board.customFields,
     isFree: board.paidStatus === "free",
-  };
-};
-
-export const getPreBoard = async (file) => {
-  const text = await file.async("string");
-  const board = JSON.parse(text);
-  return {
-    _labels: board.labels,
-    _cfs: board.customFields,
   };
 };
 

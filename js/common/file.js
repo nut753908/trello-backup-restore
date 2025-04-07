@@ -7,7 +7,7 @@ export const download = (blob, name) => {
   URL.revokeObjectURL(url);
 };
 
-export const selectFile = (accept = ".zip") =>
+export const selectFile = (accept = ".json") =>
   new Promise((resolve) => {
     const input = document.createElement("input");
     input.type = "file";
