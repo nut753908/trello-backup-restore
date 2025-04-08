@@ -2,8 +2,6 @@
 
 A Trello Power-Up which backs up and restores card, list or lists.
 
-See url for more info.
-
 ## Icons
 
 This project uses these icons.
