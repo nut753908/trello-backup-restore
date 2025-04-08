@@ -1,7 +1,6 @@
 // cf: custom field
 // cfo: custom field option
 // a: attachment
-// af: attachment file
 // cl: checklist
 // ci: checkitem
 // cfi: custom field item

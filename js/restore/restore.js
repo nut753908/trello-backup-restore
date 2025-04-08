@@ -1,4 +1,5 @@
 // cf: custom field
+// cfo: custom field option
 
 import { getCurBoard } from "./board.js";
 import { getMapIdLabel, getMapIdCf } from "./board.js";
