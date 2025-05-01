@@ -2,7 +2,7 @@ import { popupAuthorize } from "./popup.js";
 
 export const isAuthorized = async (t) => {
   const token = await t.getRestApi().getToken();
-  return /^[0-9a-fA-Z]{76}$/.test(token);
+  return !!token && token !== "&error=Token%20request%20rejected";
 };
 
 export const authorize = (func) => async (t) => {
