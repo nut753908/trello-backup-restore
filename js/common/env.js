@@ -3,6 +3,6 @@ export const APP_NAME = "";
 export const APP_AUTHOR = "nut";
 
 export const BACKUP_ICON =
-  "https://cdn.glitch.global/0b64f33b-22b9-4fbd-8d4e-fdb824ae590b/file_download_32dp_1F1F1F.svg?v=1742271240648";
+  "https://trello-backup-restore.vercel.app/img/file_download_32dp_1F1F1F.svg";
 export const RESTORE_ICON =
-  "https://cdn.glitch.global/0b64f33b-22b9-4fbd-8d4e-fdb824ae590b/file_upload_32dp_1F1F1F.svg?v=1742271236878";
+  "https://trello-backup-restore.vercel.app/img/file_upload_32dp_1F1F1F.svg";
