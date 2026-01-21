@@ -4,7 +4,7 @@
 
 Easily back up and restore cards and lists whenever needed.
 
-‌![https://trello-backup-restore.vercel.app/img/demo-for-backup-and-restore.gif](https://trello-backup-restore.vercel.app/img/demo-for-backup-and-restore.gif)
+‌![demo-for-backup-and-restore.gif](public/img/demo-for-backup-and-restore.gif)
 
 After authorization, these buttons will be available.
 
