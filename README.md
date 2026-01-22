@@ -5,7 +5,8 @@ A Trello Power-Up which backs up and restores card, list or lists.
 ## Links
 
 - This Power-Up: https://trello.com/power-ups/67e6905fcb89efd62b400776/backup-restore
-- Description for this Power-Up: [description.md](description.md)
+- Description: [description.md](description.md)
+- Privacy Policy: [privacy-policy.md](privacy-policy.md)
 
 ## Icons
 
