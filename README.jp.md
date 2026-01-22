@@ -2,7 +2,7 @@
 
 # Trello Backup & Restore (Trelloのバックアップと復元)
 
-カード、リスト、または複数のリストをバックアップおよび復元するTrelloのPower-Upです。
+カード、リスト、またはすべてのリストをバックアップおよび復元するTrelloのPower-Upです。
 
 ## リンク
 
