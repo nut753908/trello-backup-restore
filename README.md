@@ -1,3 +1,5 @@
+[English](README.md) | [日本語](README.jp.md)
+
 # Trello Backup & Restore
 
 A Trello Power-Up which backs up and restores card, list or lists.

@@ -1,3 +1,5 @@
+[English](description.md) | [日本語](description.jp.md)
+
 ## Here's the description from this Power-Up Listings page.
 
 **=== beginning of description ===**
