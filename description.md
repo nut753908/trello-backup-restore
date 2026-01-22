@@ -1,10 +1,12 @@
+[English](description.md) | [日本語](description.jp.md)
+
 ## Here's the description from this Power-Up Listings page.
 
 **=== beginning of description ===**
 
 Easily back up and restore cards and lists whenever needed.
 
-‌![https://trello-backup-restore.vercel.app/img/demo-for-backup-and-restore.gif](https://trello-backup-restore.vercel.app/img/demo-for-backup-and-restore.gif)
+‌![demo-for-backup-and-restore.gif](public/img/demo-for-backup-and-restore.gif)
 
 After authorization, these buttons will be available.
 
@@ -120,8 +122,8 @@ When card, list or lists is backed up, the contents of the backup file look like
         "id": "",
         "name": "",
         "type": "",
+        // options[]: Optional
         "options": [
-          // Optional
           {
             "id": "",
             "value": {
@@ -149,8 +151,8 @@ When card, list or lists is backed up, the contents of the backup file look like
           "idLabels": [""],
           "address": "", // Nullable
           "locationName": "", // Nullable
+          // coordinates{}: Nullable
           "coordinates": {
-            // Nullable
             "latitude": 0,
             "longitude": 0
           },
@@ -161,8 +163,8 @@ When card, list or lists is backed up, the contents of the backup file look like
               "url": ""
             }
           ],
+          // cover{}: Nullable. If neither color nor idUploadedBackground exists, null is set.
           "cover": {
-            // Nullable. If neither color nor idUploadedBackground exists, null is set.
             "color": "", // Nullable
             "url": "", // Nullable. If idUploadedBackground exists, the value of sharedSourceUrl is set; if not, null is set.
             "size": "",
@@ -188,8 +190,8 @@ When card, list or lists is backed up, the contents of the backup file look like
             {
               "id": "",
               "idCustomField": "",
+              // value{}: Optional
               "value": {
-                // Optional
                 "checked": "", // Optional
                 "date": "", // Optional
                 "number": "", // Optional
