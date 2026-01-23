@@ -267,11 +267,11 @@ If authorization is not complete, the user can select `Authorize account` option
 
 #### Where to restore
 
-- `Left side for all open lists on this board` radio button
-  - If checked, either card, list or lists is restored to the left side for all open lists on the current board. The card is restored as a list containing only the card. The order of restoration for each list is reversed.
+- `To the left of all lists on this board` radio button
+  - If checked, either card, list or lists is restored to the left of all lists on the current board. The card is restored as a list containing only the card. The order of restoration for each list is reversed.
   - It is unchecked by default.
-- `Right side for all open lists on this board` radio button
-  - If checked, either card, list or lists is restored to the right side for all open lists on the current board. The card is restored as a list containing only the card. The order of restoration for each list is normal.
+- `To the right of all lists on this board` radio button
+  - If checked, either card, list or lists is restored to the right of all lists on the current board. The card is restored as a list containing only the card. The order of restoration for each list is normal.
   - It is checked by default.
 
 #### Buttons to display
